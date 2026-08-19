@@ -1,0 +1,97 @@
+baseURL = "https://checklists.metacog.co.kr/"
+locale = "en-US"
+title = "IT Checklists"
+contentDir = "content"
+enableEmoji = true
+enableGitInfo = true
+defaultContentLanguage = "en"
+
+[build]
+  noJSConfigInAssets = true
+
+[module]
+  [module.hugoVersion]
+    extended = true
+    min = "0.140.0"
+  [[module.imports]]
+    path = "github.com/colinwilson/lotusdocs"
+    disable = false
+  [[module.imports]]
+    path = "github.com/gohugoio/hugo-mod-bootstrap-scss/v5"
+    disable = false
+
+[markup]
+  defaultMarkdownHandler = "goldmark"
+  [markup.tableOfContents]
+    startLevel = 1
+    endLevel = 3
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.parser]
+      [markup.goldmark.parser.attribute]
+        block = true
+
+[params]
+  google_fonts = [
+    ["Inter", "300, 400, 600, 700"],
+    ["JetBrains Mono", "400, 700"]
+  ]
+  sans_serif_font = "Inter"
+  secondary_font  = "Inter"
+  mono_font       = "JetBrains Mono"
+
+  [params.footer]
+    copyright = "© :YEAR: IT Checklists · Built with [Hugo](https://gohugo.io) and [Lotus Docs](https://github.com/colinwilson/lotusdocs)"
+
+  [params.social]
+    github = "jeonck/checklists"
+
+  [params.docs]
+    title           = "IT Checklists"
+    themeColor      = "blue"
+    darkMode        = true
+
+    prism           = true
+    prismTheme      = "lotusdocs"
+
+    repoURL         = "https://github.com/jeonck/checklists"
+    repoBranch      = "main"
+    editPage        = true
+    lastMod         = true
+    lastModRelative = true
+
+    sidebarIcons    = true
+    titleIcon       = true
+    breadcrumbs     = true
+    backToTop       = true
+
+    toc             = true
+    tocMobile       = true
+    scrollSpy       = true
+
+    descriptions    = true
+    navDesc         = true
+    navDescTrunc    = 60
+    listDescTrunc   = 120
+
+    intLinkTooltip  = true
+
+  [params.flexsearch]
+    enabled      = true
+    tokenize     = "forward"
+    optimize     = true
+    minQueryChar = 2
+    maxResult    = 8
+
+[[menu.primary]]
+  name       = "Checklists"
+  url        = "/docs/"
+  identifier = "docs"
+  weight     = 10
+
+[[menu.primary]]
+  name       = "GitHub"
+  url        = "https://github.com/jeonck/checklists"
+  identifier = "github"
+  weight     = 20

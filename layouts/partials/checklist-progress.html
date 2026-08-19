@@ -1,0 +1,83 @@
+<style>
+/* The theme signals dark mode with a data-dark-mode attribute on <html>; it does
+   not update Bootstrap's --bs-body-bg, so drive our own tokens off that attribute. */
+:root{--cl-bg:#fff;--cl-border:#e3e6ec;--cl-track:rgba(20,24,40,.1)}
+html[data-dark-mode]{--cl-bg:#181921;--cl-border:#2f3243;--cl-track:rgba(255,255,255,.12)}
+.cl-progress{position:sticky;top:0;z-index:20;margin:0 0 1.5rem;padding:.75rem 1rem;border:1px solid var(--cl-border);border-radius:.5rem;background:var(--cl-bg);display:none}
+.cl-progress.is-active{display:block}
+.cl-progress-head{display:flex;align-items:center;gap:.75rem;font-size:.875rem;font-weight:600}
+.cl-progress-count{margin-left:auto;font-variant-numeric:tabular-nums;opacity:.75;font-weight:500}
+.cl-progress-reset{border:0;background:none;padding:0 0 0 .75rem;font-size:.8125rem;color:inherit;opacity:.55;cursor:pointer;text-decoration:underline}
+.cl-progress-reset:hover{opacity:1}
+.cl-progress-track{margin-top:.5rem;height:6px;border-radius:3px;background:var(--cl-track);overflow:hidden}
+.cl-progress-fill{height:100%;width:0;border-radius:3px;background:var(--primary,#0a58ca);transition:width .2s ease}
+.main-content ul.contains-task-list{list-style:none;padding-left:.25rem}
+.main-content li.task-list-item{position:relative;padding-left:1.9rem;margin-bottom:.5rem}
+.main-content li.task-list-item>input[type=checkbox]{position:absolute;left:0;top:.3rem;width:1.05rem;height:1.05rem;cursor:pointer;accent-color:var(--primary,#0a58ca)}
+.main-content li.task-list-item.is-done{opacity:.55}
+.main-content li.task-list-item.is-done>strong,.main-content li.task-list-item.is-done>p>strong{text-decoration:line-through}
+@media print{.cl-progress{position:static}}
+</style>
+<script>
+(function () {
+  var root = document.getElementById('content');
+  if (!root) return;
+  var boxes = root.querySelectorAll('input[type="checkbox"]');
+  if (!boxes.length) return;
+
+  var storeKey = 'checklist:' + window.location.pathname;
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(storeKey) || '{}'); } catch (e) { saved = {}; }
+
+  function hash(s) {
+    var h = 5381, i = s.length;
+    while (i) h = (h * 33) ^ s.charCodeAt(--i);
+    return (h >>> 0).toString(36);
+  }
+
+  var bar = document.createElement('div');
+  bar.className = 'cl-progress is-active';
+  bar.innerHTML =
+    '<div class="cl-progress-head"><span>Progress</span>' +
+    '<span class="cl-progress-count"><span data-cl-done>0</span> / ' + boxes.length + '</span>' +
+    '<button type="button" class="cl-progress-reset" data-cl-reset>Reset</button></div>' +
+    '<div class="cl-progress-track"><div class="cl-progress-fill" data-cl-fill></div></div>';
+  root.insertBefore(bar, root.firstChild);
+
+  var fill = bar.querySelector('[data-cl-fill]');
+  var done = bar.querySelector('[data-cl-done]');
+
+  function render() {
+    var n = 0;
+    boxes.forEach(function (b) {
+      if (b.checked) n++;
+      var li = b.closest('li');
+      if (li) li.classList.toggle('is-done', b.checked);
+    });
+    done.textContent = n;
+    fill.style.width = (n / boxes.length * 100) + '%';
+  }
+
+  boxes.forEach(function (b, i) {
+    var li = b.closest('li');
+    var key = hash((li ? li.textContent : '') + '#' + i);
+    b.disabled = false;
+    b.removeAttribute('disabled');
+    b.checked = !!saved[key];
+    b.addEventListener('change', function () {
+      saved[key] = b.checked;
+      try { localStorage.setItem(storeKey, JSON.stringify(saved)); } catch (e) {}
+      render();
+    });
+  });
+
+  bar.querySelector('[data-cl-reset]').addEventListener('click', function () {
+    saved = {};
+    try { localStorage.removeItem(storeKey); } catch (e) {}
+    boxes.forEach(function (b) { b.checked = false; });
+    render();
+  });
+
+  render();
+})();
+</script>

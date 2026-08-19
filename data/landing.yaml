@@ -1,0 +1,62 @@
+hero:
+  enable: true
+  weight: 10
+  template: hero
+
+  badge:
+    text: "Open, versioned, free"
+    color: primary
+    pill: true
+    soft: true
+
+  title: "Checklists that ship IT work safely"
+  subtitle: "A practical, engineer-written library of **IT checklists** — production readiness, security reviews, cloud migrations, incident response, and more. Open one, tick the boxes, ship with confidence."
+
+  image:
+    path: "images"
+    filename: "hero-checklist.svg"
+    alt: "A production readiness checklist with items being ticked off"
+
+  ctaButton:
+    icon: checklist
+    btnText: "Browse checklists"
+    url: "/docs/"
+  cta2Button:
+    icon: code
+    btnText: "Contribute on GitHub"
+    url: "https://github.com/jeonck/checklists"
+
+  info: "**MIT licensed.** Every checklist is plain Markdown — fork it, adapt it, bring it into your own runbooks."
+
+featureGrid:
+  enable: true
+  weight: 20
+  template: feature grid
+
+  title: "Built for the work, not for the shelf"
+  subtitle: "Compliance checklists rot in wikis. These are written to be opened during the change window, worked through top to bottom, and closed out with an owner against every line."
+
+  items:
+    - title: Progress that sticks
+      icon: task_alt
+      description: Every box is clickable and your progress is saved in your browser. Close the tab mid-review, come back, and pick up exactly where you left off.
+
+    - title: Written for real changes
+      icon: engineering
+      description: Each item states what to verify and why it matters — not a vague noun phrase. Blocking items are called out so you know what actually stops a release.
+
+    - title: Scoped by role
+      icon: category
+      description: Grouped by discipline — security, delivery, cloud, SRE, data, networking, compliance, and service management — so you land on the right list fast.
+
+    - title: Search across everything
+      icon: search
+      description: Full-text offline search over the whole library. Hit <kbd>Ctrl</kbd> + <kbd>/</kbd> and jump straight to the item you half-remember.
+
+    - title: Sign-off built in
+      icon: fact_check
+      description: Every checklist ends with an owner-and-date sign-off table you can paste into a change ticket, PR description, or audit trail.
+
+    - title: Fork and adapt
+      icon: fork_right
+      description: Plain Markdown in a public Git repo. Copy a list into your own docs, cut what does not apply, and add the three things unique to your stack.
