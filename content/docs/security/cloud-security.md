@@ -11,7 +11,7 @@ Cloud breaches rarely involve breaking the provider. They involve an over-permis
 
 {{< alert context="info" text="**Who runs this:** the cloud platform team, reviewed by security. **When:** when a new account or subscription is created, quarterly thereafter, and whenever a new workload type is introduced." />}}
 
-## 1. Account structure and guardrails
+## 1. Account structure and guardrails {#account-structure-and-guardrails}
 
 - [ ] **Workloads are separated into accounts or subscriptions by environment and blast radius** — an account is the strongest isolation boundary the provider offers, and it is cheap.
 - [ ] **Organisation-level policies deny the actions no team should ever take** — disabling logging, leaving the approved regions, or deleting audit trails.
@@ -20,7 +20,7 @@ Cloud breaches rarely involve breaking the provider. They involve an over-permis
 - [ ] **Unused regions are disabled or explicitly denied** — attackers mine cryptocurrency in the region nobody watches.
 - [ ] **Every resource carries owner, environment, and data-classification tags, enforced at creation** — untagged resources cannot be triaged during an incident.
 
-## 2. Identity and access management
+## 2. Identity and access management {#identity-and-access-management}
 
 - [ ] **Humans authenticate through a central identity provider with SSO and MFA** — not through per-account local users.
 - [ ] **Long-lived access keys are eliminated in favour of short-lived, federated credentials** — workload identity federation and instance roles remove the secret that gets leaked.
@@ -33,7 +33,7 @@ Cloud breaches rarely involve breaking the provider. They involve an over-permis
 
 {{< alert context="danger" text="**Blocking:** a role that can create or attach IAM policies is effectively an administrator, however narrow its other permissions look. Treat every such role as privileged and review it by name." />}}
 
-## 3. Network security
+## 3. Network security {#network-security}
 
 - [ ] **Workloads run in private subnets with egress through a controlled path** — public IPs on compute should be the rare, justified exception.
 - [ ] **Security groups and firewall rules avoid ingress from 0.0.0.0/0 except on deliberate public listeners** — pay special attention to 22, 3389, and database ports.
@@ -43,7 +43,7 @@ Cloud breaches rarely involve breaking the provider. They involve an over-permis
 - [ ] **Public-facing applications sit behind a WAF and DDoS protection with tuned, non-default rules.**
 - [ ] **The internet-facing attack surface is enumerated and matched against what should be exposed** — run an external scan rather than trusting the diagram.
 
-## 4. Data protection
+## 4. Data protection {#data-protection}
 
 - [ ] **No storage bucket, blob container, or snapshot is publicly readable unless it is deliberately a public asset store** — with account-level public access blocking switched on as the default.
 - [ ] **Encryption at rest is enabled everywhere, with customer-managed keys where the data classification requires it.**
@@ -53,7 +53,7 @@ Cloud breaches rarely involve breaking the provider. They involve an over-permis
 - [ ] **Data residency and cross-region replication match the legal commitments made to customers.**
 - [ ] **Sensitive data stores are discovered and classified with tooling, not by memory** — shadow copies in analytics buckets are the usual surprise.
 
-## 5. Logging, detection, and response
+## 5. Logging, detection, and response {#logging-detection-and-response}
 
 - [ ] **The provider's control-plane audit log is enabled in all regions and delivered to a separate, restricted account.**
 - [ ] **Log storage is write-once for the retention period** — an attacker's first act is to stop or delete the logs.
@@ -62,7 +62,7 @@ Cloud breaches rarely involve breaking the provider. They involve an over-permis
 - [ ] **Posture management scans run continuously against a benchmark** — the CIS foundations benchmark is a reasonable baseline.
 - [ ] **Logs are retained long enough for a realistic investigation** — the median breach is discovered months after entry.
 
-## 6. Compute and workload hardening
+## 6. Compute and workload hardening {#compute-and-workload-hardening}
 
 - [ ] **Machine images are built from a hardened, patched base and rebuilt regularly** — patching a long-lived instance in place drifts from the source of truth.
 - [ ] **Instance metadata service v2, or the equivalent hardening, is enforced** — session-oriented metadata access is the main defence against SSRF stealing role credentials.
@@ -71,7 +71,7 @@ Cloud breaches rarely involve breaking the provider. They involve an over-permis
 - [ ] **Vulnerability scanning covers images and running workloads, with a defined remediation SLA by severity.**
 - [ ] **Managed database services are not publicly accessible and have deletion protection enabled.**
 
-## 7. Infrastructure as code and change control
+## 7. Infrastructure as code and change control {#infrastructure-as-code-and-change-control}
 
 - [ ] **All infrastructure is defined as code and applied through a pipeline, not through the console** — console changes are invisible to review and reappear as drift.
 - [ ] **Console write access in production is broken-glass only, and its use raises an alert.**
@@ -80,7 +80,7 @@ Cloud breaches rarely involve breaking the provider. They involve an over-permis
 - [ ] **The pipeline's own cloud identity is scoped and its plan and apply stages are separated** — the deployment role is usually the most powerful identity in the account.
 - [ ] **Drift is detected and reported on a schedule.**
 
-## 8. Cost, quota, and resilience signals
+## 8. Cost, quota, and resilience signals {#cost-quota-and-resilience-signals}
 
 - [ ] **Budget alerts exist per account** — a sudden spend spike is often the first observable sign of a compromise.
 - [ ] **Service quotas are known and monitored** — hitting a quota during an incident removes your ability to scale out of it.

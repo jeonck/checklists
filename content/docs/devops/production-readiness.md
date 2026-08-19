@@ -11,7 +11,7 @@ A production readiness review (PRR) is the gate between "it works on staging" an
 
 {{< alert context="info" text="**Who runs this:** the owning team, with one reviewer from outside the team. **When:** at least one week before launch, so findings can actually be fixed." />}}
 
-## 1. Ownership and documentation
+## 1. Ownership and documentation {#ownership-and-documentation}
 
 - [ ] **A named team owns the service** — not an individual, and the owner is recorded somewhere machine-readable (service catalogue, `CODEOWNERS`, or repo metadata).
 - [ ] **The escalation path is written down** — who gets paged first, who gets paged if they do not acknowledge, and who is the business decision-maker for an outage.
@@ -19,7 +19,7 @@ A production readiness review (PRR) is the gate between "it works on staging" an
 - [ ] **The architecture diagram matches reality** — every dependency the service calls, and every caller it serves, is on the diagram.
 - [ ] **All upstream and downstream dependencies are listed with their criticality** — mark each as hard (service fails without it) or soft (degrades gracefully).
 
-## 2. Reliability and failure behaviour
+## 2. Reliability and failure behaviour {#reliability-and-failure-behaviour}
 
 - [ ] **Every outbound call has a timeout** — a default-infinite HTTP client is the single most common cause of cascading failure.
 - [ ] **Retries use exponential backoff with jitter and a retry budget** — naive retries turn a slow dependency into a self-inflicted denial of service.
@@ -31,7 +31,7 @@ A production readiness review (PRR) is the gate between "it works on staging" an
 
 {{< alert context="warning" text="**Blocking:** a service without timeouts on outbound calls should not be launched. Everything else on this list can carry a dated follow-up ticket; this one cannot." />}}
 
-## 3. Observability
+## 3. Observability {#observability}
 
 - [ ] **The four golden signals are on a dashboard** — traffic, error rate, latency (p50/p95/p99), and saturation of the constraining resource.
 - [ ] **Logs are structured and include a correlation ID** — free-text logs are unsearchable at the exact moment you need them.
@@ -40,7 +40,7 @@ A production readiness review (PRR) is the gate between "it works on staging" an
 - [ ] **Log retention is set deliberately** — long enough to investigate a slow-burning bug, short enough to satisfy the data retention policy.
 - [ ] **A synthetic probe exercises the critical user journey** — dashboards go green when nobody is using a broken feature.
 
-## 4. Alerting
+## 4. Alerting {#alerting}
 
 - [ ] **Alerts fire on user-visible symptoms, not on causes** — "checkout error rate above 2% for 5 minutes" beats "CPU above 80%".
 - [ ] **Every alert links to the runbook section that resolves it** — an alert with no documented response is a notification, not an alert.
@@ -48,7 +48,7 @@ A production readiness review (PRR) is the gate between "it works on staging" an
 - [ ] **Paging alerts are distinguishable from ticket-generating alerts** — if everything pages, nothing pages.
 - [ ] **Alert volume is estimated and is under a page or two per shift** — model it against the last month of staging data if you have nothing else.
 
-## 5. Capacity and performance
+## 5. Capacity and performance {#capacity-and-performance}
 
 - [ ] **A load test has been run against production-like infrastructure** — same instance sizes, same database tier, same network topology.
 - [ ] **The breaking point is known** — the request rate at which latency degrades past the SLO, and what fails first when you get there.
@@ -57,7 +57,7 @@ A production readiness review (PRR) is the gate between "it works on staging" an
 - [ ] **Resource requests and limits are set from measured usage** — not copied from another service's manifest.
 - [ ] **Rate limiting or load shedding protects the service from a bad client** — including your own retrying clients.
 
-## 6. Data and state
+## 6. Data and state {#data-and-state}
 
 - [ ] **Backups are configured and a restore has actually been performed** — an untested backup is a hypothesis.
 - [ ] **The recovery time and recovery point objectives are written down and achievable** — measure the restore, do not estimate it.
@@ -65,7 +65,7 @@ A production readiness review (PRR) is the gate between "it works on staging" an
 - [ ] **Data at rest and in transit is encrypted** — including backups, snapshots, and any object storage bucket.
 - [ ] **Personal data is classified and its retention period is enforced by a job, not by intention.**
 
-## 7. Security
+## 7. Security {#security}
 
 - [ ] **The service authenticates its callers and authorises every request** — network position is not authorisation.
 - [ ] **Secrets come from a secret manager at runtime** — not from environment variables baked into an image, and never from the repository.
@@ -74,7 +74,7 @@ A production readiness review (PRR) is the gate between "it works on staging" an
 - [ ] **Network access is least-privilege** — the service can reach only the dependencies it declared in section 1.
 - [ ] **An audit log records security-relevant events** — authentication, authorisation failures, and privileged actions.
 
-## 8. Release and rollback
+## 8. Release and rollback {#release-and-rollback}
 
 - [ ] **Deployment is fully automated and repeatable** — the same command, run by anyone on the team, from a clean checkout.
 - [ ] **Rollback has been rehearsed and is a single documented action** — and it works even when the deployment pipeline is broken.
@@ -82,7 +82,7 @@ A production readiness review (PRR) is the gate between "it works on staging" an
 - [ ] **Feature flags gate risky behaviour and are removed on a schedule** — a permanent flag is a permanent untested code path.
 - [ ] **Rollback is safe with respect to data** — if the new version wrote data the old version cannot read, rollback is a lie.
 
-## 9. Cost
+## 9. Cost {#cost}
 
 - [ ] **The expected monthly cost is estimated and has an owner.**
 - [ ] **Every resource is tagged for cost allocation** — service, team, and environment at minimum.

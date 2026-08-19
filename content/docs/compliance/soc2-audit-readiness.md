@@ -11,7 +11,7 @@ A SOC 2 Type II report is an opinion on whether your controls operated effective
 
 {{< alert context="info" text="**Who runs this:** the compliance owner, with control owners in engineering, IT, HR, and security, and a readiness reviewer independent of the control operators. **When:** at least one quarter before the Type II observation window opens, and monthly while it is running." />}}
 
-## 1. Scope and trust services criteria selection
+## 1. Scope and trust services criteria selection {#scope-and-trust-services-criteria-selection}
 
 - [ ] **The system description boundary names the products, environments, and supporting infrastructure in scope** — a boundary drawn loosely will pull unrelated systems into sampling.
 - [ ] **Security is included and the additional criteria are chosen for a reason** — availability, confidentiality, processing integrity, and privacy each add real evidence burden, so add them because a customer contract requires them.
@@ -21,7 +21,7 @@ A SOC 2 Type II report is an opinion on whether your controls operated effective
 - [ ] **Complementary user entity controls are drafted early** — these are the things your customers must do, and writing them at the end tends to produce an unrealistic list.
 - [ ] **The auditor is a licensed CPA firm and their independence is confirmed** — the same firm cannot both build your controls and attest to them.
 
-## 2. Control narratives and the system description
+## 2. Control narratives and the system description {#control-narratives-and-the-system-description}
 
 - [ ] **Every criterion maps to at least one control with a stated owner and frequency** — the mapping matrix is the backbone of the examination and gaps in it surface immediately.
 - [ ] **Each narrative describes the control as it operates, including the system it runs in and who performs it** — write from the operator's perspective rather than from the policy.
@@ -31,7 +31,7 @@ A SOC 2 Type II report is an opinion on whether your controls operated effective
 - [ ] **Changes to the environment during the window are reflected in the narratives** — a migration mid-window means the control operated in two forms, and both need describing.
 - [ ] **Someone who does not operate the control has read the narrative and agrees it is accurate** — self-written, self-reviewed narratives are where exceptions hide.
 
-## 3. Evidence collection and sampling
+## 3. Evidence collection and sampling {#evidence-collection-and-sampling}
 
 - [ ] **Every control has a defined evidence artefact, source system, and retention location** — decide this before the window, because reconstructing evidence afterwards is often impossible.
 - [ ] **Evidence carries a reliable timestamp and shows the full population, not a filtered view** — auditors select samples from populations, so a screenshot of one approved ticket proves nothing about the other four hundred.
@@ -43,7 +43,7 @@ A SOC 2 Type II report is an opinion on whether your controls operated effective
 
 {{< alert context="danger" text="**Blocking:** a control that cannot produce evidence for every occurrence within the window will become an exception in the report. Identify these before the window opens and either fix the evidence path or remove the control from the description." />}}
 
-## 4. Managing the observation window
+## 4. Managing the observation window {#managing-the-observation-window}
 
 - [ ] **A start date is fixed and every control is operating on day one** — not designed, not planned, operating.
 - [ ] **A monthly internal check samples the same evidence the auditor will request** — catching a broken control in month two costs a fix; catching it at fieldwork costs a qualified report.
@@ -52,7 +52,7 @@ A SOC 2 Type II report is an opinion on whether your controls operated effective
 - [ ] **Personnel changes during the window are handled with a handover of control ownership** — an orphaned control quietly stops operating.
 - [ ] **Tooling changes are planned around the window where possible** — migrating your ticketing system mid-window doubles the evidence work and often breaks population completeness.
 
-## 5. Logical access and access reviews
+## 5. Logical access and access reviews {#logical-access-and-access-reviews}
 
 - [ ] **User access provisioning is tied to an approved request with evidence for every account in the sample** — including service accounts and accounts created during incidents.
 - [ ] **Termination access removal is evidenced within the SLA the narrative claims** — compare the HR termination date against the deprovisioning timestamp for every leaver in the window, not just the sampled ones.
@@ -62,7 +62,7 @@ A SOC 2 Type II report is an opinion on whether your controls operated effective
 - [ ] **Multi-factor authentication coverage is evidenced from configuration, not policy** — export the enrolment report and account for every exception.
 - [ ] **Shared and generic accounts are eliminated or individually justified and monitored** — these break every attribution argument the report makes.
 
-## 6. Change management evidence
+## 6. Change management evidence {#change-management-evidence}
 
 - [ ] **Every production change traces to a ticket, a peer-reviewed pull request, and an approval before deployment** — the auditor will pull deployments from the pipeline log and work backwards.
 - [ ] **The deployment log is the population, not the ticket queue** — if code can reach production without a ticket, the population is the deployment record and any gap is an exception.
@@ -72,7 +72,7 @@ A SOC 2 Type II report is an opinion on whether your controls operated effective
 - [ ] **Infrastructure changes follow the same control as application changes** — infrastructure-as-code changes and manual console changes both need covering, and the console path usually does not.
 - [ ] **Testing evidence exists for changes in the sample** — automated test results attached to the pipeline run are the cheapest form of this.
 
-## 7. Vendor and subservice organisation management
+## 7. Vendor and subservice organisation management {#vendor-and-subservice-organisation-management}
 
 - [ ] **A vendor inventory exists with a risk rating and a named business owner per vendor** — this is the population the vendor controls are tested against.
 - [ ] **SOC 2 reports or equivalent assurance are obtained annually for critical vendors and actually read** — with the review recorded, including any exceptions noted in their report.
@@ -81,7 +81,7 @@ A SOC 2 Type II report is an opinion on whether your controls operated effective
 - [ ] **Bridge letters cover any gap between a vendor report period and your window** — request them early, since they are issued on the vendor's schedule.
 - [ ] **Vendor offboarding evidences data return or destruction and access revocation** — including the API keys held in your own systems.
 
-## 8. Readiness assessment and audit logistics
+## 8. Readiness assessment and audit logistics {#readiness-assessment-and-audit-logistics}
 
 - [ ] **A gap assessment has been run against the full criteria set before the window opens** — by someone independent of the people who built the controls.
 - [ ] **Every gap has a remediation owner and a date that lands before the window start** — gaps closing during the window still produce exceptions for the earlier period.

@@ -11,7 +11,7 @@ A disaster recovery plan that has never been executed is a document, not a capab
 
 {{< alert context="info" text="**Who runs this:** a drill lead outside the team being tested, with the service owner, an observer taking timings, and a safety officer empowered to stop the exercise. **When:** at least annually per critical service, and after any material change to architecture, dependencies, or recovery tooling." />}}
 
-## 1. Objectives and scenario selection
+## 1. Objectives and scenario selection {#objectives-and-scenario-selection}
 
 - [ ] **The drill has a stated hypothesis to test, not just an activity to perform** — for example, we can restore the order database to a working state within four hours with at most 15 minutes of data loss.
 - [ ] **The scenario is chosen from a risk assessment rather than from convenience** — the scenarios you avoid rehearsing are precisely the ones you are least able to survive.
@@ -21,7 +21,7 @@ A disaster recovery plan that has never been executed is a document, not a capab
 - [ ] **The success criteria are written down before the drill starts** — criteria agreed afterwards are always met.
 - [ ] **Previous drill findings are on the agenda so repeat failures are visible** — the same finding appearing three years running is itself the most important result.
 
-## 2. Scope and blast radius
+## 2. Scope and blast radius {#scope-and-blast-radius}
 
 - [ ] **The systems in scope and explicitly out of scope are listed** — ambiguity here is what turns a drill into an incident.
 - [ ] **The drill runs in an environment where the impact is understood and accepted** — a production failover is the most valuable and the most dangerous option, and it needs explicit business acceptance.
@@ -31,7 +31,7 @@ A disaster recovery plan that has never been executed is a document, not a capab
 - [ ] **Data written during the drill is prevented from polluting production systems** — test orders, test notifications, and test payments reaching real customers or real ledgers is a classic drill-induced incident.
 - [ ] **A hard stop time is agreed after which the exercise is abandoned regardless of progress** — without it, drills expand until they become the outage they were simulating.
 
-## 3. Planning, participants, and notification
+## 3. Planning, participants, and notification {#planning-participants-and-notification}
 
 - [ ] **The participants are the people who would actually respond, not a hand-picked expert team** — a drill run by the architect who built the system measures the architect, not the organisation.
 - [ ] **At least one participant is deliberately unfamiliar with the system** — they will find the runbook steps that only make sense to the author.
@@ -44,7 +44,7 @@ A disaster recovery plan that has never been executed is a document, not a capab
 
 {{< alert context="warning" text="**Blocking:** never start a live failover without a named person who can call a stop, a pre-agreed phrase that distinguishes a real incident from the exercise, and a tested failback plan. Drills that turn into genuine outages almost always trace to one of these three being missing." />}}
 
-## 4. Pre-drill readiness verification
+## 4. Pre-drill readiness verification {#pre-drill-readiness-verification}
 
 - [ ] **The recovery runbook is at hand in a form that survives the scenario** — a runbook stored only in the wiki hosted in the region you are about to fail is not available.
 - [ ] **Credentials needed for recovery are accessible without the systems being recovered** — the break-glass path, tested, not assumed.
@@ -53,7 +53,7 @@ A disaster recovery plan that has never been executed is a document, not a capab
 - [ ] **Monitoring and logging for the recovery environment are working before the drill starts** — you cannot measure recovery in a system you cannot observe.
 - [ ] **The timekeeping method is agreed and a single clock is used for all timestamps** — reconciling timings across time zones after the fact loses the precision that makes the measurement useful.
 
-## 5. Running the drill
+## 5. Running the drill {#running-the-drill}
 
 - [ ] **The scenario is injected as described and the start time is recorded to the minute** — the clock starts at detection or at injection, agreed in advance and applied consistently.
 - [ ] **Participants follow the documented runbook rather than their own knowledge** — the point is to test the document; if they deviate, that deviation is the finding.
@@ -64,7 +64,7 @@ A disaster recovery plan that has never been executed is a document, not a capab
 - [ ] **If the exercise is stopped early, the reason and the state reached are recorded** — an aborted drill that documented why is more valuable than a completed one that fudged a step.
 - [ ] **Failback is executed and timed as part of the drill, not deferred to whoever is around afterwards** — untimed failback is untested failback.
 
-## 6. Measuring RTO and RPO against targets
+## 6. Measuring RTO and RPO against targets {#measuring-rto-and-rpo-against-targets}
 
 - [ ] **Actual recovery time is measured from the agreed start point to verified service restoration** — restoration means the business function works, not that the instance is running.
 - [ ] **Actual recovery point is measured as the real gap between the last recoverable transaction and the failure moment** — check the data, do not read the replication configuration and assume.
@@ -74,7 +74,7 @@ A disaster recovery plan that has never been executed is a document, not a capab
 - [ ] **The measurement covers the full dependency chain, not just the primary system** — a recovered database with no working authentication, DNS, or network path has restored nothing.
 - [ ] **Where the measured capability cannot meet the target, either the architecture or the target is changed** — carrying a target you have proven you cannot meet is worse than having no target.
 
-## 7. Data integrity and recovery validation
+## 7. Data integrity and recovery validation {#data-integrity-and-recovery-validation}
 
 - [ ] **Recovered data is validated against known-good reference values, not merely counted** — row counts match on datasets that are silently corrupt.
 - [ ] **Referential consistency across systems recovered from different points in time is checked** — restoring a database and a message queue to different moments produces orphaned records.
@@ -83,7 +83,7 @@ A disaster recovery plan that has never been executed is a document, not a capab
 - [ ] **Encryption keys, certificates, and secrets needed by the recovered systems are confirmed available in the recovery context** — a restored volume you cannot decrypt is not a restore.
 - [ ] **Any data loss actually incurred during the exercise is quantified and reported** — including any real data affected if the drill touched production.
 
-## 8. Findings, write-up, and follow-through
+## 8. Findings, write-up, and follow-through {#findings-write-up-and-follow-through}
 
 - [ ] **The write-up is produced within a defined period, typically five working days, while the detail is fresh** — a report written a month later contains the story and not the timings.
 - [ ] **The report states measured RTO and RPO, the targets, and the delta, on the first page** — this is the number the business needs and the only one most readers will read.

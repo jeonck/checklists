@@ -13,7 +13,7 @@ An ISO/IEC 27001 certification audit does not test whether your security is good
 
 {{< alert context="warning" text="This checklist supports but does not replace advice from a qualified auditor or information security professional. Certification decisions rest with an accredited certification body, and nothing here guarantees a particular audit outcome." />}}
 
-## 1. Scope, context, and interested parties
+## 1. Scope, context, and interested parties {#scope-context-and-interested-parties}
 
 - [ ] **The ISMS scope statement names the services, locations, and organisational units included** — and the exclusions are stated explicitly, because an ambiguous scope is the fastest route to a Stage 1 delay.
 - [ ] **Interfaces and dependencies at the scope boundary are described** — shared corporate IT, a parent company's network, and outsourced development all sit on the boundary and will be probed.
@@ -22,7 +22,7 @@ An ISO/IEC 27001 certification audit does not test whether your security is good
 - [ ] **The scope is credible against the certificate you intend to advertise** — scoping out the systems your customers actually care about produces a certificate that fails their vendor review.
 - [ ] **Top management commitment is evidenced, not asserted** — a signed policy, resourced roles, and attendance records at management review are what the auditor will look for.
 
-## 2. Risk assessment and treatment methodology
+## 2. Risk assessment and treatment methodology {#risk-assessment-and-treatment-methodology}
 
 - [ ] **A documented risk assessment methodology defines the criteria for acceptance and the scales used** — repeatability is the requirement, so two assessors following it should reach comparable results.
 - [ ] **Risk owners are named individuals with the authority to accept risk** — a team name is not a risk owner.
@@ -32,7 +32,7 @@ An ISO/IEC 27001 certification audit does not test whether your security is good
 - [ ] **Residual risk is formally accepted by the risk owner** — with a dated record, not implied by the absence of objection.
 - [ ] **The assessment has been re-run within the last twelve months and after any significant change** — a merger, a new product line, or a major architecture change all trigger a re-run.
 
-## 3. Statement of Applicability and Annex A controls
+## 3. Statement of Applicability and Annex A controls {#statement-of-applicability-and-annex-a-controls}
 
 - [ ] **The Statement of Applicability covers every Annex A control with an applicability decision and justification** — including justifications for exclusions, which is where auditors concentrate.
 - [ ] **Each applicable control names an owner and points to the evidence of implementation** — the SoA is the index the auditor navigates by, so make it useful.
@@ -42,7 +42,7 @@ An ISO/IEC 27001 certification audit does not test whether your security is good
 - [ ] **Controls inherited from cloud providers are separated from controls you operate** — the shared responsibility split must be written down, or you will be asked to evidence something you do not control.
 - [ ] **Control effectiveness has measurable indicators where practical** — patch compliance rate, mean time to revoke access, phishing simulation failure rate.
 
-## 4. Documented information and policy management
+## 4. Documented information and policy management {#documented-information-and-policy-management}
 
 - [ ] **Every policy has a named owner, an approval record, and a review date within the last twelve months** — an unreviewed policy signals a dormant management system more clearly than any control gap.
 - [ ] **Document control covers versioning, approval, distribution, and withdrawal of superseded copies** — including the stale PDF still sitting on the shared drive.
@@ -51,7 +51,7 @@ An ISO/IEC 27001 certification audit does not test whether your security is good
 - [ ] **Records required by the standard are retained and retrievable within the audit window** — training records, audit reports, management review minutes, corrective actions, and risk acceptances.
 - [ ] **Access to ISMS documentation is controlled and available to those who need it** — a policy set nobody can find is not implemented.
 
-## 5. Competence, awareness, and operational planning
+## 5. Competence, awareness, and operational planning {#competence-awareness-and-operational-planning}
 
 - [ ] **Roles with ISMS responsibilities have defined competence requirements** — and evidence that the holder meets them through qualification, training, or experience.
 - [ ] **Security awareness training is delivered at least annually with completion tracked per person** — and the content reflects the risks in your risk register, not a generic catalogue.
@@ -60,7 +60,7 @@ An ISO/IEC 27001 certification audit does not test whether your security is good
 - [ ] **Outsourced processes within scope are identified and controlled** — managed service providers, offshore development, and payroll processing are all in play.
 - [ ] **Changes to the ISMS are made in a planned way with consequences considered** — unplanned change is explicitly called out by the standard.
 
-## 6. Monitoring, measurement, and internal audit
+## 6. Monitoring, measurement, and internal audit {#monitoring-measurement-and-internal-audit}
 
 - [ ] **What is monitored, how, by whom, and how often is defined for each measure** — a metrics dashboard without a defined method fails the clause even if the numbers are good.
 - [ ] **An internal audit programme covers the whole ISMS over a defined cycle and is documented** — with the cycle length justified against risk and previous results.
@@ -72,7 +72,7 @@ An ISO/IEC 27001 certification audit does not test whether your security is good
 
 {{< alert context="danger" text="**Blocking:** a Stage 2 audit cannot succeed without at least one completed internal audit cycle and one completed management review covering the current scope. If either is missing, move the audit date rather than hoping the auditor overlooks it." />}}
 
-## 7. Management review and continual improvement
+## 7. Management review and continual improvement {#management-review-and-continual-improvement}
 
 - [ ] **Management review has been held within the planned interval and is minuted** — with attendees recorded, since top management presence is the point of the clause.
 - [ ] **Every required input is on the agenda and visible in the minutes** — status of previous actions, changes in issues and interested parties, performance measures, audit results, risk assessment status, and improvement opportunities.
@@ -82,7 +82,7 @@ An ISO/IEC 27001 certification audit does not test whether your security is good
 - [ ] **Improvement suggestions from staff and incidents reach the ISMS** — a feedback path that only carries audit findings misses most of the useful signal.
 - [ ] **Trends across incidents, findings, and metrics are analysed rather than reported item by item** — this is what distinguishes a maturing system from a compliant one.
 
-## 8. Certification audit stages and logistics
+## 8. Certification audit stages and logistics {#certification-audit-stages-and-logistics}
 
 - [ ] **The certification body is accredited and the accreditation has been verified** — an unaccredited certificate will be rejected by the customers you obtained it for.
 - [ ] **Stage 1 documentation is assembled as a coherent pack** — scope, policy, risk methodology, risk assessment, treatment plan, SoA, internal audit report, and management review minutes.

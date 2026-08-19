@@ -11,7 +11,7 @@ Most data pipelines do not fail loudly. They succeed, quietly emit the wrong num
 
 {{< alert context="info" text="**Who runs this:** the owning data engineer plus one reviewer who consumes the output. **When:** before the pipeline is promoted to production, and again whenever its source system or partitioning scheme changes." />}}
 
-## 1. Contracts and sources
+## 1. Contracts and sources {#contracts-and-sources}
 
 - [ ] **Every source has a named owner and a documented delivery expectation** — what arrives, how often, and by what time, so a missing file is a broken promise rather than a surprise.
 - [ ] **The read pattern from each source is agreed with its owner** — replica versus primary, snapshot versus CDC, and whether your query load is acceptable at their peak.
@@ -20,7 +20,7 @@ Most data pipelines do not fail loudly. They succeed, quietly emit the wrong num
 - [ ] **Source-side deletes are handled deliberately** — decide whether a row disappearing upstream means soft delete, hard delete, or ignore, because CDC and snapshot loads behave differently here.
 - [ ] **Timezone and clock semantics are documented per source** — whether timestamps are UTC, local, or session-dependent, and which clock (event, ingest, or processing) each column represents.
 
-## 2. Idempotency and reprocessing
+## 2. Idempotency and reprocessing {#idempotency-and-reprocessing}
 
 - [ ] **Every ingestion job is idempotent on its partition key** — re-running a failed day must produce the same table state, not a second copy of the rows.
 - [ ] **Writes use delete-and-insert per partition, `MERGE` on a stable key, or an atomic partition swap** — plain `INSERT` into a shared table is what turns a retry into duplicated revenue.
@@ -31,7 +31,7 @@ Most data pipelines do not fail loudly. They succeed, quietly emit the wrong num
 
 {{< alert context="warning" text="**Blocking:** a pipeline whose re-run duplicates rows must not go to production. Every other item here can carry a dated follow-up ticket; non-idempotent writes cannot, because the first retry silently corrupts the table." />}}
 
-## 3. Late and out-of-order data
+## 3. Late and out-of-order data {#late-and-out-of-order-data}
 
 - [ ] **Event time and processing time are separate columns** — conflating them makes every late arrival look like it happened when you happened to read it.
 - [ ] **The allowed lateness window is an explicit, documented number** — and it is derived from measured arrival distributions, not from a round number that felt safe.
@@ -40,7 +40,7 @@ Most data pipelines do not fail loudly. They succeed, quietly emit the wrong num
 - [ ] **Watermark or high-water-mark logic is tested against out-of-order input** — replay a shuffled batch in staging and assert the output matches the ordered run.
 - [ ] **Restatement of already-published numbers has an agreed process** — who is told, how the correction is versioned, and whether downstream extracts are refreshed.
 
-## 4. Schema evolution
+## 4. Schema evolution {#schema-evolution}
 
 - [ ] **Additive schema changes flow through without a manual deploy** — a new nullable upstream column should not break the load, and it should not silently vanish either.
 - [ ] **Breaking changes are detected before the write, not after** — a type change or dropped column fails the run with a clear error rather than writing nulls.
@@ -49,7 +49,7 @@ Most data pipelines do not fail loudly. They succeed, quietly emit the wrong num
 - [ ] **Schema changes are versioned in the repository and reviewed like code** — including the migration for any already-written historical partitions.
 - [ ] **Downstream consumers are notified before a column is renamed or removed** — with a deprecation period long enough for them to actually act.
 
-## 5. Partitioning, storage, and layout
+## 5. Partitioning, storage, and layout {#partitioning-storage-and-layout}
 
 - [ ] **The partition column matches the dominant query filter** — partitioning by ingest date while every consumer filters on event date guarantees full scans.
 - [ ] **Partition granularity is chosen against data volume** — hourly partitions on a small table produce millions of tiny files and a metadata problem worse than the scan you avoided.
@@ -58,7 +58,7 @@ Most data pipelines do not fail loudly. They succeed, quietly emit the wrong num
 - [ ] **Table statistics or manifests are refreshed after each load** — a stale catalogue makes the query planner choose badly and hides newly written partitions.
 - [ ] **Retention and archival are enforced by a job** — an unbounded table is a cost problem and, where personal data is involved, a compliance problem.
 
-## 6. Orchestration, retries, and dependencies
+## 6. Orchestration, retries, and dependencies {#orchestration-retries-and-dependencies}
 
 - [ ] **Tasks declare their data dependencies rather than relying on schedule ordering** — a job that starts at 02:00 because the upstream usually finishes at 01:45 will eventually read yesterday's data.
 - [ ] **Retries use bounded attempts with exponential backoff** — and retry only on transient errors, because retrying a schema violation twelve times just delays the alert.
@@ -68,7 +68,7 @@ Most data pipelines do not fail loudly. They succeed, quietly emit the wrong num
 - [ ] **The DAG can be resumed from the failed task** — a four-hour pipeline that must restart from step one after a step-nine failure will not be recoverable during an incident.
 - [ ] **Credentials come from a secret manager at run time** — not from connection strings in the DAG file or variables committed to the repository.
 
-## 7. Backfills
+## 7. Backfills {#backfills}
 
 - [ ] **A backfill runs through the same code path as the scheduled run** — a separate backfill script drifts from production logic and produces history that does not match the present.
 - [ ] **Backfills are rate-limited and resource-capped** — an unthrottled 400-day backfill will saturate the warehouse and take the daily load down with it.
@@ -77,7 +77,7 @@ Most data pipelines do not fail loudly. They succeed, quietly emit the wrong num
 - [ ] **Backfills can be paused and resumed** — and a partially completed backfill leaves the table in a consistent, identifiable state.
 - [ ] **The cost of the backfill is estimated before it is run** — full-history reprocessing on a metered warehouse is one of the most common surprise invoices.
 
-## 8. Freshness, quality gates, and monitoring
+## 8. Freshness, quality gates, and monitoring {#freshness-quality-gates-and-monitoring}
 
 - [ ] **A freshness SLA is defined per output table** — the maximum acceptable age of the newest record, agreed with the consumers who depend on it.
 - [ ] **Freshness is monitored from the table, not from the scheduler** — a green DAG run that wrote zero rows is the failure mode this catches.
@@ -88,7 +88,7 @@ Most data pipelines do not fail loudly. They succeed, quietly emit the wrong num
 - [ ] **Alerts distinguish a failed run from a stale table** — they have different causes and different responders, and one can happen without the other.
 - [ ] **Column-level lineage is available for critical outputs** — when a number looks wrong, tracing it to the source column should take minutes, not a day.
 
-## 9. Cost and efficiency
+## 9. Cost and efficiency {#cost-and-efficiency}
 
 - [ ] **The cost per run is measured and attributed to the pipeline** — query tags, job labels, or a dedicated warehouse make this attributable rather than a shared mystery.
 - [ ] **Incremental processing is used wherever the source supports it** — full-table reloads scale linearly with history and eventually stop finishing overnight.

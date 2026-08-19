@@ -11,7 +11,7 @@ Code review is the cheapest place to catch a defect and the most expensive place
 
 {{< alert context="info" text="**Who runs this:** the reviewer, with the author completing section 1 before requesting review. **When:** on every pull request that changes production code, configuration, or infrastructure." />}}
 
-## 1. Before review is requested
+## 1. Before review is requested {#before-review-is-requested}
 
 - [ ] **The change does one thing** — a refactor and a behaviour change in the same pull request means the reviewer cannot tell which diff lines are the risky ones.
 - [ ] **The description states the intent, not the diff** — what problem is being solved and what alternative was rejected; the reviewer can already read what changed.
@@ -21,7 +21,7 @@ Code review is the cheapest place to catch a defect and the most expensive place
 - [ ] **CI is green before review is requested** — asking a human to review code that does not compile wastes the scarcest resource on the team.
 - [ ] **Linked to the issue or ticket it resolves** — future archaeologists need the why, and the ticket usually holds it.
 
-## 2. Correctness
+## 2. Correctness {#correctness}
 
 - [ ] **The code does what the description says it does** — read the change against the stated intent, not against what you assume it should do.
 - [ ] **Boundary conditions are handled** — empty collections, single-element collections, zero, negative numbers, maximum values, and the first and last iteration.
@@ -32,7 +32,7 @@ Code review is the cheapest place to catch a defect and the most expensive place
 - [ ] **Floating-point arithmetic is not used for money** — use integer minor units or a decimal type, and check that no rounding is done implicitly.
 - [ ] **Resources are released on every path** — file handles, connections, locks, and cursors, including when an exception unwinds the stack.
 
-## 3. Design and structure
+## 3. Design and structure {#design-and-structure}
 
 - [ ] **The change fits the existing architecture, or the divergence is deliberate and explained** — a second way of doing something that already has a way is a maintenance tax.
 - [ ] **Abstractions are introduced because there are concrete callers, not in anticipation of them** — speculative generality is harder to remove than duplication.
@@ -42,7 +42,7 @@ Code review is the cheapest place to catch a defect and the most expensive place
 - [ ] **The code is not duplicating a utility that already exists in the repository** — search before you accept a new helper.
 - [ ] **Backwards compatibility of any shared contract is preserved** — API responses, event payloads, database columns, and queue message formats all have consumers you cannot deploy atomically with.
 
-## 4. Readability and naming
+## 4. Readability and naming {#readability-and-naming}
 
 - [ ] **Names say what the thing is, not what type it is** — `retryBudget` beats `intVal`, and a boolean named `flag` tells the reader nothing.
 - [ ] **Comments explain why, not what** — a comment restating the code rots; a comment recording the reason for a non-obvious decision earns its keep.
@@ -51,7 +51,7 @@ Code review is the cheapest place to catch a defect and the most expensive place
 - [ ] **Magic numbers and strings are named constants** — especially timeouts, retry counts, and limits, which someone will need to tune under pressure.
 - [ ] **The change matches the file's existing style** — consistency inside a file matters more than the reviewer's personal preference.
 
-## 5. Tests
+## 5. Tests {#tests}
 
 - [ ] **The tests would fail without the change** — the surest check is to mentally revert the production code and ask which test breaks.
 - [ ] **A bug fix comes with a regression test that reproduces the original bug** — otherwise nothing stops it returning.
@@ -61,7 +61,7 @@ Code review is the cheapest place to catch a defect and the most expensive place
 - [ ] **Test data does not contain real personal data or real credentials** — fixtures leak into logs, screenshots, and public repositories.
 - [ ] **Failure messages are informative** — assert on values, not on booleans, so a red build says what was expected and what was received.
 
-## 6. Security and data handling
+## 6. Security and data handling {#security-and-data-handling}
 
 - [ ] **All external input is validated at the boundary** — including values from other internal services, which are not more trustworthy than the internet, just differently compromised.
 - [ ] **Queries are parameterised** — string-concatenated SQL, shell commands, or template expressions are the classic injection route.
@@ -73,7 +73,7 @@ Code review is the cheapest place to catch a defect and the most expensive place
 
 {{< alert context="danger" text="**Do not approve** a change that adds an unparameterised query, disables certificate verification, or removes an authorisation check with the explanation that it is only for a test environment. These reach production far more often than anyone expects." />}}
 
-## 7. Performance and operational impact
+## 7. Performance and operational impact {#performance-and-operational-impact}
 
 - [ ] **No query is issued inside a loop over results** — the N+1 pattern passes review at ten rows and fails at ten thousand.
 - [ ] **New queries are supported by an index, and the query plan has been checked** — not assumed from the column name.
@@ -82,7 +82,7 @@ Code review is the cheapest place to catch a defect and the most expensive place
 - [ ] **Caching changes state ownership deliberately** — the invalidation rule and the staleness the product accepts should be written down, not implied.
 - [ ] **The change is observable** — a new failure mode with no metric, log, or trace attached is invisible until a customer reports it.
 
-## 8. Review conduct
+## 8. Review conduct {#review-conduct}
 
 - [ ] **Comments distinguish blocking from non-blocking** — prefix optional suggestions clearly so the author knows what actually holds up the merge.
 - [ ] **Feedback addresses the code, not the author** — phrase findings as questions about the code's behaviour rather than judgements about the person.

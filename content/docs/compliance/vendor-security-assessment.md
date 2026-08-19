@@ -11,7 +11,7 @@ Most organisations lose control of their data at the third hop: a vendor you ass
 
 {{< alert context="info" text="**Who runs this:** the security team with the business owner requesting the vendor, and procurement or legal for the contractual sections. **When:** before contract signature, on renewal, and whenever the vendor's scope of access or data materially changes." />}}
 
-## 1. Intake and tiering
+## 1. Intake and tiering {#intake-and-tiering}
 
 - [ ] **A single intake path captures every new vendor before purchase** — assessment after the card has been charged is a negotiation you have already lost.
 - [ ] **Tiering is driven by data sensitivity, access level, and business criticality** — a marketing tool holding email addresses and a payroll provider holding bank details do not deserve the same process.
@@ -21,7 +21,7 @@ Most organisations lose control of their data at the third hop: a vendor you ass
 - [ ] **Each vendor has a named internal business owner accountable for the relationship** — security cannot own a vendor it does not use.
 - [ ] **The assessment depth per tier is defined with a target turnaround time** — an unbounded process is why teams route around it.
 
-## 2. Questionnaire and evidence review
+## 2. Questionnaire and evidence review {#questionnaire-and-evidence-review}
 
 - [ ] **A standard questionnaire is used and sized to the tier** — a three-hundred-question set sent to a low-tier vendor produces copied answers nobody reads.
 - [ ] **Answers are corroborated with evidence for anything material** — a claim of encryption at rest should be supported by a configuration statement, an architecture document, or an audit report reference.
@@ -31,7 +31,7 @@ Most organisations lose control of their data at the third hop: a vendor you ass
 - [ ] **Conditional acceptances carry dated remediation commitments referenced in the contract** — a promise made in a questionnaire is unenforceable on its own.
 - [ ] **The completed assessment is retained with a review date** — this is the artefact your own auditors will sample.
 
-## 3. Certifications, reports, and their scope
+## 3. Certifications, reports, and their scope {#certifications-reports-and-their-scope}
 
 - [ ] **Certificates and audit reports are obtained directly and checked for validity dates** — expired or lapsed certificates circulate in sales decks long after they stop being true.
 - [ ] **The scope statement is read, not just the certificate front page** — an ISO 27001 certificate scoped to the vendor's corporate IT tells you nothing about the product you are buying.
@@ -43,7 +43,7 @@ Most organisations lose control of their data at the third hop: a vendor you ass
 
 {{< alert context="warning" text="**Common mistake:** treating any certificate as a pass. A certificate proves that a defined scope met a standard on a date. Read the scope statement first, and if it does not cover the service you are buying, the certificate is evidence of nothing relevant." />}}
 
-## 4. Technical and integration review
+## 4. Technical and integration review {#technical-and-integration-review}
 
 - [ ] **The data actually sent to the vendor is enumerated field by field** — teams routinely discover the integration ships far more than the assessment assumed.
 - [ ] **Authentication into your systems uses least privilege with scoped, rotatable credentials** — a vendor with a permanent admin API key is an unmanaged access path.
@@ -53,7 +53,7 @@ Most organisations lose control of their data at the third hop: a vendor you ass
 - [ ] **Logging and audit trails are available to you, not only to the vendor** — an incident you cannot investigate on their platform is an incident you cannot close.
 - [ ] **Any agent, browser extension, or code the vendor runs inside your environment is reviewed like your own code** — this is a direct supply-chain path into production.
 
-## 5. Subprocessor and fourth-party chain
+## 5. Subprocessor and fourth-party chain {#subprocessor-and-fourth-party-chain}
 
 - [ ] **A current subprocessor list is obtained and reviewed, not just acknowledged** — the list is where the actual data flow becomes visible.
 - [ ] **Each subprocessor's purpose and location are recorded** — a hosting provider, an email relay, and an offshore support desk carry very different risks.
@@ -62,7 +62,7 @@ Most organisations lose control of their data at the third hop: a vendor you ass
 - [ ] **Flow-down of your security and privacy obligations to subprocessors is contractually required** — otherwise your requirements stop at the first hop.
 - [ ] **Concentration risk across vendors is understood** — several critical vendors on the same underlying platform means one outage takes all of them.
 
-## 6. Contractual controls
+## 6. Contractual controls {#contractual-controls}
 
 - [ ] **Security requirements are in the contract or an annexed security schedule, not only in the questionnaire** — assessment answers are usually not contractually binding.
 - [ ] **Breach notification obligations have a defined deadline you can meet with your own regulators** — 72-hour regulatory clocks require a notification term measured in hours, not days.
@@ -72,7 +72,7 @@ Most organisations lose control of their data at the third hop: a vendor you ass
 - [ ] **Service levels and support response times reflect how critical the vendor actually is** — and the remedy for missing them is meaningful rather than a token credit.
 - [ ] **Liability and insurance terms are proportionate to the data at risk** — a cap at twelve months of fees is inadequate for a vendor holding your entire customer base.
 
-## 7. Ongoing monitoring and reassessment
+## 7. Ongoing monitoring and reassessment {#ongoing-monitoring-and-reassessment}
 
 - [ ] **Reassessment frequency is set per tier with a calendar owner** — annually for critical vendors, at renewal for the rest, and immediately on a material change.
 - [ ] **New certifications and audit reports are collected on the vendor's cycle** — track their report period end date, not your own review date.
@@ -82,7 +82,7 @@ Most organisations lose control of their data at the third hop: a vendor you ass
 - [ ] **The vendor inventory is reconciled against actual spend and actual integrations at least annually** — expense reports and OAuth grant lists both reveal vendors nobody assessed.
 - [ ] **Critical vendor failure is covered in business continuity planning** — with an identified alternative or a documented acceptance of the outage.
 
-## 8. Offboarding and termination
+## 8. Offboarding and termination {#offboarding-and-termination}
 
 - [ ] **Offboarding is triggered by a defined event and owned by the business owner** — contract expiry, migration, or an unrenewed trial should all start the same process.
 - [ ] **Your data is exported in a usable format before access is terminated** — the order matters, and teams regularly discover this the wrong way round.

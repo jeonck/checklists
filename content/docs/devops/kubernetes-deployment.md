@@ -11,7 +11,7 @@ Kubernetes will happily run a badly configured workload for months and then fail
 
 {{< alert context="info" text="**Who runs this:** the owning team, with a platform engineer reviewing cluster-level settings. **When:** before the first production apply, and whenever resources, probes, or scaling behaviour change." />}}
 
-## 1. Workload definition
+## 1. Workload definition {#workload-definition}
 
 - [ ] **The correct workload kind is used** — `Deployment` for stateless replicas, `StatefulSet` where stable identity and storage matter, `DaemonSet` for per-node agents, `Job`/`CronJob` for finite work.
 - [ ] **Images are referenced by digest and `imagePullPolicy` is deliberate** — a mutable tag with `IfNotPresent` means different nodes can run different code indefinitely.
@@ -21,7 +21,7 @@ Kubernetes will happily run a badly configured workload for months and then fail
 - [ ] **A change to a `ConfigMap` triggers a rollout** — either via a checksum annotation on the pod template or immutable, versioned config objects, otherwise pods keep the old values until something unrelated restarts them.
 - [ ] **The manifest is version controlled and applied by automation** — nothing reaches production through `kubectl edit` on someone's laptop.
 
-## 2. Resource requests and limits
+## 2. Resource requests and limits {#resource-requests-and-limits}
 
 - [ ] **Every container sets CPU and memory requests based on measured usage** — requests drive scheduling, and an unset request means the scheduler is guessing.
 - [ ] **Memory limits are set and equal to or close to the request for latency-sensitive workloads** — memory is incompressible, so exceeding a limit means an immediate `OOMKilled`, not throttling.
@@ -31,7 +31,7 @@ Kubernetes will happily run a badly configured workload for months and then fail
 - [ ] **Namespace `ResourceQuota` and `LimitRange` allow the workload's peak, including during a rollout** — a rollout temporarily needs headroom for surge pods.
 - [ ] **Requests are reconciled against the cluster's node sizes** — a pod requesting more than any node can offer stays `Pending` forever with an unhelpful message.
 
-## 3. Health probes and lifecycle
+## 3. Health probes and lifecycle {#health-probes-and-lifecycle}
 
 - [ ] **Readiness probes reflect the ability to serve a real request** — not a static `200` from a handler that ignores dependency state.
 - [ ] **Liveness probes do not check downstream dependencies** — a shared dependency outage otherwise restart-loops every healthy pod in the fleet and turns a partial failure into a total one.
@@ -41,7 +41,7 @@ Kubernetes will happily run a badly configured workload for months and then fail
 - [ ] **A `preStop` hook gives the service mesh or load balancer time to deregister** — endpoint removal and container termination are concurrent, so a short sleep prevents requests being routed to a shutting-down pod.
 - [ ] **The application handles `SIGTERM` and stops accepting new work while draining** — verify by deleting a pod under load and watching for errors.
 
-## 4. Scheduling and availability
+## 4. Scheduling and availability {#scheduling-and-availability}
 
 - [ ] **A `PodDisruptionBudget` protects the workload during node drains** — without one, a cluster upgrade can evict every replica simultaneously.
 - [ ] **The disruption budget cannot deadlock the cluster** — `minAvailable` equal to the replica count blocks all voluntary evictions and stalls node maintenance.
@@ -52,7 +52,7 @@ Kubernetes will happily run a badly configured workload for months and then fail
 
 {{< alert context="warning" text="**Blocking:** a production workload with no readiness probe and no PodDisruptionBudget will drop traffic during every routine node upgrade. Neither is optional for a service that carries user requests." />}}
 
-## 5. Configuration and secrets
+## 5. Configuration and secrets {#configuration-and-secrets}
 
 - [ ] **Secrets come from a secret manager through an operator or CSI driver, or are encrypted in git via a sealed-secrets style tool** — plain base64 in a manifest is encoding, not encryption.
 - [ ] **Etcd encryption at rest is enabled on the cluster for secret resources** — confirm with the platform team rather than assuming.
@@ -61,7 +61,7 @@ Kubernetes will happily run a badly configured workload for months and then fail
 - [ ] **Config differences between environments live in an overlay or values file, not in duplicated manifests** — divergence between copies is how staging stops predicting production.
 - [ ] **No service account token is mounted unless the pod calls the Kubernetes API** — set `automountServiceAccountToken: false` by default.
 
-## 6. Pod and container security
+## 6. Pod and container security {#pod-and-container-security}
 
 - [ ] **The pod security context sets `runAsNonRoot`, a numeric `runAsUser`, and `fsGroup` where volumes are written** — and the image actually supports it.
 - [ ] **`allowPrivilegeEscalation` is false and all Linux capabilities are dropped, adding back only what is needed** — most workloads need none.
@@ -71,7 +71,7 @@ Kubernetes will happily run a badly configured workload for months and then fail
 - [ ] **The namespace enforces Pod Security Admission at the restricted level where possible** — a policy that only warns will be ignored.
 - [ ] **The pod's service account has a least-privilege `Role` binding** — never `cluster-admin`, and never a wildcard verb on a wildcard resource.
 
-## 7. Networking and traffic
+## 7. Networking and traffic {#networking-and-traffic}
 
 - [ ] **A default-deny `NetworkPolicy` exists in the namespace, with explicit allow rules** — without a default deny, every pod can reach every other pod in the cluster.
 - [ ] **Egress is restricted to the dependencies the service actually needs** — including DNS, which is the rule people forget and then spend an hour debugging.
@@ -80,7 +80,7 @@ Kubernetes will happily run a badly configured workload for months and then fail
 - [ ] **Timeouts and retry behaviour at the ingress or mesh layer are aligned with the application's own timeouts** — mismatched layers turn one slow request into an amplified retry storm.
 - [ ] **Session requirements are explicit** — if the application needs sticky sessions or long-lived connections, the load balancing configuration reflects that.
 
-## 8. Storage and state
+## 8. Storage and state {#storage-and-state}
 
 - [ ] **`PersistentVolumeClaim` storage classes are chosen deliberately, including the reclaim policy** — a `Delete` policy on production data is one `kubectl delete` from permanent loss.
 - [ ] **Access modes match the topology** — a `ReadWriteOnce` volume ties the pod to a single node and constrains rolling updates.
@@ -89,7 +89,7 @@ Kubernetes will happily run a badly configured workload for months and then fail
 - [ ] **`StatefulSet` scale-down behaviour is understood** — orphaned volumes remain and cost money, or are reclaimed and destroy data, depending on configuration.
 - [ ] **`emptyDir` usage is bounded with a size limit** — an unbounded `emptyDir` can fill the node disk and evict unrelated pods.
 
-## 9. Rollout, observability, and operations
+## 9. Rollout, observability, and operations {#rollout-observability-and-operations}
 
 - [ ] **The rolling update strategy sets `maxUnavailable` and `maxSurge` deliberately** — and the cluster has capacity for the surge.
 - [ ] **A failing rollout stops rather than replacing every healthy pod** — `progressDeadlineSeconds` is set and the rollout status is checked by the pipeline.

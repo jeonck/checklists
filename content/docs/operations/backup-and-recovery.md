@@ -11,7 +11,7 @@ Nobody wants backups; everybody wants restores. The distinction matters because 
 
 {{< alert context="info" text="**Who runs this:** the service owner together with whoever operates the data platform, reviewed by someone outside the team. **When:** before go-live, after any change to storage or retention, and at least once a year regardless." />}}
 
-## 1. Scope and inventory
+## 1. Scope and inventory {#scope-and-inventory}
 
 - [ ] **Every data store the service depends on is listed** — databases, object storage, search indexes, message queues with durable state, and the caches that cannot be rebuilt from source.
 - [ ] **Configuration and infrastructure state are in scope, not just user data** — Terraform state, secret manager contents, DNS zones, IAM policies, and CI/CD configuration are all restore-critical.
@@ -20,7 +20,7 @@ Nobody wants backups; everybody wants restores. The distinction matters because 
 - [ ] **Dependencies between datasets are recorded** — restoring a database without the object storage its rows reference produces a consistent-looking but broken system.
 - [ ] **The inventory is generated or verified automatically** — a hand-maintained list will silently miss the database that was created last quarter.
 
-## 2. Recovery objectives
+## 2. Recovery objectives {#recovery-objectives}
 
 - [ ] **An RPO and RTO are agreed per dataset with the business, in writing** — engineering cannot invent an acceptable data loss window on the business's behalf.
 - [ ] **The objectives are derived from actual impact, not from what the current tooling happens to deliver** — a 24-hour RPO for payments data is a decision, and it should be a conscious one.
@@ -29,7 +29,7 @@ Nobody wants backups; everybody wants restores. The distinction matters because 
 - [ ] **Objectives for a full regional loss are separate from those for a single-table deletion** — they are different scenarios with different mechanisms and different costs.
 - [ ] **The cost of meeting each objective is known and accepted** — a one-minute RPO is achievable and expensive, and the trade-off belongs to the data owner.
 
-## 3. Backup implementation
+## 3. Backup implementation {#backup-implementation}
 
 - [ ] **Backup frequency actually satisfies the stated RPO** — a nightly snapshot cannot deliver a four-hour RPO, no matter what the policy document says.
 - [ ] **Point-in-time recovery is enabled where the RPO is shorter than the snapshot interval** — continuous transaction log archiving is what closes the gap between snapshots.
@@ -39,7 +39,7 @@ Nobody wants backups; everybody wants restores. The distinction matters because 
 - [ ] **Missing backups are alerted on, not just failing ones** — a job that stopped being scheduled generates no failure event at all.
 - [ ] **Backup duration and size are trended** — steady growth predicts the day the job stops fitting inside its window.
 
-## 4. Storage, isolation, and retention
+## 4. Storage, isolation, and retention {#storage-isolation-and-retention}
 
 - [ ] **At least one copy is in a different region or physical location** — a backup stored beside the primary shares its failure domain.
 - [ ] **At least one copy is in an account or subscription with separate credentials** — an attacker or a runaway script with production credentials must not be able to delete the backups.
@@ -51,7 +51,7 @@ Nobody wants backups; everybody wants restores. The distinction matters because 
 
 {{< alert context="danger" text="**Blocking:** if the credentials that run production can also delete the backups, you do not have backups. Immutable storage in a separately credentialed account is the minimum bar for anything you would be unwilling to lose." />}}
 
-## 5. Encryption and access control
+## 5. Encryption and access control {#encryption-and-access-control}
 
 - [ ] **Backups are encrypted at rest and in transit** — including snapshots, exports, and any temporary staging bucket used during the copy.
 - [ ] **Encryption keys are stored separately from the backups and are themselves backed up** — an unrecoverable key makes an intact backup worthless, which is the most avoidable form of total data loss.
@@ -60,7 +60,7 @@ Nobody wants backups; everybody wants restores. The distinction matters because 
 - [ ] **Restores into non-production environments anonymise or mask personal data** — copying production data into a development account is a common and serious breach path.
 - [ ] **Break-glass access to backups is documented and tested** — including how to restore when the normal identity provider is the thing that is down.
 
-## 6. Restore testing
+## 6. Restore testing {#restore-testing}
 
 - [ ] **A full restore has been performed end to end, into a clean environment** — an untested backup is a hypothesis, and the failure rate of first restores is high.
 - [ ] **Restore tests run on a schedule, at least quarterly, and after every major version upgrade** — a database engine upgrade can silently break compatibility with older backup formats.
@@ -70,7 +70,7 @@ Nobody wants backups; everybody wants restores. The distinction matters because 
 - [ ] **The restore is performed by someone who did not build it, following only the runbook** — this is how you find the undocumented step that lives in one person's head.
 - [ ] **Measured restore time is recorded and compared to the RTO** — with any gap raised as a ticket rather than quietly normalised.
 
-## 7. Runbooks and decision-making
+## 7. Runbooks and decision-making {#runbooks-and-decision-making}
 
 - [ ] **A restore runbook exists per dataset with exact commands** — during a data-loss incident nobody should be reading vendor documentation for the first time.
 - [ ] **The runbook states who authorises a restore** — overwriting production with a backup is itself destructive and needs a named decision-maker.
@@ -79,7 +79,7 @@ Nobody wants backups; everybody wants restores. The distinction matters because 
 - [ ] **Vendor support paths and account identifiers are recorded in the runbook** — some restores require the provider, and finding the support contract number under pressure wastes the window.
 - [ ] **Communication expectations during a restore are defined** — restores are slow, and stakeholders need a cadence rather than silence.
 
-## 8. Failover and disaster scenarios
+## 8. Failover and disaster scenarios {#failover-and-disaster-scenarios}
 
 - [ ] **Loss of an entire region has a documented and rehearsed response** — including how DNS, certificates, and secrets are made available in the recovery region.
 - [ ] **The recovery environment can actually be provisioned** — check service quotas, instance availability, and image replication in the target region before you need them.

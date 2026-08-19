@@ -11,7 +11,7 @@ Warehouse migrations rarely fail on the technical load. They fail because nobody
 
 {{< alert context="info" text="**Who runs this:** the migration lead with the platform team and a representative of each major consuming group. **When:** at the start of the programme for sections 1 to 3, and then as a running gate through each wave of migrated workloads." />}}
 
-## 1. Inventory and discovery
+## 1. Inventory and discovery {#inventory-and-discovery}
 
 - [ ] **Every object in the source warehouse is inventoried with its last-accessed timestamp** — query history is the only honest source of what is really used, and it usually shows that a large share of tables are dead.
 - [ ] **Consumers are identified per object from query logs, not from interviews** — the report someone forgot to mention is the one that breaks on cutover day.
@@ -21,7 +21,7 @@ Warehouse migrations rarely fail on the technical load. They fail because nobody
 - [ ] **Direct database connections from applications are found** — BI tools are easy to inventory, and the application with a hardcoded connection string is not.
 - [ ] **Data volume and growth rate per table are measured** — they determine the transfer strategy and the target platform sizing more than any vendor calculator will.
 
-## 2. Target design and platform decisions
+## 2. Target design and platform decisions {#target-design-and-platform-decisions}
 
 - [ ] **The target data model is decided deliberately rather than lifted-and-shifted** — a design built for a previous platform's distribution keys is usually wrong on the new one.
 - [ ] **Type mapping is documented for every source type, especially numeric and temporal ones** — precision, scale, and timezone handling differ between platforms and quietly change results.
@@ -31,7 +31,7 @@ Warehouse migrations rarely fail on the technical load. They fail because nobody
 - [ ] **Encryption, key management, and data residency requirements are confirmed for the target** — including where backups and query results are stored.
 - [ ] **A cost model exists for the target with an owner and a budget alert** — consumption-based pricing punishes the query patterns that a fixed-capacity warehouse tolerated for free.
 
-## 3. Migration approach and sequencing
+## 3. Migration approach and sequencing {#migration-approach-and-sequencing}
 
 - [ ] **Workloads are grouped into waves by consumer, not by table** — cutting over a whole reporting domain at once is testable; cutting over half its inputs is not.
 - [ ] **The first wave is a real but low-risk domain** — something with genuine consumers who will notice defects, but where being wrong for a day is survivable.
@@ -41,7 +41,7 @@ Warehouse migrations rarely fail on the technical load. They fail because nobody
 - [ ] **A rollback position is defined for every wave** — the point at which you abandon the new platform for that domain, and what has to remain true for that to still be possible.
 - [ ] **The freeze policy for source-side changes is agreed** — every schema change made to the old warehouse during migration must be applied to both, or dual-run will never converge.
 
-## 4. Dual-run and dual-write
+## 4. Dual-run and dual-write {#dual-run-and-dual-write}
 
 - [ ] **Both warehouses are loaded from the same source for the duration of the dual-run** — chaining the new warehouse off the old one hides exactly the ingestion defects you need to find.
 - [ ] **The dual-run period covers at least one full business cycle** — month-end and quarter-end logic is where the undocumented adjustments live.
@@ -52,7 +52,7 @@ Warehouse migrations rarely fail on the technical load. They fail because nobody
 
 {{< alert context="warning" text="**Blocking:** do not cut over any consumer while reconciliation differences remain unexplained. An unexplained difference is not a rounding artefact until you have proven it is one, and every migration that skipped this step spent the following year defending its numbers." />}}
 
-## 5. Reconciliation and validation
+## 5. Reconciliation and validation {#reconciliation-and-validation}
 
 - [ ] **Row counts match per table and per partition** — a whole-table count can match while individual days are shifted by a timezone bug.
 - [ ] **Checksums or aggregate hashes are compared per partition** — sum, min, max, and count of distinct values on key columns catch what a row count cannot.
@@ -63,7 +63,7 @@ Warehouse migrations rarely fail on the technical load. They fail because nobody
 - [ ] **Reconciliation is automated and runs on every dual-run cycle** — a one-off manual comparison is stale the day after it is produced.
 - [ ] **Query performance on the target is compared against the source for representative workloads** — a correct warehouse that is slower than the one it replaced will not be accepted.
 
-## 6. Consumer cutover
+## 6. Consumer cutover {#consumer-cutover}
 
 - [ ] **Each consumer's cutover is a scheduled event with a named owner on their side** — not an announcement that the new connection details are available.
 - [ ] **BI tool connections, extracts, and caches are repointed and refreshed as part of the cutover** — a dashboard reading a stale extract will show old numbers long after the warehouse moved.
@@ -74,7 +74,7 @@ Warehouse migrations rarely fail on the technical load. They fail because nobody
 - [ ] **Training and updated documentation are delivered before the cutover, not after** — dialect differences will otherwise generate a wave of support requests.
 - [ ] **The old platform is switched to read-only for migrated domains immediately after cutover** — leaving both writable is how the two systems start diverging permanently.
 
-## 7. Operational readiness of the target
+## 7. Operational readiness of the target {#operational-readiness-of-the-target}
 
 - [ ] **Backup, restore, and time-travel settings are configured and a restore has been performed** — an untested backup on a new platform is an untested backup.
 - [ ] **Monitoring covers freshness, load failures, query errors, and cost** — with the same alert routes as the rest of the estate rather than a new tool nobody watches.
@@ -84,7 +84,7 @@ Warehouse migrations rarely fail on the technical load. They fail because nobody
 - [ ] **Audit logging of access to sensitive data is enabled and its retention meets policy** — verify it before cutover, since retrofitting an audit trail for a past period is impossible.
 - [ ] **Workload isolation prevents an ad-hoc query from starving the scheduled loads** — separate warehouses, queues, or resource groups, with limits set.
 
-## 8. Decommissioning the source
+## 8. Decommissioning the source {#decommissioning-the-source}
 
 - [ ] **A decommission date is agreed and communicated before cutover, not after** — without a date, the old warehouse survives on the strength of unspecified fear.
 - [ ] **Query activity on the source is monitored to zero before shutdown** — the log tells you whether anyone is still connecting, and someone always is.

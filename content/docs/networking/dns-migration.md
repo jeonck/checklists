@@ -11,7 +11,7 @@ DNS migrations are unforgiving because the mistake is invisible at the moment yo
 
 {{< alert context="info" text="**Who runs this:** the team that owns the zone, with the registrar account holder available live during the cutover. **When:** section 1 at least 48 hours before the cutover, sections 4 to 6 during it, section 8 no earlier than 48 hours after." />}}
 
-## 1. TTL reduction, at least 48 hours ahead
+## 1. TTL reduction, at least 48 hours ahead {#ttl-reduction-at-least-48-hours-ahead}
 
 - [ ] **Every record being moved has had its TTL lowered to 300 seconds or less** — a record still cached at its old 86400 second value cannot be rolled back quickly, so the TTL reduction is the thing that buys you a fast undo.
 - [ ] **The TTL reduction was applied at least one full old-TTL period before the cutover** — lowering a 24 hour TTL two hours before cutover achieves nothing, because resolvers holding the old value keep it for the old duration.
@@ -20,7 +20,7 @@ DNS migrations are unforgiving because the mistake is invisible at the moment yo
 - [ ] **A calendar entry exists to restore TTLs after the migration** — low TTLs multiply query volume and cost, and left in place they become the permanent default nobody remembers to change.
 - [ ] **The current TTL values were recorded before lowering them** — you need the original values to restore, and reconstructing them from memory produces a zone that drifts a little more with every migration.
 
-## 2. Record inventory and parity
+## 2. Record inventory and parity {#record-inventory-and-parity}
 
 - [ ] **A complete zone export exists from the current provider** — prefer a real AXFR or the provider's zone export rather than reading the web console, which frequently hides provider-specific records.
 - [ ] **Provider-proprietary record types are identified and mapped to a portable equivalent** — ALIAS, ANAME, CNAME-at-apex, and weighted or geo-routed records are not standard and rarely survive a lift-and-shift.
@@ -41,7 +41,7 @@ done
 
 {{< alert context="warning" text="**Common mistake:** exporting only A and CNAME records. The records that cause the worst post-migration incidents are TXT records for SPF and DKIM, and NS records delegating subdomains, because nothing fails immediately and nobody connects the eventual failure to the migration." />}}
 
-## 3. Pre-cutover validation on the new provider
+## 3. Pre-cutover validation on the new provider {#pre-cutover-validation-on-the-new-provider}
 
 - [ ] **The new nameservers answer authoritatively for the zone before delegation changes** — query them directly by IP and confirm the AA flag is set and the SOA serial is current.
 - [ ] **Responses match the old provider for a representative sample of names** — including the apex, www, wildcard behaviour, and at least one name that should not exist.
@@ -51,7 +51,7 @@ done
 - [ ] **The zone passes an external validity check** — run a third-party zone analyser and resolve every warning or record why it is acceptable.
 - [ ] **Any traffic-management behaviour is reproduced and tested** — health-checked failover, latency routing, or weighted answers behave differently between providers and must be verified from more than one vantage point.
 
-## 4. DNSSEC handling
+## 4. DNSSEC handling {#dnssec-handling}
 
 - [ ] **Whether the zone is currently signed has been checked at the parent, not just at the provider** — the presence of a DS record in the parent zone is what makes validation mandatory, and it is the thing that breaks the domain if it goes stale.
 - [ ] **A migration path for DNSSEC is chosen explicitly** — either both providers support multi-signer operation with shared keys, or you go insecure temporarily by removing the DS record and waiting out its TTL before switching.
@@ -62,7 +62,7 @@ done
 
 {{< alert context="danger" text="**Blocking:** never change nameservers while a DS record for the old provider's key is still published in the parent zone. Validating resolvers will fail closed, and the domain is hard down for those users until the DS TTL expires." />}}
 
-## 5. Registrar and nameserver change
+## 5. Registrar and nameserver change {#registrar-and-nameserver-change}
 
 - [ ] **Access to the registrar account is confirmed working before the window** — including multi-factor authentication and the person who holds it being present, not merely reachable.
 - [ ] **Registrar lock status is checked and the domain expiry date is comfortably far away** — a migration is a bad time to discover the domain expires next week.
@@ -71,7 +71,7 @@ done
 - [ ] **The nameserver change is made as a complete replacement of the NS set** — mixed old and new nameservers means resolvers get answers from whichever they picked, which makes any inconsistency intermittent and nearly impossible to debug.
 - [ ] **The exact time of the delegation change is recorded** — every subsequent propagation observation is meaningless without a start time to measure from.
 
-## 6. Propagation verification
+## 6. Propagation verification {#propagation-verification}
 
 - [ ] **The parent zone delegation is queried directly to confirm the change landed** — query a TLD nameserver for the NS records rather than trusting the registrar console, which reflects intent rather than published state.
 - [ ] **Resolution is checked from multiple independent public resolvers and geographies** — your office resolver having the new answer says nothing about the rest of the world.
@@ -80,7 +80,7 @@ done
 - [ ] **Mail flow is tested end to end after the change** — send and receive a real message, and check that SPF, DKIM, and DMARC all pass at the receiving end.
 - [ ] **A named rollback trigger and owner exist for the propagation window** — reverting the NS set at the registrar, with the old zone still intact, is the rollback, and it costs one delegation TTL.
 
-## 7. Post-cutover stabilisation
+## 7. Post-cutover stabilisation {#post-cutover-stabilisation}
 
 - [ ] **The old provider's zone stays live and in sync for a defined period** — at least a week, long enough for stragglers with broken or hard-coded caching to be flushed out.
 - [ ] **Any change made to the zone during that period is applied to both providers** — a divergence between them turns residual old traffic into inconsistent behaviour.
@@ -89,7 +89,7 @@ done
 - [ ] **Automation and infrastructure-as-code definitions are updated to the new provider** — a Terraform state still describing the old provider will helpfully revert your migration on the next apply.
 - [ ] **Domain expiry and DNSSEC key expiry alerts are configured with a long lead time** — thirty days minimum, delivered to a team address rather than an individual.
 
-## 8. TTL restoration and closure
+## 8. TTL restoration and closure {#ttl-restoration-and-closure}
 
 - [ ] **TTLs are restored to their normal values only after the stabilisation period ends** — typically 3600 seconds or higher for stable records, using the values recorded in section 1.
 - [ ] **Records that genuinely need agility keep a low TTL deliberately** — failover targets and endpoints under active change, with the reason noted so a future cleanup does not raise them.

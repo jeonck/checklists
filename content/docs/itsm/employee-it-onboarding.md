@@ -11,7 +11,7 @@ Onboarding is the moment an organisation decides how much access a stranger gets
 
 {{< alert context="info" text="**Who runs this:** IT service desk, with the hiring manager as requester and the identity owner as approver. **When:** started at least five working days before the start date, closed out within 30 days." />}}
 
-## 1. Before day one: request, approval, and role
+## 1. Before day one: request, approval, and role {#before-day-one-request-approval-and-role}
 
 - [ ] **A joiner request exists in the ticketing system with the hiring manager named as requester** — verbal or chat-based onboarding requests leave no approval record when an auditor asks who authorised the access.
 - [ ] **The start date, employment type, and contract end date are recorded** — contractors and fixed-term staff need an expiry date on the account from the outset, not a reminder that nobody sets.
@@ -21,7 +21,7 @@ Onboarding is the moment an organisation decides how much access a stranger gets
 - [ ] **Background or right-to-work checks required before access are confirmed complete or explicitly deferred with a date** — track the deferral rather than letting it disappear.
 - [ ] **Hardware is ordered with enough lead time and a delivery address is confirmed** — for remote joiners, confirm someone will be there to sign for it.
 
-## 2. Identity account creation
+## 2. Identity account creation {#identity-account-creation}
 
 - [ ] **The account is created in the authoritative identity provider and nowhere else** — accounts created directly in a downstream application escape joiner-mover-leaver processes entirely.
 - [ ] **The username follows the standard convention and does not collide with a former employee's identifier** — recycled identifiers inherit stale group memberships and mail routing.
@@ -30,7 +30,7 @@ Onboarding is the moment an organisation decides how much access a stranger gets
 - [ ] **The initial credential is single-use and delivered out of band** — a temporary password sent in the same channel as the username is one compromised inbox away from an account takeover.
 - [ ] **Licence assignment is driven by group membership, not by hand** — manual licence assignment is the most common cause of both cost drift and day-one blockers.
 
-## 3. Multi-factor enrolment and credential hygiene
+## 3. Multi-factor enrolment and credential hygiene {#multi-factor-enrolment-and-credential-hygiene}
 
 - [ ] **Multi-factor authentication is enforced by policy before the first sign-in, not offered afterwards** — a grace period is a window in which a leaked temporary password is enough.
 - [ ] **The enrolment is supervised or bound to a verified channel** — unsupervised first-time enrolment lets an attacker who has the temporary password register their own authenticator.
@@ -39,7 +39,7 @@ Onboarding is the moment an organisation decides how much access a stranger gets
 - [ ] **A documented account recovery path exists that does not rely on the service desk trusting a voice on the phone** — helpdesk social engineering is now a mainstream intrusion route.
 - [ ] **The password manager is provisioned and the joiner is shown how to use it on day one** — if you do not give people a place to put credentials, they will use a spreadsheet.
 
-## 4. Device provisioning and management enrolment
+## 4. Device provisioning and management enrolment {#device-provisioning-and-management-enrolment}
 
 - [ ] **The device is enrolled in the mobile device management platform before handover** — a device that is enrolled only when the user gets round to it is a device that is never enrolled.
 - [ ] **Full-disk encryption is enabled and the recovery key is escrowed to the management platform** — an encrypted laptop with a recovery key on a sticky note is theatre.
@@ -50,7 +50,7 @@ Onboarding is the moment an organisation decides how much access a stranger gets
 - [ ] **The asset is recorded in the asset register against the joiner with serial number and assignment date** — this is the record you will rely on at offboarding.
 - [ ] **Personal devices used for work are covered by a documented policy and enrolled at least to the level that permits selective wipe** — decide this before the person needs mail on their phone, not after.
 
-## 5. Access grants and least privilege
+## 5. Access grants and least privilege {#access-grants-and-least-privilege}
 
 - [ ] **Every entitlement is granted through a group, not directly to the user** — direct grants are invisible to access reviews and survive role changes.
 - [ ] **Production, customer data, and financial systems are excluded from the default profile** — these should require an explicit request even for engineers who will obviously need them later.
@@ -62,7 +62,7 @@ Onboarding is the moment an organisation decides how much access a stranger gets
 
 {{< alert context="warning" text="**Common failure:** granting the new joiner the same access as a long-tenured colleague because it is faster. That colleague has accumulated years of entitlements from roles they no longer hold, and you have just cloned all of them into a fresh account." />}}
 
-## 6. Day one: handover and first sign-in
+## 6. Day one: handover and first sign-in {#day-one-handover-and-first-sign-in}
 
 - [ ] **Identity is verified at handover for remote joiners** — a video call against the photo ID already held by HR, or collection in person; couriered laptops have been intercepted.
 - [ ] **The joiner completes first sign-in, multi-factor enrolment, and a password change while support is available** — day-one failures that go unresolved become week-one shadow IT.
@@ -71,7 +71,7 @@ Onboarding is the moment an organisation decides how much access a stranger gets
 - [ ] **Communication tools, calendar, and directory profile work and the joiner appears in the org chart** — a joiner missing from the directory gets excluded from access reviews as well as from meetings.
 - [ ] **Any day-one access that has not arrived is logged as a ticket with an owner** — not left as an informal promise from whoever is doing the handover.
 
-## 7. First week: training and baseline
+## 7. First week: training and baseline {#first-week-training-and-baseline}
 
 - [ ] **Security awareness training is completed, including phishing, social engineering, and credential handling** — schedule it in the first week while it is still treated as part of the job rather than an interruption.
 - [ ] **Data classification and handling rules are covered with examples from the joiner's actual role** — generic training does not tell a support agent what to do with a customer's exported data.
@@ -79,7 +79,7 @@ Onboarding is the moment an organisation decides how much access a stranger gets
 - [ ] **The joiner has run through the tools they will actually use, with someone watching** — this surfaces missing entitlements faster than any access report.
 - [ ] **Training completion is recorded against the person, with a due date and an escalation for non-completion** — a training platform nobody chases is a training platform nobody uses.
 
-## 8. First month: verification and attestation
+## 8. First month: verification and attestation {#first-month-verification-and-attestation}
 
 - [ ] **The manager attests that the granted access matches the role, item by item** — this is the control that catches over-provisioning while it is still cheap to fix.
 - [ ] **Access that was requested but never used in the first month is flagged for removal** — first-month usage data is the cleanest signal you will ever get about what a role actually needs.

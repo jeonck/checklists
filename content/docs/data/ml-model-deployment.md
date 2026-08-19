@@ -11,7 +11,7 @@ A model that scores well offline can still be a bad deployment: the features it 
 
 {{< alert context="info" text="**Who runs this:** the owning ML engineer or data scientist, with a platform or SRE reviewer and, for consequential decisions, a responsible-AI reviewer. **When:** before the first production rollout, and again for any retrain that changes features, architecture, or training data sources." />}}
 
-## 1. Reproducibility and versioning
+## 1. Reproducibility and versioning {#reproducibility-and-versioning}
 
 - [ ] **The exact training dataset is versioned and addressable** — a snapshot, a table version, or a manifest of file hashes, so the run can be repeated rather than approximated.
 - [ ] **Training code, configuration, and hyperparameters are committed and linked to the artefact** — a model whose training command lives in someone's notebook history is not reproducible.
@@ -21,7 +21,7 @@ A model that scores well offline can still be a bad deployment: the features it 
 - [ ] **A retrain of the current production model has been demonstrated end to end** — if you cannot rebuild the running model, you cannot fix it under pressure.
 - [ ] **Model artefacts are stored immutably with integrity checks** — overwriting a version in place makes every downstream record of which model served a request a lie.
 
-## 2. Features and training/serving skew
+## 2. Features and training/serving skew {#features-and-training-serving-skew}
 
 - [ ] **Training and serving compute features from the same code path** — a reimplementation of the feature logic in the serving language is the single most common source of skew.
 - [ ] **Point-in-time correctness is enforced when building training data** — joining a feature at its current value rather than its value at event time leaks the future and inflates offline metrics.
@@ -33,7 +33,7 @@ A model that scores well offline can still be a bad deployment: the features it 
 
 {{< alert context="danger" text="**Blocking:** if production feature vectors have never been compared against the training distribution, do not release. Training/serving skew produces a model that passes every offline test and quietly performs far worse than measured on real traffic." />}}
 
-## 3. Offline evaluation
+## 3. Offline evaluation {#offline-evaluation}
 
 - [ ] **The evaluation split reflects how the model will be used** — time-based splits for anything with temporal structure, because a random split on time-series data measures nothing useful.
 - [ ] **A held-out test set is used once, at the end** — a test set consulted repeatedly during tuning has become a validation set and no longer estimates generalisation.
@@ -43,7 +43,7 @@ A model that scores well offline can still be a bad deployment: the features it 
 - [ ] **Calibration is checked where the score is consumed as a probability** — a ranking model used as a probability threshold will misprice every downstream decision.
 - [ ] **Robustness to realistic input degradation is tested** — missing fields, delayed features, and stale lookups, since these will occur in production far more often than in your test set.
 
-## 4. Serving infrastructure
+## 4. Serving infrastructure {#serving-infrastructure}
 
 - [ ] **Latency at p95 and p99 is measured under expected concurrency** — mean inference time on an idle machine tells you nothing about behaviour under load.
 - [ ] **The model server has request timeouts and a bounded queue** — an unbounded queue converts a slow model into an outage that spreads to every caller.
@@ -53,7 +53,7 @@ A model that scores well offline can still be a bad deployment: the features it 
 - [ ] **Input validation rejects malformed requests before inference** — including payload size limits, since an unbounded input is both a correctness and a denial-of-service problem.
 - [ ] **Autoscaling is configured with limits, and the maximum is affordable** — verify the ceiling against the monthly budget, not just the quota.
 
-## 5. Rollout, shadow, and canary
+## 5. Rollout, shadow, and canary {#rollout-shadow-and-canary}
 
 - [ ] **The model runs in shadow mode against live traffic before it serves anyone** — predictions logged and compared, no user impact, for long enough to cover a full weekly cycle.
 - [ ] **Shadow results are compared to production on both prediction distribution and latency** — a distribution shift between shadow and current production is a defect to investigate, not a rounding difference.
@@ -63,7 +63,7 @@ A model that scores well offline can still be a bad deployment: the features it 
 - [ ] **The online experiment is powered for the metric that matters** — decide the sample size and duration in advance, because stopping when the number looks good guarantees false positives.
 - [ ] **Offline and online results are reconciled after the ramp** — a model that improved offline but not online is a lesson about your evaluation setup, and it should be recorded.
 
-## 6. Rollback and model governance
+## 6. Rollback and model governance {#rollback-and-model-governance}
 
 - [ ] **The previous model version remains deployable and has been rolled back to in a rehearsal** — keeping the artefact is not the same as being able to serve it.
 - [ ] **Rollback is a single documented action that does not require a retrain** — and it works even when the training pipeline is broken.
@@ -72,7 +72,7 @@ A model that scores well offline can still be a bad deployment: the features it 
 - [ ] **A model registry holds the promotion state of each version** — staging, production, archived, with an approval recorded for each transition.
 - [ ] **Retraining is triggered by a defined policy** — a schedule, a drift threshold, or a performance floor, and an automatic retrain never promotes itself without passing the same gates.
 
-## 7. Monitoring, drift, and feedback loops
+## 7. Monitoring, drift, and feedback loops {#monitoring-drift-and-feedback-loops}
 
 - [ ] **Input feature drift is monitored per feature against the training distribution** — with a statistical test and a threshold, since eyeballing a hundred histograms does not scale.
 - [ ] **Prediction distribution is monitored continuously** — it is the earliest available signal, since it needs no labels and moves before outcomes do.
@@ -82,7 +82,7 @@ A model that scores well offline can still be a bad deployment: the features it 
 - [ ] **Feedback loops are identified and controlled** — when the model's own outputs influence its future training data, add exploration or holdout traffic so the training set does not collapse onto past decisions.
 - [ ] **A runbook exists for a suspected model incident** — how to check for drift, how to see recent predictions, and how to roll back, written for whoever is on call rather than for its author.
 
-## 8. Responsible AI, security, and compliance
+## 8. Responsible AI, security, and compliance {#responsible-ai-security-and-compliance}
 
 - [ ] **Intended use, out-of-scope use, and known limitations are documented as a model card** — and it is written before launch, not assembled during an audit.
 - [ ] **Fairness metrics are evaluated across protected or sensitive groups where the decision affects people** — with the chosen metric justified, since the common definitions cannot all hold at once.

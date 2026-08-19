@@ -11,7 +11,7 @@ Secrets leak the same way every time: someone needed a credential in a hurry, pu
 
 {{< alert context="info" text="**Who runs this:** the owning engineering team, with a platform or security engineer for the storage and rotation sections. **When:** at service bootstrap, before any new integration credential is issued, and after any suspected exposure." />}}
 
-## 1. Inventory and classification
+## 1. Inventory and classification {#inventory-and-classification}
 
 - [ ] **Every secret the system uses is listed with its type, owner, consumer, and blast radius** — you cannot rotate what nobody has written down.
 - [ ] **Each secret has a stated impact if disclosed** — read-only analytics credentials and production database root are not managed the same way.
@@ -19,7 +19,7 @@ Secrets leak the same way every time: someone needed a credential in a hurry, pu
 - [ ] **Secrets held by third parties and vendors are included in the inventory** — the webhook signing key you gave a partner is still your secret.
 - [ ] **Human-held secrets are separated from machine-held secrets** — they need different storage, different rotation, and different revocation triggers.
 
-## 2. Eliminating secrets where possible
+## 2. Eliminating secrets where possible {#eliminating-secrets-where-possible}
 
 - [ ] **Workload identity or federated credentials replace static keys wherever the platform supports it** — the safest secret is the one that never exists.
 - [ ] **Cloud resources are accessed through attached roles rather than access keys** — instance profiles, managed identities, and workload identity federation all remove the long-lived key.
@@ -27,7 +27,7 @@ Secrets leak the same way every time: someone needed a credential in a hurry, pu
 - [ ] **Database access uses IAM authentication or short-lived generated credentials where available.**
 - [ ] **Any remaining static credential has a written justification and a review date** — this forces the exception to be revisited instead of becoming permanent.
 
-## 3. Storage
+## 3. Storage {#storage}
 
 - [ ] **All secrets live in a dedicated secret manager or vault** — not in environment files in a repository, not in a wiki page, not in a pinned chat message.
 - [ ] **Access to each secret is authorised per principal and per secret path** — a single policy granting read on everything defeats the purpose of the vault.
@@ -37,7 +37,7 @@ Secrets leak the same way every time: someone needed a credential in a hurry, pu
 - [ ] **Secrets are never written to a container image, a build artefact, or an AMI** — image layers persist even when the file is deleted in a later layer.
 - [ ] **Configuration management and IaC state files do not contain plaintext secrets** — Terraform state is a common and overlooked plaintext store.
 
-## 4. Delivery to workloads
+## 4. Delivery to workloads {#delivery-to-workloads}
 
 - [ ] **Secrets are fetched at runtime, or injected by the platform, rather than baked in at build time** — build-time injection ties every rotation to a rebuild.
 - [ ] **The workload's identity for retrieving secrets is not itself a stored secret** — otherwise you have only moved the problem one level down.
@@ -46,7 +46,7 @@ Secrets leak the same way every time: someone needed a credential in a hurry, pu
 - [ ] **The application fails closed when the secret store is unavailable** — falling back to a cached or default credential is how expired secrets stay in use.
 - [ ] **Developers use per-developer credentials against non-production systems** — nobody needs a production secret on a laptop for local development.
 
-## 5. Rotation and expiry
+## 5. Rotation and expiry {#rotation-and-expiry}
 
 - [ ] **Every secret has a defined maximum lifetime and a rotation owner** — an unrotated credential accumulates every past employee who ever saw it.
 - [ ] **Rotation is automated and has been executed successfully at least once** — a documented manual procedure that nobody has run does not work.
@@ -55,7 +55,7 @@ Secrets leak the same way every time: someone needed a credential in a hurry, pu
 - [ ] **Rotation is triggered by events as well as by schedule** — team member departure, vendor incident, or any suspected exposure.
 - [ ] **Rotation runbooks state the rollback path** — including what breaks if the new credential is wrong.
 
-## 6. Preventing leakage
+## 6. Preventing leakage {#preventing-leakage}
 
 - [ ] **Secret scanning runs pre-commit, in CI, and across full repository history** — a secret removed in the latest commit is still in the history and must be treated as compromised.
 - [ ] **Push protection blocks a commit containing a detected secret rather than reporting it afterwards.**
@@ -66,7 +66,7 @@ Secrets leak the same way every time: someone needed a credential in a hurry, pu
 
 {{< alert context="danger" text="**Treat any secret that has ever been committed to version control as compromised, even in a private repository, even if the commit was amended.** Rotate it. Removing the commit hides the evidence, not the exposure." />}}
 
-## 7. Revocation and incident handling
+## 7. Revocation and incident handling {#revocation-and-incident-handling}
 
 - [ ] **A documented procedure exists to revoke any single secret within minutes** — and the person on call knows where it is.
 - [ ] **The consumer list per secret is accurate enough to predict what revocation will break** — this is the inventory from section 1 earning its keep.
@@ -74,7 +74,7 @@ Secrets leak the same way every time: someone needed a credential in a hurry, pu
 - [ ] **Post-exposure procedure includes reviewing the audit log for use of the secret, not only rotating it** — rotation stops future abuse and tells you nothing about past abuse.
 - [ ] **Departing staff trigger revocation of every credential they could have read, not only their own accounts** — shared secrets they had access to must be rotated.
 
-## 8. Governance and verification
+## 8. Governance and verification {#governance-and-verification}
 
 - [ ] **Access to production secrets is reviewed at least quarterly against current role membership.**
 - [ ] **A periodic exercise verifies that a randomly chosen secret can actually be rotated end to end** — treat it like a restore test.

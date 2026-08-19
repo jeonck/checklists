@@ -11,7 +11,7 @@ An HTTP API is the hardest kind of code to change, because the people who depend
 
 {{< alert context="info" text="**Who runs this:** the owning team plus one reviewer who will have to consume the API. **When:** at design review, before the first endpoint ships, and again before the API is published externally." />}}
 
-## 1. Resources and URL structure
+## 1. Resources and URL structure {#resources-and-url-structure}
 
 - [ ] **Paths name resources, not actions** — `POST /orders/42/refunds` beats `POST /refundOrder`, because the resource model composes and the verb list does not.
 - [ ] **Collections are plural and consistently cased** — pick one convention for multi-word segments and apply it everywhere; mixed `user_profiles` and `userProfiles` guarantees integration bugs.
@@ -21,7 +21,7 @@ An HTTP API is the hardest kind of code to change, because the people who depend
 - [ ] **Genuinely non-CRUD operations are modelled as subordinate resources** — a state transition can be a `POST` to `/subscriptions/{id}/cancellations` rather than an RPC verb bolted onto the path.
 - [ ] **Trailing slash, casing, and encoding behaviour is defined and consistent** — decide whether `/Orders` redirects or 404s, and make the router enforce it.
 
-## 2. HTTP semantics
+## 2. HTTP semantics {#http-semantics}
 
 - [ ] **Method semantics are respected** — `GET` and `HEAD` never change state, `PUT` and `DELETE` are idempotent, and `POST` is the only method allowed to be neither safe nor idempotent.
 - [ ] **`GET` requests carry no request body and no side effects** — intermediaries are entitled to retry, cache, and prefetch them.
@@ -32,7 +32,7 @@ An HTTP API is the hardest kind of code to change, because the people who depend
 - [ ] **Long-running work returns 202 with a status resource** — a synchronous request that blocks for minutes will be killed by some proxy in the path.
 - [ ] **Partial updates use a defined patch format** — `PATCH` with an ad-hoc merge dialect makes clearing a field to null indistinguishable from omitting it.
 
-## 3. Request and response payloads
+## 3. Request and response payloads {#request-and-response-payloads}
 
 - [ ] **One media type is the default and it is negotiated properly** — honour `Accept`, and return 415 for an unsupported `Content-Type` rather than silently attempting to parse it.
 - [ ] **Field naming is consistent across every endpoint** — one casing convention, and the same concept has the same field name everywhere.
@@ -43,7 +43,7 @@ An HTTP API is the hardest kind of code to change, because the people who depend
 - [ ] **Absent, null, and empty are distinguished deliberately** — document what each means for every optional field, because callers will infer something.
 - [ ] **Request bodies have a maximum size enforced before parsing** — unbounded parsing is a trivially exploitable denial of service.
 
-## 4. Errors
+## 4. Errors {#errors}
 
 - [ ] **Errors use a single machine-readable structure across the whole API** — RFC 9457 problem details is a reasonable default and saves every client writing a bespoke parser.
 - [ ] **Every error carries a stable, documented error code** — clients must be able to branch on something other than the human-readable message, which you will want to reword.
@@ -67,7 +67,7 @@ Content-Type: application/problem+json
 }
 ```
 
-## 5. Pagination, filtering, and sorting
+## 5. Pagination, filtering, and sorting {#pagination-filtering-and-sorting}
 
 - [ ] **Collection endpoints are paginated by default with a documented maximum page size** — an unpaginated collection is a time bomb attached to your slowest table.
 - [ ] **Pagination uses a stable cursor rather than an offset** — with offsets, rows inserted or deleted mid-scan cause results to shift, duplicate, or be skipped entirely.
@@ -77,7 +77,7 @@ Content-Type: application/problem+json
 - [ ] **Filter syntax is simple and closed** — a bespoke query language on a query string becomes an injection surface and an optimiser problem.
 - [ ] **Deep pagination is bounded** — either cap the total traversable depth or require a narrower filter, rather than letting page 10,000 melt the database.
 
-## 6. Versioning and evolution
+## 6. Versioning and evolution {#versioning-and-evolution}
 
 - [ ] **The versioning strategy is decided and documented before launch** — retrofitting versioning onto a live API is far more expensive than choosing wrongly at the start.
 - [ ] **What counts as a breaking change is written down** — removing or renaming a field, tightening validation, changing a status code, or adding a required request field all break existing callers.
@@ -88,7 +88,7 @@ Content-Type: application/problem+json
 
 {{< alert context="warning" text="**Common mistake:** treating a change as non-breaking because your own client still works. Tightening a validation rule, narrowing an enum, or making an optional response field disappear will break somebody, even though your tests stay green." />}}
 
-## 7. Security and access control
+## 7. Security and access control {#security-and-access-control}
 
 - [ ] **Every endpoint requires authentication unless it is deliberately public** — the default in the router should be deny, with public routes as explicit exceptions.
 - [ ] **Authorisation is enforced per object, not per route** — object-level authorisation failure is the most commonly exploited API vulnerability, and it always looks fine in a route table.
@@ -99,7 +99,7 @@ Content-Type: application/problem+json
 - [ ] **CORS policy names specific origins** — a wildcard combined with credentials is a mistake that survives review because it makes the browser errors stop.
 - [ ] **Responses never include fields the caller is not entitled to see** — filtering in the client is not filtering.
 
-## 8. Documentation and contract
+## 8. Documentation and contract {#documentation-and-contract}
 
 - [ ] **A machine-readable specification exists and is generated from or verified against the implementation** — hand-written OpenAPI drifts within one sprint.
 - [ ] **Every endpoint documents its error responses, not just the success case** — the error contract is the part integrators actually need.
@@ -108,7 +108,7 @@ Content-Type: application/problem+json
 - [ ] **Rate limits, quotas, and pagination defaults are stated in the documentation** — not discovered in production by a caller who then files a support ticket.
 - [ ] **A changelog records every change with its date and its compatibility impact.**
 
-## 9. Operability
+## 9. Operability {#operability}
 
 - [ ] **Idempotency keys are supported on non-idempotent operations that create money movement or side effects** — clients will retry a timed-out `POST`, and without a key you will charge twice.
 - [ ] **Cache behaviour is explicit on every response** — set `Cache-Control` deliberately, and use `ETag` with conditional requests where responses are expensive.

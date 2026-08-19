@@ -11,7 +11,7 @@ Most web applications are not broken into through exotic zero-days. They are bro
 
 {{< alert context="info" text="**Who runs this:** an application security engineer together with a developer who knows the codebase. **When:** before the first public release, after any change to authentication or authorisation, and at least annually for anything internet-facing." />}}
 
-## 1. Authentication
+## 1. Authentication {#authentication}
 
 - [ ] **Passwords are stored with a memory-hard hash** — bcrypt, scrypt, or Argon2id with tuned parameters; SHA-256 with a salt is not adequate against modern GPU cracking.
 - [ ] **Credential stuffing is throttled per account and per source** — rate limit on the username as well as the IP, because attackers spread a single password across many accounts from many addresses.
@@ -21,7 +21,7 @@ Most web applications are not broken into through exotic zero-days. They are bro
 - [ ] **The reset flow does not trust the Host header** — a reset link built from an attacker-controlled `Host` sends the token to the attacker.
 - [ ] **Default and seeded credentials are removed from every environment** — including the demo admin account someone added for a sales pitch.
 
-## 2. Session management
+## 2. Session management {#session-management}
 
 - [ ] **Session cookies carry HttpOnly, Secure, and SameSite=Lax or Strict** — HttpOnly blocks theft via XSS, Secure blocks it over plaintext, SameSite blunts CSRF.
 - [ ] **The session identifier is rotated on login and on privilege change** — otherwise an attacker who fixes a victim's session ID before login inherits the authenticated session.
@@ -30,7 +30,7 @@ Most web applications are not broken into through exotic zero-days. They are bro
 - [ ] **JWTs, if used, pin the algorithm server-side and validate issuer, audience, and expiry** — accepting the `alg` header from the token is how `none` and key-confusion attacks work.
 - [ ] **There is a way to revoke a session or token before it expires** — needed the moment a laptop is lost or an account is compromised.
 
-## 3. Authorisation and access control
+## 3. Authorisation and access control {#authorisation-and-access-control}
 
 - [ ] **Every request is authorised server-side against the authenticated principal** — hiding a button in the UI is not access control.
 - [ ] **Object-level authorisation is checked on every object reference** — the classic IDOR is `GET /invoices/1042` returning someone else's invoice because only authentication was checked.
@@ -42,7 +42,7 @@ Most web applications are not broken into through exotic zero-days. They are bro
 
 {{< alert context="danger" text="**Blocking:** broken object-level authorisation is the single most commonly exploited web flaw and is invisible to most automated scanners. Test it by hand, with two accounts, before release." />}}
 
-## 4. Input handling and injection
+## 4. Input handling and injection {#input-handling-and-injection}
 
 - [ ] **All database access uses parameterised queries or a well-used ORM** — string concatenation into SQL is still the fastest route to full data loss.
 - [ ] **Dynamic query fragments such as sort columns are mapped through an allow-list** — parameter binding cannot protect an identifier or an `ORDER BY` clause.
@@ -52,7 +52,7 @@ Most web applications are not broken into through exotic zero-days. They are bro
 - [ ] **Input validation is positive** — validate against expected type, length, format, and range rather than trying to filter known-bad strings.
 - [ ] **XML parsers have external entity resolution disabled** — XXE turns a document upload into a file-read and internal-network probe.
 
-## 5. Output encoding and browser-side defences
+## 5. Output encoding and browser-side defences {#output-encoding-and-browser-side-defences}
 
 - [ ] **Output is contextually encoded at the point of rendering** — HTML body, attribute, JavaScript, URL, and CSS contexts each need different escaping.
 - [ ] **Any use of a raw-HTML sink is reviewed and sanitised with a maintained library** — `innerHTML`, `dangerouslySetInnerHTML`, and their equivalents are where DOM XSS lives.
@@ -62,7 +62,7 @@ Most web applications are not broken into through exotic zero-days. They are bro
 - [ ] **Security headers are set** — HSTS with a long max-age, `X-Content-Type-Options: nosniff`, and a restrictive `Referrer-Policy` and `Permissions-Policy`.
 - [ ] **Clickjacking is prevented** — `frame-ancestors` in the CSP, with `X-Frame-Options` for legacy clients.
 
-## 6. Business logic and abuse resistance
+## 6. Business logic and abuse resistance {#business-logic-and-abuse-resistance}
 
 - [ ] **Server-side price, quantity, and discount values are authoritative** — never trust an amount that came back from the client.
 - [ ] **Workflow steps cannot be skipped or replayed** — verify that jumping straight to the confirmation endpoint fails.
@@ -70,7 +70,7 @@ Most web applications are not broken into through exotic zero-days. They are bro
 - [ ] **Expensive endpoints are rate limited and quota bounded** — search, export, and report generation are cheap to request and expensive to serve.
 - [ ] **Server-side requests to user-supplied URLs are blocked or proxied through an allow-list** — SSRF into cloud metadata endpoints is a standard path to credential theft.
 
-## 7. Data protection and privacy
+## 7. Data protection and privacy {#data-protection-and-privacy}
 
 - [ ] **All traffic is HTTPS with modern TLS and HTTP redirected permanently** — including internal service-to-service calls.
 - [ ] **Sensitive data is not placed in URLs** — query strings end up in access logs, referrer headers, and browser history.
@@ -79,7 +79,7 @@ Most web applications are not broken into through exotic zero-days. They are bro
 - [ ] **Caching headers prevent sensitive responses being stored by browsers or intermediaries.**
 - [ ] **Uploaded files are validated by content, stored outside the web root, and served with a fixed content type** — and never with a user-controlled filename or extension.
 
-## 8. Dependencies and configuration
+## 8. Dependencies and configuration {#dependencies-and-configuration}
 
 - [ ] **A software bill of materials is generated and dependencies are scanned on every build** — with a policy for how quickly a critical finding must be fixed.
 - [ ] **Framework and server configurations are hardened for production** — debug mode off, directory listing off, admin consoles unreachable from the internet.

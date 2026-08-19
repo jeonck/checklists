@@ -11,7 +11,7 @@ A load balancer is the component most likely to be blamed for an outage and leas
 
 {{< alert context="info" text="**Who runs this:** the service owner together with the platform or network team that owns the load balancer. **When:** before the load balancer takes production traffic, and again after any change to backend timeouts or deployment strategy." />}}
 
-## 1. Topology and listeners
+## 1. Topology and listeners {#topology-and-listeners}
 
 - [ ] **The load balancer type matches the traffic** — a layer 7 proxy for HTTP where you need path routing and header manipulation, a layer 4 balancer where you need protocol transparency or client IP preservation without headers.
 - [ ] **Listeners cover every port and protocol clients actually use** — including plain HTTP for the redirect to HTTPS, and any secondary admin or metrics port that should explicitly not be exposed.
@@ -20,7 +20,7 @@ A load balancer is the component most likely to be blamed for an outage and leas
 - [ ] **HTTP/2 or HTTP/3 support is a deliberate choice on both the client side and the backend side** — protocol downgrade between the two halves is normal and fine, but should be intentional rather than discovered.
 - [ ] **The client's real IP address reaches the application** — via X-Forwarded-For or the PROXY protocol, and the application must trust that header only from the balancer, or clients can spoof their own address.
 
-## 2. Health checks
+## 2. Health checks {#health-checks}
 
 - [ ] **The health check hits an endpoint that reflects the service's real ability to serve** — a static 200 from the web server proves the process is running and nothing else.
 - [ ] **The health check does not fail because a downstream dependency is down** — if every backend deregisters when a shared database is slow, you convert a degraded service into a total outage with zero healthy targets.
@@ -31,7 +31,7 @@ A load balancer is the component most likely to be blamed for an outage and leas
 - [ ] **Health check failures are logged with enough detail to diagnose** — status code and response time per target, not merely a healthy or unhealthy flag.
 - [ ] **A deliberately failed backend has been tested end to end** — stop a backend and observe both that traffic stops reaching it and how long that took.
 
-## 3. Timeouts
+## 3. Timeouts {#timeouts}
 
 - [ ] **The load balancer idle timeout is shorter than the backend keep-alive timeout** — this is the most common misconfiguration in the whole list: if the backend closes an idle pooled connection first, the balancer will send a request onto a connection that is closing and the client sees a sporadic 502.
 - [ ] **The backend keep-alive timeout is set explicitly rather than left at the framework default** — many application servers default to a few seconds, well below typical balancer idle timeouts.
@@ -49,7 +49,7 @@ proxy_read_timeout 60s;     # balancer/proxy side, deliberately shorter
 
 {{< alert context="warning" text="**Common mistake:** intermittent 502 errors under low traffic almost always mean the backend keep-alive timeout is shorter than the load balancer idle timeout. Raise the backend value above the balancer value, rather than adding a retry to paper over the race." />}}
 
-## 4. Connection draining and deployments
+## 4. Connection draining and deployments {#connection-draining-and-deployments}
 
 - [ ] **Connection draining or deregistration delay is enabled** — without it, terminating an instance drops every in-flight request on it, which shows up as a burst of errors on every deploy.
 - [ ] **The drain period is longer than the longest normal request** — draining for 30 seconds while a report endpoint takes 90 truncates those requests anyway.
@@ -59,7 +59,7 @@ proxy_read_timeout 60s;     # balancer/proxy side, deliberately shorter
 - [ ] **A deployment has been observed at the balancer's own metrics** — watch for a spike in 5xx or reset connections during a deploy in a lower environment, since that is where draining bugs are visible.
 - [ ] **Scale-in events drain the same way as deployments** — autoscaling terminations are the forgotten path, and they drop connections if only the deploy pipeline was tested.
 
-## 5. Session affinity
+## 5. Session affinity {#session-affinity}
 
 - [ ] **Whether the application needs sticky sessions at all is confirmed** — stickiness is almost always a workaround for in-memory session state, and moving state to a shared store removes an entire class of problems.
 - [ ] **Where stickiness is used, its cookie attributes are correct** — Secure, HttpOnly, and an appropriate SameSite value, since a balancer-issued cookie is still a cookie in the user's browser.
@@ -68,7 +68,7 @@ proxy_read_timeout 60s;     # balancer/proxy side, deliberately shorter
 - [ ] **Load distribution is measured with stickiness enabled** — check requests per backend, since affinity plus long sessions routinely produces a two-to-one skew that pure round robin would not.
 - [ ] **Sticky sessions and connection draining are tested together** — draining a backend that holds affinity for many users must move them cleanly rather than dropping them.
 
-## 6. TLS termination and re-encryption
+## 6. TLS termination and re-encryption {#tls-termination-and-re-encryption}
 
 - [ ] **The termination model is a deliberate decision** — terminate at the edge for simplicity, or pass through where the backend must see the original certificate or client certificate.
 - [ ] **Where traffic is re-encrypted to the backend, the backend certificate is actually validated** — re-encryption with validation disabled provides encryption but no authentication, so it does not defend against a compromised network path.
@@ -78,7 +78,7 @@ proxy_read_timeout 60s;     # balancer/proxy side, deliberately shorter
 - [ ] **Certificate renewal on the balancer is automated and monitored** — the balancer is where hand-uploaded certificates accumulate, and where their expiry is least visible.
 - [ ] **HTTP to HTTPS redirection happens at the balancer, not the application** — the application should never be asked to serve anything over plain HTTP.
 
-## 7. Traffic management and resilience
+## 7. Traffic management and resilience {#traffic-management-and-resilience}
 
 - [ ] **The balancing algorithm suits the workload** — least outstanding requests handles heterogeneous request costs far better than round robin, which is only fair when every request costs the same.
 - [ ] **Cross-zone balancing is enabled, or its absence is a deliberate choice** — with it disabled and uneven target counts per zone, a zone with two backends receives the same share as a zone with ten, and each of the two carries five times the load.
@@ -88,7 +88,7 @@ proxy_read_timeout 60s;     # balancer/proxy side, deliberately shorter
 - [ ] **Capacity is sized for the loss of an entire zone** — if losing one of three zones puts the remaining two above their breaking point, the redundancy is decorative.
 - [ ] **Pre-warming or scaling limits are confirmed for expected traffic spikes** — some managed balancers scale gradually and will shed load during a sudden step change in traffic.
 
-## 8. Observability
+## 8. Observability {#observability}
 
 - [ ] **Access logs are enabled and their retention and cost are set deliberately** — the balancer's log is often the only record of requests that never reached a backend.
 - [ ] **Balancer-generated errors are distinguished from backend errors in dashboards** — a 502 from the balancer and a 500 from the application have entirely different causes and different owners.

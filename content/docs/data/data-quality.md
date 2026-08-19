@@ -11,7 +11,7 @@ Data quality work fails in a predictable way: a team writes a hundred tests, the
 
 {{< alert context="info" text="**Who runs this:** the dataset owner together with the analyst or team that consumes it most. **When:** before a dataset is certified for decision-making, and quarterly for anything feeding financial or regulatory reporting." />}}
 
-## 1. Ownership and definitions
+## 1. Ownership and definitions {#ownership-and-definitions}
 
 - [ ] **Each critical dataset has a named owning team recorded in the catalogue** — an unowned table accumulates defects nobody is accountable for fixing.
 - [ ] **Every business-critical metric has one written definition and one implementation** — two definitions of "active user" in two dashboards is a quality defect, not a nuance.
@@ -20,7 +20,7 @@ Data quality work fails in a predictable way: a team writes a hundred tests, the
 - [ ] **The consumers of each dataset are known** — you cannot assess the blast radius of a defect if you do not know who reads the table.
 - [ ] **There is a documented path for a consumer to report a suspected defect** — and it leads to a triaged queue rather than to a chat thread that scrolls away.
 
-## 2. Completeness
+## 2. Completeness {#completeness}
 
 - [ ] **Row counts per load are checked against an absolute floor and a trailing deviation band** — this single test catches empty loads, partial loads, and accidental duplication.
 - [ ] **Every expected partition exists for the reporting period** — a missing day is invisible in an aggregate but obvious in a partition inventory.
@@ -29,7 +29,7 @@ Data quality work fails in a predictable way: a team writes a hundred tests, the
 - [ ] **Records rejected during load are counted, retained, and visible** — a quarantine table with zero rows is a strong signal, and a growing one is a stronger one.
 - [ ] **Join fan-out is tested on critical models** — an unexpected many-to-many join inflates counts in a way that looks like growth.
 
-## 3. Uniqueness and referential integrity
+## 3. Uniqueness and referential integrity {#uniqueness-and-referential-integrity}
 
 - [ ] **Each table has a declared grain and a uniqueness test on that grain** — writing down "one row per order per day" prevents most duplication bugs from surviving a deploy.
 - [ ] **Foreign keys are tested for orphans against their dimension tables** — analytical warehouses usually do not enforce constraints, so the test is the constraint.
@@ -37,7 +37,7 @@ Data quality work fails in a predictable way: a team writes a hundred tests, the
 - [ ] **Slowly changing dimensions have non-overlapping validity ranges** — overlapping effective dates silently double-count every fact joined through them.
 - [ ] **Late-arriving dimension members are handled rather than dropped** — either a placeholder row or a documented reprocessing step, never a silent inner-join loss.
 
-## 4. Validity, accuracy, and consistency
+## 4. Validity, accuracy, and consistency {#validity-accuracy-and-consistency}
 
 - [ ] **Value ranges are asserted for numeric business columns** — negative quantities, zero prices, and future-dated events are usually defects, and each one you allow should be a deliberate decision.
 - [ ] **Categorical columns are tested against an accepted-values list** — a new status value appearing upstream should raise an alert, not quietly fall out of every filter.
@@ -46,7 +46,7 @@ Data quality work fails in a predictable way: a team writes a hundred tests, the
 - [ ] **Units and currency are stored explicitly or normalised at ingest** — a mixed-currency amount column is a defect that no aggregate will ever reveal.
 - [ ] **The same metric computed by two independent paths is compared periodically** — agreement between the warehouse and the operational system is the strongest accuracy signal available.
 
-## 5. Timeliness and freshness
+## 5. Timeliness and freshness {#timeliness-and-freshness}
 
 - [ ] **Each dataset has a published freshness SLA** — the maximum acceptable age of its newest record, agreed with consumers rather than declared by the producer.
 - [ ] **Freshness is measured on the data itself, not on job success** — a successful run that wrote nothing is the case that matters.
@@ -54,7 +54,7 @@ Data quality work fails in a predictable way: a team writes a hundred tests, the
 - [ ] **Breaches of the freshness SLA alert the owner and are recorded** — the trend in breaches per month is a better quality metric than any single test.
 - [ ] **Consumers know what to do when data is stale** — whether to wait, use the previous period, or escalate, documented alongside the dataset.
 
-## 6. Tests, gates, and automation
+## 6. Tests, gates, and automation {#tests-gates-and-automation}
 
 - [ ] **Tests run as a gate before publication for tier-one datasets** — write to a staging location, test, then promote, so a failing test means consumers see yesterday's good data instead of today's bad data.
 - [ ] **Tests are defined as code in the same repository as the transformations** — and are reviewed in the same pull request that changes the logic.
@@ -66,7 +66,7 @@ Data quality work fails in a predictable way: a team writes a hundred tests, the
 
 {{< alert context="warning" text="**Common mistake:** running the full test suite after the table has already been published. Consumers have then already read the bad data, and the alert only tells you how many people you need to email. Gate the publication instead." />}}
 
-## 7. Incident response for data defects
+## 7. Incident response for data defects {#incident-response-for-data-defects}
 
 - [ ] **There is a defined severity scale for data incidents** — based on which decisions the wrong data touched, not on how many rows were affected.
 - [ ] **A defect that reached consumers triggers a notification with scope and impact** — which tables, which date range, and which reports were wrong.
@@ -75,7 +75,7 @@ Data quality work fails in a predictable way: a team writes a hundred tests, the
 - [ ] **Data incidents get a postmortem when the impact was material** — with the missing test identified as an action item.
 - [ ] **A known-issues list is visible to consumers** — trust survives a documented defect far better than a discovered one.
 
-## 8. Governance, lineage, and access
+## 8. Governance, lineage, and access {#governance-lineage-and-access}
 
 - [ ] **Column-level lineage is available for every certified dataset** — tracing a suspect number to its source column should take minutes.
 - [ ] **Personal and sensitive columns are classified and tagged in the catalogue** — quality tooling that samples data must respect those tags.
@@ -84,7 +84,7 @@ Data quality work fails in a predictable way: a team writes a hundred tests, the
 - [ ] **Deprecated tables are marked, given an end date, and eventually removed** — leaving a stale duplicate table available is the most common source of two conflicting numbers.
 - [ ] **Retention periods are enforced by a job and match the stated policy** — for personal data, an intention is not a control.
 
-## 9. Measuring and improving trust
+## 9. Measuring and improving trust {#measuring-and-improving-trust}
 
 - [ ] **A small set of quality KPIs is published** — test pass rate, freshness SLA attainment, open defects, and mean time to resolution, per critical dataset.
 - [ ] **Defects are counted by how they were found** — a rising share found by consumers rather than by tests means your test coverage is losing ground.

@@ -11,7 +11,7 @@ Automated tools catch roughly a third of accessibility defects, and almost none 
 
 {{< alert context="info" text="**Who runs this:** the engineer or designer shipping the interface, ideally with a colleague who uses a screen reader daily. **When:** during component development and again before release of any new page, flow, or design system component." />}}
 
-## 1. Semantics and structure
+## 1. Semantics and structure {#semantics-and-structure}
 
 - [ ] **Native HTML elements are used before ARIA** — a `button` element is focusable, activatable by Enter and Space, and announced correctly for free; a `div` with a click handler is none of those things.
 - [ ] **Headings describe the structure and nest without skipping levels** — screen reader users navigate by heading, and a page whose headings were chosen for their font size is unnavigable.
@@ -22,7 +22,7 @@ Automated tools catch roughly a third of accessibility defects, and almost none 
 - [ ] **ARIA is not applied where it contradicts the element** — a wrong role is worse than no role, because it overrides what the browser already knew.
 - [ ] **Every custom widget follows an established ARIA pattern completely** — the roles, states, and keyboard interactions of the APG pattern are a package, and implementing half of one produces a control that announces itself as something it does not behave like.
 
-## 2. Keyboard operation
+## 2. Keyboard operation {#keyboard-operation}
 
 - [ ] **Every interactive element can be reached and operated with the keyboard alone** — unplug the mouse and complete the primary user journey; this single test finds more real defects than any scanner.
 - [ ] **Focus order follows the visual reading order** — a positioned layout that reorders content visually without reordering the DOM produces a focus path that jumps around the screen.
@@ -33,7 +33,7 @@ Automated tools catch roughly a third of accessibility defects, and almost none 
 - [ ] **No functionality requires a specific pointer gesture** — WCAG 2.2 requires that anything achievable by dragging also be achievable by a single tap or click, which rules out drag-only reordering and sliders with no keyboard equivalent.
 - [ ] **Custom keyboard shortcuts using single characters can be turned off or remapped** — they collide with screen reader navigation keys.
 
-## 3. Focus visibility
+## 3. Focus visibility {#focus-visibility}
 
 - [ ] **A visible focus indicator is present on every focusable element** — removing the default outline without replacing it is the most common accessibility regression in any design refresh.
 - [ ] **The focus indicator has sufficient contrast against both the component and the background** — a subtle indicator that meets nobody's needs is functionally the same as none.
@@ -42,7 +42,7 @@ Automated tools catch roughly a third of accessibility defects, and almost none 
 - [ ] **Focus is moved deliberately after actions that change context** — after a route change in a single-page application, move focus to the new heading, or the keyboard user is left at the top of a page they cannot tell has changed.
 - [ ] **Focus is never moved automatically in a way that interrupts the user** — auto-focusing a field mid-interaction disorients screen reader users.
 
-## 4. Colour, contrast, and visual presentation
+## 4. Colour, contrast, and visual presentation {#colour-contrast-and-visual-presentation}
 
 - [ ] **Text meets a 4.5:1 contrast ratio, or 3:1 for large text** — measure the computed values including any overlay or gradient behind the text.
 - [ ] **Non-text elements meet 3:1** — icons that carry meaning, form field borders, focus indicators, and chart series boundaries all count.
@@ -52,7 +52,7 @@ Automated tools catch roughly a third of accessibility defects, and almost none 
 - [ ] **`prefers-reduced-motion` is honoured** — remove parallax, large transitions, and auto-playing animation for users who have asked for it, because motion can cause genuine nausea.
 - [ ] **Nothing flashes more than three times per second** — this criterion exists to prevent seizures and has no exceptions worth negotiating.
 
-## 5. Forms and error handling
+## 5. Forms and error handling {#forms-and-error-handling}
 
 - [ ] **Every input has a programmatically associated label** — a placeholder is not a label; it disappears on typing and is often ignored by assistive technology.
 - [ ] **Required fields are marked in the accessible name or with `aria-required`, not only with a coloured asterisk** — a visual convention explained once at the top of the form is not available to someone tabbing straight into the field.
@@ -64,7 +64,7 @@ Automated tools catch roughly a third of accessibility defects, and almost none 
 - [ ] **Authentication does not depend on a cognitive function test** — WCAG 2.2 criterion 3.3.8 means allowing password managers to paste, and not requiring the user to transcribe, remember, or solve a puzzle with no alternative.
 - [ ] **Submissions that are legal, financial, or irreversible are reversible, checked, or confirmed** — a confirmation step is the accepted mechanism.
 
-## 6. Content, media, and non-text alternatives
+## 6. Content, media, and non-text alternatives {#content-media-and-non-text-alternatives}
 
 - [ ] **Every image has an alternative that serves its purpose** — describe the function for a functional image, the information for an informative one, and use an empty `alt` for a purely decorative one so it is skipped rather than announced as a filename.
 - [ ] **Complex images have a longer description available in text** — charts, diagrams, and infographics cannot be served by a short alternative.
@@ -74,7 +74,7 @@ Automated tools catch roughly a third of accessibility defects, and almost none 
 - [ ] **Audio-only content has a transcript, and nothing auto-plays sound for more than three seconds without a control to stop it** — unexpected audio competes directly with a screen reader's speech output.
 - [ ] **Help mechanisms appear in a consistent place across pages** — WCAG 2.2 criterion 3.2.6, which matters most for users who rely on finding help in the same location every time.
 
-## 7. Dynamic behaviour and timing
+## 7. Dynamic behaviour and timing {#dynamic-behaviour-and-timing}
 
 - [ ] **Content that updates without a page load is announced appropriately** — use a polite live region for status messages and reserve assertive for genuinely urgent ones.
 - [ ] **Live regions exist in the DOM before the content is inserted** — a region added and populated in the same tick is frequently not announced at all.
@@ -84,7 +84,7 @@ Automated tools catch roughly a third of accessibility defects, and almost none 
 - [ ] **Focus and context do not change on input alone** — selecting a value in a dropdown must not navigate the page; require an explicit action.
 - [ ] **Disabled controls are used sparingly, and a disabled submit button is not the only feedback** — a disabled element is typically skipped by keyboard navigation and offers no explanation of what is missing.
 
-## 8. Touch and target size
+## 8. Touch and target size {#touch-and-target-size}
 
 - [ ] **Interactive targets are at least 24 by 24 CSS pixels, or have equivalent spacing** — WCAG 2.2 criterion 2.5.8; the common failures are icon-only buttons, table row actions, and close buttons.
 - [ ] **Targets that sit close together have adequate spacing** — adjacent small controls cause mis-taps for anyone with a motor impairment or a moving vehicle.
@@ -93,7 +93,7 @@ Automated tools catch roughly a third of accessibility defects, and almost none 
 - [ ] **A visible label's text is contained in the accessible name** — otherwise a speech-input user saying the visible label cannot activate the control.
 - [ ] **Hover-triggered content can also be triggered by keyboard, remains visible while the pointer moves onto it, and is dismissible with Escape.**
 
-## 9. Testing and governance
+## 9. Testing and governance {#testing-and-governance}
 
 - [ ] **An automated scanner runs in CI on key pages and on component stories** — it catches the mechanical third cheaply and prevents regressions.
 - [ ] **The critical journey has been completed with a screen reader** — NVDA or JAWS with a desktop browser, and VoiceOver on iOS, since mobile behaviour differs materially.

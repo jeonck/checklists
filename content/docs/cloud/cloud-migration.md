@@ -11,7 +11,7 @@ Migration projects rarely fail at the technology; they fail in the hour when tra
 
 {{< alert context="info" text="**Who runs this:** the migration lead, with the workload owner, a database engineer, and a network engineer. **When:** start at least four weeks before the cutover date; the rehearsal section must complete at least one week before." />}}
 
-## 1. Assessment and scope
+## 1. Assessment and scope {#assessment-and-scope}
 
 - [ ] **The migration strategy is chosen and written down per component** — rehost, replatform, refactor, repurchase, retire, or retain; a project that has not decided will drift into a partial refactor under time pressure.
 - [ ] **The scope boundary lists what is explicitly not moving in this window** — the ambiguity between "later" and "never" is where orphaned dependencies live.
@@ -21,7 +21,7 @@ Migration projects rarely fail at the technology; they fail in the hour when tra
 - [ ] **Success criteria and the acceptance owner are agreed before work starts** — including the latency and error-rate thresholds that define a successful cutover.
 - [ ] **The rollback deadline within the window is fixed and agreed** — the clock time after which you stop trying to fix forward and revert, decided when everyone is calm.
 
-## 2. Dependency and integration mapping
+## 2. Dependency and integration mapping {#dependency-and-integration-mapping}
 
 - [ ] **Every inbound caller of the workload is identified, including batch and internal tooling** — a report generator that runs monthly is the classic caller nobody remembers until it fails.
 - [ ] **Every outbound dependency is identified with its protocol, endpoint, and authentication method.**
@@ -31,7 +31,7 @@ Migration projects rarely fail at the technology; they fail in the hour when tra
 - [ ] **Shared infrastructure dependencies are flagged** — an on-premises directory service, message broker, or file share that stays behind creates a latency and availability coupling that must be designed for explicitly.
 - [ ] **Scheduled jobs, cron entries, and their timezone assumptions are inventoried** — jobs that double-run during cutover, or silently stop, are a frequent post-migration data problem.
 
-## 3. Target environment build and data replication
+## 3. Target environment build and data replication {#target-environment-build-and-data-replication}
 
 - [ ] **The target environment is built from code, not by hand** — you will need to build it at least twice, once for rehearsal and once for real.
 - [ ] **Target capacity is sized from the baseline in section 1, with headroom for the cutover spike** — cold caches and reconnecting clients make the first hour the busiest.
@@ -43,7 +43,7 @@ Migration projects rarely fail at the technology; they fail in the hour when tra
 - [ ] **Secrets, connection strings, and configuration exist in the target and have been used successfully at least once** — an untested secret is an outage waiting for the worst moment.
 - [ ] **Observability is live on the target before cutover, with the same dashboards as the source** — you must be able to compare the two systems side by side during validation.
 
-## 4. Rehearsal and dry run
+## 4. Rehearsal and dry run {#rehearsal-and-dry-run}
 
 - [ ] **A full dry run of the cutover runbook has been executed end to end** — with a copy of production data, and against the real target environment.
 - [ ] **Every step in the runbook has an owner, an expected duration, and an explicit verification** — a step that says only "switch DNS" will be performed differently by each person who reads it.
@@ -55,7 +55,7 @@ Migration projects rarely fail at the technology; they fail in the hour when tra
 
 {{< alert context="danger" text="**Blocking:** do not proceed to a production cutover without at least one complete, timed dry run including rollback. If the schedule does not allow a rehearsal, the schedule is wrong, not the checklist." />}}
 
-## 5. Freeze and go/no-go
+## 5. Freeze and go/no-go {#freeze-and-go-no-go}
 
 - [ ] **A change freeze is in effect on both source and target for an agreed period before the window** — including schema changes, configuration edits, and third-party integrations.
 - [ ] **The freeze is enforced technically where possible** — pipeline gate or branch protection, because a freeze that relies on everyone remembering does not hold.
@@ -65,7 +65,7 @@ Migration projects rarely fail at the technology; they fail in the hour when tra
 - [ ] **Vendor and cloud provider support tickets are pre-opened for the window where the platform offers it** — you do not want to be explaining your architecture to a first-line agent at 02:00.
 - [ ] **Automated alerting that will fire spuriously during the window is muted deliberately, with an unmute time set** — and the mute must not cover the alerts you need to see.
 
-## 6. The cutover window
+## 6. The cutover window {#the-cutover-window}
 
 - [ ] **A single bridge call or channel is open and all participants are on it before step one.**
 - [ ] **The runbook is being followed in a shared document with steps ticked and timestamped live** — this is your incident timeline if something goes wrong, and your evidence for the retrospective.
@@ -75,7 +75,7 @@ Migration projects rarely fail at the technology; they fail in the hour when tra
 - [ ] **Traffic is switched at the agreed layer** — DNS, load balancer target group, or connection string; and the mechanism was the one rehearsed.
 - [ ] **Each step's verification is performed before moving to the next** — the temptation to run ahead during a tight window is exactly how a failure is discovered three steps too late.
 
-## 7. Post-cutover validation
+## 7. Post-cutover validation {#post-cutover-validation}
 
 - [ ] **Data validation queries from the rehearsal are re-run and match expected outputs** — row counts, checksums, and business aggregates, before any user traffic is admitted.
 - [ ] **Smoke tests cover the critical user journeys end to end, including a real write** — a read-only health check will pass against a database that cannot accept writes.
@@ -85,7 +85,7 @@ Migration projects rarely fail at the technology; they fail in the hour when tra
 - [ ] **Latency and error rate are compared against the section 1 baseline, not against zero** — and any regression beyond the agreed threshold triggers the acceptance decision, not a shrug.
 - [ ] **A defined soak period is observed before the window is declared closed** — long enough to include one peak traffic period.
 
-## 8. Rollback
+## 8. Rollback {#rollback}
 
 - [ ] **The rollback trigger conditions are written down and objective** — specific error-rate, data-integrity, or elapsed-time thresholds, so the decision is not a debate at 04:00.
 - [ ] **The rollback procedure is a step-by-step runbook, not a paragraph, and was executed in the dry run.**
@@ -94,7 +94,7 @@ Migration projects rarely fail at the technology; they fail in the hour when tra
 - [ ] **DNS and load balancer changes are reversible within the lowered TTL** — and the reverse change has been prepared in advance rather than typed under pressure.
 - [ ] **Stakeholder communication for a rollback is pre-drafted** — writing it during the rollback delays the rollback.
 
-## 9. Stabilisation and decommissioning
+## 9. Stabilisation and decommissioning {#stabilisation-and-decommissioning}
 
 - [ ] **Hypercare support is staffed for an agreed period after cutover** — typically one full business cycle, including the first month-end if any process depends on it.
 - [ ] **DNS TTL is returned to its normal value once the migration is confirmed stable.**

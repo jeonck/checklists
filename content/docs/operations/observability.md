@@ -11,7 +11,7 @@ Monitoring answers questions you thought of in advance. Observability is whether
 
 {{< alert context="info" text="**Who runs this:** the owning team, reviewed by whoever is on call for the service. **When:** before a production readiness review, and again after any incident where the answer was *we could not tell*." />}}
 
-## 1. Signal coverage
+## 1. Signal coverage {#signal-coverage}
 
 - [ ] **The four golden signals exist for every user-facing entry point** — traffic, error rate, latency distribution, and saturation of the constraining resource, per endpoint rather than only in aggregate.
 - [ ] **Latency is recorded as a histogram, not an average** — averages hide the tail, and the tail is what your users are complaining about.
@@ -21,7 +21,7 @@ Monitoring answers questions you thought of in advance. Observability is whether
 - [ ] **Batch and scheduled jobs emit start, finish, duration, and record counts** — a cron job that stopped running produces no signal at all unless you explicitly watch for its absence.
 - [ ] **Dependency calls are instrumented on the client side** — a downstream service that reports itself healthy can still be unreachable from your network position.
 
-## 2. Metrics
+## 2. Metrics {#metrics}
 
 - [ ] **Metric names follow one documented convention** — unit suffix, consistent prefix, and the same label spelling across services, or cross-service queries silently return nothing.
 - [ ] **Cardinality is bounded and reviewed** — never label a metric with user ID, request ID, URL path with embedded IDs, or anything unbounded; this is the single most common way to take down a metrics backend.
@@ -30,7 +30,7 @@ Monitoring answers questions you thought of in advance. Observability is whether
 - [ ] **Recording rules pre-compute the expensive queries used by dashboards and alerts** — a dashboard that takes 40 seconds to load will not be opened during an incident.
 - [ ] **Retention is tiered deliberately** — high resolution for recent debugging, downsampled long-term series for capacity and trend work.
 
-## 3. Logs
+## 3. Logs {#logs}
 
 - [ ] **All logs are structured** — JSON or an equivalent key-value format, so that fields can be filtered and aggregated rather than grepped.
 - [ ] **Every log line carries a trace ID and a request or job ID** — without a correlation key, a distributed request becomes a hundred unlinked lines across a dozen services.
@@ -40,7 +40,7 @@ Monitoring answers questions you thought of in advance. Observability is whether
 - [ ] **Retention satisfies both the investigation need and the data retention policy** — long enough to chase a slow-burning bug, short enough to be defensible.
 - [ ] **Log ingestion failure is itself monitored** — a full disk or a rejected batch means you are flying blind precisely when things are going wrong.
 
-## 4. Distributed tracing
+## 4. Distributed tracing {#distributed-tracing}
 
 - [ ] **Trace context propagates across every hop** — HTTP, gRPC, message queues, and background workers; a trace that stops at the first hop tells you nothing you did not already know.
 - [ ] **Spans are created for outbound calls, database queries, and cache lookups** — the point of tracing is attributing latency to a component, which needs spans at component boundaries.
@@ -49,7 +49,7 @@ Monitoring answers questions you thought of in advance. Observability is whether
 - [ ] **Instrumentation uses OpenTelemetry or another vendor-neutral SDK** — so that changing backend does not mean re-instrumenting every service.
 - [ ] **Trace IDs are surfaced to users or in error responses** — a support ticket that quotes a trace ID turns a two-hour investigation into a two-minute one.
 
-## 5. Dashboards
+## 5. Dashboards {#dashboards}
 
 - [ ] **Every service has one overview dashboard that fits on a single screen** — golden signals plus dependency health, with no scrolling required.
 - [ ] **Dashboards are ordered top-down** — user-visible symptoms first, then service internals, then infrastructure, matching how you actually diagnose.
@@ -58,7 +58,7 @@ Monitoring answers questions you thought of in advance. Observability is whether
 - [ ] **Dashboards are defined as code and version-controlled** — a hand-edited dashboard is lost the first time someone else edits it.
 - [ ] **A cross-service view exists for the critical user journey** — end-to-end latency and success rate for the journey, not just for individual services.
 
-## 6. Alerting
+## 6. Alerting {#alerting}
 
 - [ ] **Alerts fire on user-visible symptoms, not on causes** — high CPU is only worth paging about if it is degrading something a user can perceive.
 - [ ] **Every alert that pages links to the runbook section that resolves it** — an alert with no documented response should be downgraded to a ticket.
@@ -70,7 +70,7 @@ Monitoring answers questions you thought of in advance. Observability is whether
 
 {{< alert context="warning" text="**Common mistake:** alerting on every metric that has a threshold. Each new page must be justified against the question *what would the responder do differently in the next five minutes?* If there is no answer, it is a dashboard panel, not an alert." />}}
 
-## 7. SLOs and error budgets
+## 7. SLOs and error budgets {#slos-and-error-budgets}
 
 - [ ] **Each critical user journey has an SLI defined as good events divided by valid events** — with an explicit definition of what counts as good and what requests are excluded.
 - [ ] **SLO targets are set from what users need, not from what the system currently does** — and they are achievable, since an SLO that is permanently breached is ignored.
@@ -78,7 +78,7 @@ Monitoring answers questions you thought of in advance. Observability is whether
 - [ ] **Multi-window multi-burn-rate alerting is configured** — a fast window for outages and a slow window for chronic degradation, so both are caught without false pages.
 - [ ] **A policy exists for what happens when the budget is exhausted** — typically freezing feature releases in favour of reliability work, agreed with the product owner in advance.
 
-## 8. Synthetic monitoring and the pipeline itself
+## 8. Synthetic monitoring and the pipeline itself {#synthetic-monitoring-and-the-pipeline-itself}
 
 - [ ] **A synthetic probe exercises the critical user journey from outside the network** — real user traffic can drop to zero while every internal metric stays green.
 - [ ] **Probes run from more than one region or provider** — so that a probe failure is distinguishable from an outage in the probing infrastructure.

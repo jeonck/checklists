@@ -11,7 +11,7 @@ Most cloud cost programmes fail in the same way: someone is asked to cut 30%, th
 
 {{< alert context="info" text="**Who runs this:** a FinOps practitioner or platform engineer, paired with the engineering owner of each major workload. **When:** quarterly as a standing review, and before any commitment purchase or budget-cut exercise." />}}
 
-## 1. Visibility and cost attribution
+## 1. Visibility and cost attribution {#visibility-and-cost-attribution}
 
 - [ ] **The detailed billing export is enabled and queryable** — AWS Cost and Usage Report into Athena, Azure cost export into a storage account, or GCP billing export into BigQuery; the console cost explorer is too coarse to answer per-team questions.
 - [ ] **At least 90% of spend is attributable to a team or product** — measure the unattributed percentage explicitly, because that number is the ceiling on any accountability you try to introduce.
@@ -22,7 +22,7 @@ Most cloud cost programmes fail in the same way: someone is asked to cut 30%, th
 - [ ] **A unit cost metric exists for the main business driver** — cost per order, per active user, per GB ingested; absolute spend rising while unit cost falls is a healthy business, and you cannot tell the difference without the ratio.
 - [ ] **Cost anomaly detection is enabled and alerts reach the owning team, not just finance.**
 
-## 2. Eliminating waste
+## 2. Eliminating waste {#eliminating-waste}
 
 - [ ] **Unattached block storage volumes are identified and deleted** — orphaned EBS, managed disks, and persistent disks survive instance termination and accrue indefinitely with zero signal.
 - [ ] **Old snapshots and machine images beyond the retention policy are removed** — snapshot sprawl is incremental per snapshot but the chain keeps the original blocks alive forever.
@@ -34,7 +34,7 @@ Most cloud cost programmes fail in the same way: someone is asked to cut 30%, th
 - [ ] **Abandoned resources from proofs of concept have an expiry mechanism** — sandbox accounts that reap resources on a timer, or a tag with a deletion date that a scheduled job enforces.
 - [ ] **Data transfer to deleted or unused observability and log destinations is stopped** — teams frequently delete a dashboard and leave the agent shipping the data.
 
-## 3. Rightsizing compute
+## 3. Rightsizing compute {#rightsizing-compute}
 
 - [ ] **Rightsizing recommendations are reviewed against a lookback window of at least 14 days including peak** — a recommendation generated over a quiet fortnight will undersize a workload that spikes monthly.
 - [ ] **Memory utilisation is actually being collected** — provider rightsizing defaults to CPU only, and memory-bound workloads get downsized into an out-of-memory incident.
@@ -45,7 +45,7 @@ Most cloud cost programmes fail in the same way: someone is asked to cut 30%, th
 - [ ] **Autoscaling is driven by the metric that actually constrains the service** — scaling on CPU for a queue-depth-bound consumer means over-provisioning while the backlog grows.
 - [ ] **Rightsizing changes are rolled out progressively and monitored against latency SLOs** — a saving that causes an incident is not a saving.
 
-## 4. Commitments and discount instruments
+## 4. Commitments and discount instruments {#commitments-and-discount-instruments}
 
 - [ ] **Waste removal and rightsizing were completed before commitments were sized** — this is the ordering mistake that locks in years of overspend.
 - [ ] **Commitment coverage and utilisation are both tracked** — coverage tells you how much on-demand spend is still uncovered; utilisation tells you whether you are paying for commitments you do not consume, and only both together are meaningful.
@@ -58,7 +58,7 @@ Most cloud cost programmes fail in the same way: someone is asked to cut 30%, th
 
 {{< alert context="warning" text="**Common mistake:** buying a three-year commitment to hit a quarterly savings target before rightsizing. You will be paying for oversized instances until 2029, and the commitment cannot be undone — only partially resold, in some regions, at a loss." />}}
 
-## 5. Storage and data lifecycle
+## 5. Storage and data lifecycle {#storage-and-data-lifecycle}
 
 - [ ] **Every object storage bucket over 100 GB has a lifecycle policy** — and the transition thresholds were derived from access log analysis rather than guessed.
 - [ ] **Storage class analysis has been run before enabling intelligent tiering everywhere** — the monitoring charge per object makes automatic tiering a loss for buckets full of small objects.
@@ -69,7 +69,7 @@ Most cloud cost programmes fail in the same way: someone is asked to cut 30%, th
 - [ ] **Backup retention matches the stated recovery point objective and legal requirement, not a default** — and duplicate backups from two overlapping tools have been eliminated.
 - [ ] **Database storage auto-growth is monitored** — many managed databases grow storage automatically and never shrink it, so a one-off import permanently raises the floor.
 
-## 6. Network and data transfer
+## 6. Network and data transfer {#network-and-data-transfer}
 
 - [ ] **Data transfer charges are broken out and understood by direction and boundary** — cross-AZ, cross-region, internet egress, and NAT processing are separately priced and separately fixable.
 - [ ] **Cross-availability-zone chatter is measured** — a service mesh or a naive client that ignores topology can double a bill by routing every request across zones for no availability benefit.
@@ -78,7 +78,7 @@ Most cloud cost programmes fail in the same way: someone is asked to cut 30%, th
 - [ ] **Cache hit ratio at the CDN is measured and tuned** — a misconfigured cache key or a missing cache-control header turns a CDN into an expensive proxy.
 - [ ] **Chatty cross-region replication is justified by an actual availability requirement** — replicating everything to a DR region that has never been used costs storage plus transfer plus the compute to serve it.
 
-## 7. Managed services, licensing, and vendors
+## 7. Managed services, licensing, and vendors {#managed-services-licensing-and-vendors}
 
 - [ ] **Serverless versus provisioned has been compared on real traffic shape** — spiky, low-duty-cycle workloads favour serverless; steady high-utilisation workloads are usually cheaper provisioned, and the crossover is workload-specific.
 - [ ] **Provisioned throughput on databases, streams, and search matches measured demand** — provisioned capacity on a table with bursty traffic is worse than on-demand mode on both cost and reliability.
@@ -87,7 +87,7 @@ Most cloud cost programmes fail in the same way: someone is asked to cut 30%, th
 - [ ] **Duplicate tooling doing the same job has been consolidated** — two log platforms, three secrets stores, and a CI system nobody uses is a recurring pattern after any reorganisation or acquisition.
 - [ ] **Enterprise discount programme and marketplace private offers have been negotiated at renewal** — committed spend agreements and marketplace routing of third-party spend both move real money.
 
-## 8. Governance and operating model
+## 8. Governance and operating model {#governance-and-operating-model}
 
 - [ ] **Cost is a visible engineering metric, not a finance report** — put unit cost on the same dashboard as latency and error rate, and it becomes an engineering concern.
 - [ ] **New workloads produce a cost estimate before provisioning** — infrastructure-as-code cost estimation in pull requests catches the expensive default before it is merged.

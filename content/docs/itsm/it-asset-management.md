@@ -11,7 +11,7 @@ Asset management is unglamorous until the moment it matters: a vulnerability adv
 
 {{< alert context="info" text="**Who runs this:** the asset manager with IT operations, finance, and the security owner. **When:** quarterly for the full review, with reconciliation running monthly and on every joiner, mover, and leaver event." />}}
 
-## 1. Hardware inventory
+## 1. Hardware inventory {#hardware-inventory}
 
 - [ ] **Every asset has a unique identifier that is physically attached and recorded** — asset tag and serial number, because model and user name are not unique and change over time.
 - [ ] **The register covers all categories, not just laptops** — servers, network equipment, mobile devices, security keys, monitors, and the equipment sitting in home offices.
@@ -21,7 +21,7 @@ Asset management is unglamorous until the moment it matters: a vulnerability adv
 - [ ] **Purchase date, warranty end, cost, and cost centre are recorded** — these drive refresh planning, warranty claims, and depreciation, and they are painful to reconstruct later.
 - [ ] **Cloud and virtual assets are inventoried alongside physical ones** — instances, volumes, and managed services are assets with owners and costs even though nobody can trip over them.
 
-## 2. Software inventory and discovery
+## 2. Software inventory and discovery {#software-inventory-and-discovery}
 
 - [ ] **Installed software is discovered automatically on every managed endpoint and server** — a manual software inventory is out of date the day after it is compiled.
 - [ ] **The inventory records version and edition, not just product name** — licence entitlements and vulnerability advisories are both version-specific.
@@ -31,7 +31,7 @@ Asset management is unglamorous until the moment it matters: a vulnerability adv
 - [ ] **Open-source components in internally built software are inventoried in a software bill of materials** — when the next widely exploited library vulnerability lands, this is the only thing that answers are we affected quickly.
 - [ ] **Browser extensions and unmanaged plugins are inventoried on endpoints** — an extension with read access to every page is an unreviewed data processor.
 
-## 3. Ownership and lifecycle
+## 3. Ownership and lifecycle {#ownership-and-lifecycle}
 
 - [ ] **Every asset has a named custodian and a named business owner** — the custodian holds it, the owner decides about it, and both fields being empty is the norm in neglected registers.
 - [ ] **Lifecycle states are defined and every asset is in exactly one** — ordered, in stock, assigned, in repair, retired, disposed.
@@ -40,7 +40,7 @@ Asset management is unglamorous until the moment it matters: a vulnerability adv
 - [ ] **Assets assigned to leavers are cleared within a defined period** — an asset still assigned to someone who left three months ago means either the asset is lost or the register is wrong, and both need action.
 - [ ] **Loan and temporary assignments have an expected return date and are chased** — loaner equipment without a return date becomes permanently issued equipment.
 
-## 4. Licence compliance and true-up risk
+## 4. Licence compliance and true-up risk {#licence-compliance-and-true-up-risk}
 
 - [ ] **Entitlements are recorded from contracts and matched against measured deployment** — the licence position is entitlement minus consumption, and you need both numbers to know where you stand.
 - [ ] **Licence metrics are understood per product: per user, per device, per core, or per concurrent session** — core-based and virtualisation-based metrics are where unexpected liabilities are created.
@@ -53,7 +53,7 @@ Asset management is unglamorous until the moment it matters: a vulnerability adv
 
 {{< alert context="warning" text="**Audit exposure:** the expensive part of a licence audit is rarely the licences you knew about. It is virtualised or cloud-hosted deployments counted under a different metric than you assumed, and non-production environments that the vendor counts as production. Check those two things before a vendor does." />}}
 
-## 5. End-of-life and patching
+## 5. End-of-life and patching {#end-of-life-and-patching}
 
 - [ ] **End-of-support dates for operating systems, firmware, databases, and appliances are recorded in the register** — so the estate can be queried for what stops receiving fixes in the next 12 months.
 - [ ] **Assets past end of support are listed, risk-assessed, and either replaced or formally accepted** — an unsupported system that nobody has decided about is an unowned risk.
@@ -63,7 +63,7 @@ Asset management is unglamorous until the moment it matters: a vulnerability adv
 - [ ] **Network appliances, printers, and other embedded devices are patched too** — they run full operating systems, sit on the internal network, and are almost never in the patch plan.
 - [ ] **Exceptions to patching have an owner, a compensating control, and an expiry date** — a machine that cannot be patched because of a vendor dependency should be isolated, not ignored.
 
-## 6. Reconciliation against identity and finance data
+## 6. Reconciliation against identity and finance data {#reconciliation-against-identity-and-finance-data}
 
 - [ ] **The asset register is reconciled against the identity directory on a defined cycle** — every assigned asset should map to an active person, and every active person with an issued device should have one.
 - [ ] **Assets assigned to disabled or deleted identities are surfaced as exceptions** — this is the single most productive reconciliation query in the whole practice.
@@ -73,7 +73,7 @@ Asset management is unglamorous until the moment it matters: a vulnerability adv
 - [ ] **Discrepancies are investigated and closed with a recorded cause, not simply overwritten** — the cause tells you which process is leaking.
 - [ ] **Reconciliation runs automatically and produces an exception report rather than requiring a person to compare spreadsheets** — a manual reconciliation happens twice and then stops.
 
-## 7. Disposal and data sanitisation
+## 7. Disposal and data sanitisation {#disposal-and-data-sanitisation}
 
 - [ ] **A disposal procedure exists per media type and follows a recognised sanitisation standard** — clear, purge, or destroy chosen against the sensitivity of the data and the fate of the device.
 - [ ] **Self-encrypting drives are sanitised by verified cryptographic erase, and the verification is recorded** — cryptographic erase is only as good as the proof that the key was actually destroyed.
@@ -84,7 +84,7 @@ Asset management is unglamorous until the moment it matters: a vulnerability adv
 - [ ] **Cloud storage, snapshots, and backups belonging to a decommissioned system are deleted too** — decommissioning the instance and leaving the volume snapshots is retained data with no owner.
 - [ ] **The register is updated to disposed with the date, method, and evidence reference** — an asset that vanishes from the register has not been disposed of, it has been forgotten.
 
-## 8. Governance, reporting, and audit readiness
+## 8. Governance, reporting, and audit readiness {#governance-reporting-and-audit-readiness}
 
 - [ ] **The asset management policy is documented, approved, and reviewed on a schedule** — including what counts as an asset, which is more contentious than it sounds.
 - [ ] **A single system of record is designated and other lists are subordinate to it** — two authoritative spreadsheets means zero authoritative spreadsheets.

@@ -11,7 +11,7 @@ Release day goes badly when decisions that should have been made yesterday are m
 
 {{< alert context="info" text="**Who runs this:** a named release conductor, with the owning engineers and the on-call responder present. **When:** starting the day before the deploy window and continuing through the soak period." />}}
 
-## 1. T-1 day: scope and readiness
+## 1. T-1 day: scope and readiness {#t-1-day-scope-and-readiness}
 
 - [ ] **The release contents are frozen and the change list is published** — every merged commit, with the pull requests and tickets it closes, so nobody discovers an unexpected change mid-incident.
 - [ ] **Every change in the release has been through code review and the pipeline is green on the release commit** — a green build from an earlier commit does not count.
@@ -21,7 +21,7 @@ Release day goes badly when decisions that should have been made yesterday are m
 - [ ] **Database migrations are backward compatible and have been timed against a production-sized dataset** — a migration that locks a large table for minutes is an outage regardless of how correct it is.
 - [ ] **Any dependency on another team's release is confirmed in writing, including its ordering.**
 
-## 2. T-1 day: communication and logistics
+## 2. T-1 day: communication and logistics {#t-1-day-communication-and-logistics}
 
 - [ ] **The deploy window is agreed and published** — with the timezone stated explicitly and confirmed against any change freeze.
 - [ ] **The window avoids peak traffic, the end of a shift, and the hours before a weekend or holiday** — deploying at 5pm on a Friday leaves nobody to watch the soak.
@@ -31,7 +31,7 @@ Release day goes badly when decisions that should have been made yesterday are m
 - [ ] **The incident channel and bridge are created in advance** — creating communication channels during an incident wastes the first ten minutes.
 - [ ] **Anything requiring a maintenance window or a status page notice has been scheduled and drafted.**
 
-## 3. T-1 day: rollback preparation
+## 3. T-1 day: rollback preparation {#t-1-day-rollback-preparation}
 
 - [ ] **The rollback procedure is written down as concrete commands, not as a description** — the person running it may not be the person who wrote it.
 - [ ] **The previous artefact version and its digest are recorded and confirmed to still exist in the registry** — retention policies have deleted rollback targets before.
@@ -41,7 +41,7 @@ Release day goes badly when decisions that should have been made yesterday are m
 - [ ] **The maximum acceptable time to decide on rollback is agreed** — typically minutes, and stated before anyone is emotionally invested in the release.
 - [ ] **A feature flag kill switch is tested if the release relies on one** — verify it takes effect without a redeploy.
 
-## 4. Go/no-go, immediately before the window
+## 4. Go/no-go, immediately before the window {#go-no-go-immediately-before-the-window}
 
 - [ ] **The pipeline is still green and no new commits have landed on the release branch since the freeze.**
 - [ ] **No active incident is in progress in this service or its critical dependencies** — check the incident tracker rather than assuming.
@@ -53,7 +53,7 @@ Release day goes badly when decisions that should have been made yesterday are m
 
 {{< alert context="warning" text="**No-go conditions:** an active incident anywhere in the critical dependency chain, a rollback path that has not been verified, or a key person unavailable for the soak period. Any one of these is enough to postpone. Postponing costs a day; a bad release with nobody watching costs far more." />}}
 
-## 5. Deploy window: execution
+## 5. Deploy window: execution {#deploy-window-execution}
 
 - [ ] **Every step is announced in the release channel as it starts and as it completes** — with timestamps, because the timeline is what you will reconstruct later.
 - [ ] **Backward-compatible schema migrations run and complete before the application deploy** — expand first, contract in a later release.
@@ -64,7 +64,7 @@ Release day goes badly when decisions that should have been made yesterday are m
 - [ ] **Deploy progress is watched actively, not started and left** — the person who ran the command stays until the rollout completes.
 - [ ] **If anything unexpected occurs, the rollout is paused rather than pushed through** — a paused rollout is cheap; a completed bad rollout is not.
 
-## 6. Immediately after rollout: verification
+## 6. Immediately after rollout: verification {#immediately-after-rollout-verification}
 
 - [ ] **The running version is confirmed on every instance or replica** — a partially completed rollout serving two versions is a real and frequently missed state.
 - [ ] **The critical user journey is exercised end to end by a human, not only by a synthetic probe** — log in, complete the primary action, confirm the result persisted.
@@ -75,7 +75,7 @@ Release day goes badly when decisions that should have been made yesterday are m
 - [ ] **Any feature flags intended to be enabled with this release are turned on one at a time, with verification between each.**
 - [ ] **Cache and configuration invalidation has taken effect where required** — including content delivery network caches for front-end changes.
 
-## 7. Soak period: monitoring
+## 7. Soak period: monitoring {#soak-period-monitoring}
 
 - [ ] **A defined soak duration is agreed before the release is declared done** — long enough to cover at least one full traffic cycle for the service, and never less than the time it takes for slow failure modes to appear.
 - [ ] **A named person is actively watching dashboards for the soak, not relying on alerts alone** — alerts catch what you predicted; a human catches what you did not.
@@ -85,7 +85,7 @@ Release day goes badly when decisions that should have been made yesterday are m
 - [ ] **Support and customer-facing channels are monitored for reports that dashboards will not show** — a broken payment flow for one card type is invisible in aggregate.
 - [ ] **The on-call responder is briefed on what changed and what to do about it before the conductor stands down.**
 
-## 8. Rollback decision
+## 8. Rollback decision {#rollback-decision}
 
 - [ ] **The pre-agreed trigger conditions are applied as written, without renegotiation** — the whole purpose of setting them in advance is to remove judgement under pressure.
 - [ ] **Rollback is the default response to an unexplained regression** — diagnose after service is restored, not before.
@@ -95,7 +95,7 @@ Release day goes badly when decisions that should have been made yesterday are m
 - [ ] **The decision, its reasoning, and its timeline are recorded in the release channel as they happen.**
 - [ ] **If rolling back, feature flags enabled during the release are also reverted** — a flag left on against an old binary is an untested combination.
 
-## 9. Release closure
+## 9. Release closure {#release-closure}
 
 - [ ] **The release is explicitly declared complete or rolled back in the release channel** — an ambiguous ending leaves the on-call responder unsure of the current state.
 - [ ] **The deployed version, artefact digest, and timestamp are recorded in the change log or change management system.**

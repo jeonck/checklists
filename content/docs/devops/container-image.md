@@ -11,7 +11,7 @@ Most container images in production are far larger, far more privileged, and far
 
 {{< alert context="info" text="**Who runs this:** the team that owns the Dockerfile, with a reviewer from platform or security for images that run in production. **When:** at image creation, at any base image change, and on a recurring schedule for long-lived images." />}}
 
-## 1. Base image selection
+## 1. Base image selection {#base-image-selection}
 
 - [ ] **The base image comes from a known, maintained publisher** — an official image, a vendor-supported distribution image, or your own internal base, rather than an arbitrary registry account.
 - [ ] **The base image is pinned by digest, not by tag** — `FROM node:22-slim` moves under you; `FROM node:22-slim@sha256:...` is a decision you can review.
@@ -20,7 +20,7 @@ Most container images in production are far larger, far more privileged, and far
 - [ ] **A rebuild cadence is defined for picking up base image patches** — an image built once and never rebuilt accumulates vulnerabilities even if your own code never changes.
 - [ ] **The architecture set is explicit** — multi-architecture images are built deliberately, so an arm64 node does not silently pull an emulated amd64 image.
 
-## 2. Build hygiene
+## 2. Build hygiene {#build-hygiene}
 
 - [ ] **A multi-stage build separates compilation from runtime** — compilers, package managers, and build caches must not ship to production.
 - [ ] **The final stage copies only the artefacts it needs** — copying the whole build workspace defeats the point of multi-stage.
@@ -30,7 +30,7 @@ Most container images in production are far larger, far more privileged, and far
 - [ ] **No package manager remains usable at runtime where it can be removed** — an image where an attacker can `apt-get install` their tooling is a much friendlier environment for them.
 - [ ] **The image builds without `--privileged` or a mounted Docker socket** — build steps requiring the host daemon are a privilege escalation path from CI into the host.
 
-## 3. Secrets and build-time data
+## 3. Secrets and build-time data {#secrets-and-build-time-data}
 
 - [ ] **No secret is passed as a build argument** — `ARG` values are recorded in image history and readable by anyone who can pull the image.
 - [ ] **Private registry or repository credentials use build secret mounts** — BuildKit secret mounts are not persisted into any layer.
@@ -39,7 +39,7 @@ Most container images in production are far larger, far more privileged, and far
 - [ ] **Runtime configuration comes from the environment or a mounted secret, not baked into the image** — an image containing production endpoints and keys cannot be reused or safely shared.
 - [ ] **Private base images are pulled with credentials scoped to the pipeline** — not a shared personal registry token.
 
-## 4. Runtime user and filesystem
+## 4. Runtime user and filesystem {#runtime-user-and-filesystem}
 
 - [ ] **The image declares a non-root `USER` with a fixed numeric UID** — a username alone does not satisfy orchestrator policies that check `runAsNonRoot`.
 - [ ] **The UID is outside the host's reserved range and does not collide with a privileged host user** — a common convention is a UID above 10000.
@@ -48,7 +48,7 @@ Most container images in production are far larger, far more privileged, and far
 - [ ] **File ownership and permissions are set at build time, not by a start-up script running as root** — an entrypoint that starts privileged and drops later is weaker than never being privileged.
 - [ ] **The image contains no shell where the workload does not require one** — a distroless runtime removes the most convenient post-exploitation tooling.
 
-## 5. Image content and dependencies
+## 5. Image content and dependencies {#image-content-and-dependencies}
 
 - [ ] **The package list has been reviewed and unnecessary packages removed** — debugging tools, editors, and network utilities are for a debug image, not the production one.
 - [ ] **Application dependencies are installed from a lockfile with integrity hashes** — so the image content is a function of the commit, not of the registry at build time.
@@ -59,7 +59,7 @@ Most container images in production are far larger, far more privileged, and far
 
 {{< alert context="warning" text="**Common mistake:** scanning the image once at build time and never again. A CVE published tomorrow applies to the image running today, so scan images in the registry on a schedule and alert on newly discovered findings in what is deployed, not only in what is being built." />}}
 
-## 6. Image metadata and identity
+## 6. Image metadata and identity {#image-metadata-and-identity}
 
 - [ ] **The image carries OCI standard labels** — source repository, revision, build timestamp, and version, so a running container can be traced to a commit.
 - [ ] **Tags are immutable in the registry** — overwriting a tag makes rollback and forensics unreliable.
@@ -68,7 +68,7 @@ Most container images in production are far larger, far more privileged, and far
 - [ ] **The image is signed and the signature is verifiable** — with the verification wired into admission control rather than performed by hand.
 - [ ] **Build provenance attestations are attached to the image** — recording which builder, which source commit, and which parameters produced it.
 
-## 7. Runtime configuration in the image
+## 7. Runtime configuration in the image {#runtime-configuration-in-the-image}
 
 - [ ] **`ENTRYPOINT` uses exec form so the application is PID 1 and receives signals** — a shell form entrypoint swallows `SIGTERM` and turns every deploy into a hard kill after the grace period.
 - [ ] **Zombie process reaping is handled** — either the application reaps children correctly or a minimal init process is used.
@@ -77,7 +77,7 @@ Most container images in production are far larger, far more privileged, and far
 - [ ] **A health check endpoint exists in the application and is documented** — the orchestrator's probe configuration depends on it.
 - [ ] **The default working directory and configuration paths are documented** — operators should not have to read the Dockerfile to mount a config file.
 
-## 8. Registry and distribution
+## 8. Registry and distribution {#registry-and-distribution}
 
 - [ ] **Push access to production repositories is limited to the pipeline identity** — no individual should be able to push an image that admission control will accept.
 - [ ] **The registry requires authentication for pulls of private images and does not permit anonymous listing** — public registry repositories routinely leak internal service names and configuration.

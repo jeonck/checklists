@@ -11,7 +11,7 @@ Everything a service is missing on its first day it will still be missing two ye
 
 {{< alert context="info" text="**Who runs this:** the engineer creating the service, with a platform or infrastructure reviewer. **When:** in the first week of the repository existing, well before any traffic. See also the [Production Readiness Review](/docs/devops/production-readiness/) for the launch gate." />}}
 
-## 1. Justification and boundaries
+## 1. Justification and boundaries {#justification-and-boundaries}
 
 - [ ] **There is a written reason this is a separate service rather than a module** — independent scaling, independent deployment cadence, or a genuine team boundary; "microservices" is not a reason.
 - [ ] **The service owns its data and no other service reads its database directly** — a shared database turns two services into one distributed monolith with worse failure modes.
@@ -20,7 +20,7 @@ Everything a service is missing on its first day it will still be missing two ye
 - [ ] **The operational cost is estimated and someone has agreed to pay it** — a service is a permanent on-call, patching, and dependency-upgrade obligation, not just a repository.
 - [ ] **The technology choice is on the team's supported list, or the exception is approved** — every new language adds a build toolchain, a security scanner, and a set of idioms the on-call must know at 3am.
 
-## 2. Repository and code hygiene
+## 2. Repository and code hygiene {#repository-and-code-hygiene}
 
 - [ ] **The repository is created from the organisation's template where one exists** — templates carry the pipeline, the linting rules, and the security defaults that nobody remembers to add manually.
 - [ ] **`README` gets a new engineer from clone to running locally in one documented sequence** — and someone who did not write it has followed it end to end.
@@ -31,7 +31,7 @@ Everything a service is missing on its first day it will still be missing two ye
 - [ ] **Automated dependency update PRs are enabled** — batching a year of upgrades into one change is how services end up stranded on an unsupported runtime.
 - [ ] **A `.gitignore` and a secret-scanning hook are in place from the first commit** — a credential committed once is committed forever in the history.
 
-## 3. Configuration and secrets
+## 3. Configuration and secrets {#configuration-and-secrets}
 
 - [ ] **All configuration comes from the environment, with no environment-specific code branches** — `if env == "production"` scattered through the codebase means staging never tests the production path.
 - [ ] **The service fails fast at start-up when required configuration is missing or malformed** — validate on boot and exit non-zero rather than discovering it on the first request that needs it.
@@ -40,7 +40,7 @@ Everything a service is missing on its first day it will still be missing two ye
 - [ ] **Every configuration value is documented with its default, its type, and what it does** — undocumented tunables are the settings nobody dares change at 3am.
 - [ ] **Local development uses non-production credentials against non-production data** — the first developer to point a local instance at production will not be the last.
 
-## 4. Build and pipeline
+## 4. Build and pipeline {#build-and-pipeline}
 
 - [ ] **A single command builds, tests, and lints the service locally, and CI runs the identical command** — divergence between local and CI is the most common source of "works on my machine".
 - [ ] **The build is reproducible from a clean checkout with no manual step** — no local tool installed by hand, no undocumented environment variable.
@@ -50,7 +50,7 @@ Everything a service is missing on its first day it will still be missing two ye
 - [ ] **CI runs in under ten minutes for the common path** — beyond that, engineers batch their pushes and the feedback loop stops working.
 - [ ] **Deployment to at least one non-production environment is automated on merge** — a deploy path exercised many times a day is the one that still works during an incident.
 
-## 5. Runtime scaffolding
+## 5. Runtime scaffolding {#runtime-scaffolding}
 
 - [ ] **Separate liveness and readiness endpoints exist** — liveness must not check downstream dependencies, or an outage in a dependency will make the orchestrator restart-loop healthy pods.
 - [ ] **Graceful shutdown is implemented on the first day** — handle the termination signal, stop accepting new work, drain in-flight requests, and exit within the grace period.
@@ -62,7 +62,7 @@ Everything a service is missing on its first day it will still be missing two ye
 
 {{< alert context="warning" text="**Blocking:** do not deploy a service whose outbound clients have no timeout, or whose liveness probe depends on a downstream service. Both turn a minor dependency wobble into a full outage, and both are trivial to fix now and painful to fix later." />}}
 
-## 6. Observability from day one
+## 6. Observability from day one {#observability-from-day-one}
 
 - [ ] **Logs are structured, at a configurable level, and written to standard output** — writing to files inside a container is a class of problem you never need to have.
 - [ ] **A correlation or trace identifier is generated at the edge and propagated to every downstream call** — retrofitting propagation across an existing call graph is far harder than adding it now.
@@ -72,7 +72,7 @@ Everything a service is missing on its first day it will still be missing two ye
 - [ ] **At least one alert on a user-visible symptom is configured before the first real traffic** — with a runbook link, even if the runbook is initially a stub.
 - [ ] **No secret, token, or personal data is logged** — check specifically for code that logs whole request objects or authorisation headers.
 
-## 7. Testing strategy
+## 7. Testing strategy {#testing-strategy}
 
 - [ ] **The test pyramid is decided and enforced** — fast unit tests as the bulk, a thin layer of integration tests against real dependencies in containers, and a very small number of end-to-end tests.
 - [ ] **Integration tests run against the real database engine and version** — an in-memory substitute will not reproduce locking, collation, or transaction semantics.
@@ -81,7 +81,7 @@ Everything a service is missing on its first day it will still be missing two ye
 - [ ] **Test data setup is isolated per test** — shared fixtures create order dependence, which surfaces as an unreproducible failure months later.
 - [ ] **A smoke test runs against each environment after deployment** — verifying the deployed instance actually serves the critical path, not just that the pods are ready.
 
-## 8. Ownership and operations
+## 8. Ownership and operations {#ownership-and-operations}
 
 - [ ] **The service is registered in the service catalogue with a named owning team** — a team, not an individual, and recorded somewhere machine-readable.
 - [ ] **It is added to the on-call rotation's scope and the escalation path is recorded** — before launch, not after the first page goes to nobody.

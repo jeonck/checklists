@@ -11,7 +11,7 @@ Most on-call failures are not heroic technical failures. They are an ongoing iss
 
 {{< alert context="info" text="**Who runs this:** the outgoing and incoming on-call engineers together, with the team lead as escalation if something cannot be handed over cleanly. **When:** at a fixed time at the end of every shift, before the rotation flips in the paging tool." />}}
 
-## 1. Before the handover meeting
+## 1. Before the handover meeting {#before-the-handover-meeting}
 
 - [ ] **The handover happens at a scheduled time, not whenever the rotation silently flips** — an automatic rotation change with no conversation is how context is lost.
 - [ ] **The outgoing engineer has written the handover note before the meeting starts** — the meeting is for questions and clarification, not for composing the note live.
@@ -20,7 +20,7 @@ Most on-call failures are not heroic technical failures. They are an ongoing iss
 - [ ] **The meeting is time-boxed to fifteen minutes** — if it needs longer, that is a signal to escalate an unresolved issue rather than to talk for an hour.
 - [ ] **A handover is still held when the shift was quiet** — the absence of pages is itself information, and skipping the ritual is how the ritual dies.
 
-## 2. What the outgoing engineer hands over
+## 2. What the outgoing engineer hands over {#what-the-outgoing-engineer-hands-over}
 
 - [ ] **Every page received during the shift, with what was done about it** — including pages that were acknowledged and ignored, which are the most likely to recur.
 - [ ] **Open incidents with current status, severity, and who else is involved** — never hand over an active incident by pager alone; brief the incoming engineer directly.
@@ -30,7 +30,7 @@ Most on-call failures are not heroic technical failures. They are an ongoing iss
 - [ ] **Manual work in flight** — a half-finished migration, a partially applied configuration change, or a rollback that was started and not finished.
 - [ ] **Tickets raised during the shift, with links** — so follow-up work does not have to be reconstructed from the chat history.
 
-## 3. What the incoming engineer confirms
+## 3. What the incoming engineer confirms {#what-the-incoming-engineer-confirms}
 
 - [ ] **The pager actually reaches them** — send a test notification and confirm it arrives on the phone that will be in the room, with the ringer on and do-not-disturb bypassed.
 - [ ] **Access works before it is needed** — production console, cluster credentials, VPN, the incident tool, and any break-glass procedure, all exercised now rather than mid-incident.
@@ -41,7 +41,7 @@ Most on-call failures are not heroic technical failures. They are an ongoing iss
 
 {{< alert context="danger" text="**Blocking:** do not flip the rotation until the incoming engineer has confirmed a test page arrived and that production access works. A silent pager is indistinguishable from a healthy system until the outage is already an hour old." />}}
 
-## 4. System state review
+## 4. System state review {#system-state-review}
 
 - [ ] **The service dashboards are walked through together** — current error rate and latency versus the same time last week, so a slow drift is visible rather than normalised.
 - [ ] **Error budget consumption for the shift is reported** — a large burn during a quiet shift means something is degrading without paging.
@@ -50,7 +50,7 @@ Most on-call failures are not heroic technical failures. They are an ongoing iss
 - [ ] **Backlogs and dead letter queues are reported with their trend** — a dead letter queue that grew during the shift is a customer-impacting bug that has not surfaced yet.
 - [ ] **Known-degraded dependencies are named** — including third-party providers currently on a status-page incident, so the next page is not misdiagnosed.
 
-## 5. Alerting and paging hygiene
+## 5. Alerting and paging hygiene {#alerting-and-paging-hygiene}
 
 - [ ] **Alerts that fired more than twice this shift are flagged as noisy** — repeated pages for the same non-actionable condition are the main driver of on-call attrition.
 - [ ] **Every silence created during the shift has an owner and an expiry** — and silences that are about to expire are transferred explicitly.
@@ -58,7 +58,7 @@ Most on-call failures are not heroic technical failures. They are an ongoing iss
 - [ ] **False positives are ticketed, not just tolerated** — if it is not written down, the same alert will wake five more people before anyone fixes it.
 - [ ] **The paging tool's schedule shows the correct people for the next fourteen days** — including holiday cover, and with an override rather than a private arrangement.
 
-## 6. Documentation and runbooks
+## 6. Documentation and runbooks {#documentation-and-runbooks}
 
 - [ ] **Any runbook used during the shift was corrected where it was wrong** — the moment you discover a stale step is the only moment you will reliably remember to fix it.
 - [ ] **Any incident resolved without a runbook produced one** — even a rough set of commands is better than the next responder starting from nothing.
@@ -67,7 +67,7 @@ Most on-call failures are not heroic technical failures. They are an ongoing iss
 - [ ] **Manual steps performed during the shift are captured as automation candidates** — the third time a human runs the same recovery command, it should become a script.
 - [ ] **The runbook index reflects any service added or retired since the last shift** — responders will search the index first, and a missing entry reads as no procedure exists.
 
-## 7. Escalation and follow-up ownership
+## 7. Escalation and follow-up ownership {#escalation-and-follow-up-ownership}
 
 - [ ] **Each open item has exactly one named owner after the handover** — either the incoming engineer or a specific person on the team, never "on-call" as an abstraction.
 - [ ] **Items that need daytime engineering work are moved into the team backlog, not carried in the pager** — on-call is for response; recurring toil belongs in sprint planning.
@@ -75,7 +75,7 @@ Most on-call failures are not heroic technical failures. They are an ongoing iss
 - [ ] **Incidents from the shift have a postmortem owner assigned where the severity threshold was met** — postmortems left unassigned at handover are rarely written.
 - [ ] **Follow-up actions from previous postmortems that are now overdue are surfaced** — the same incident recurring is almost always an unimplemented action item.
 
-## 8. Shift health and sustainability
+## 8. Shift health and sustainability {#shift-health-and-sustainability}
 
 - [ ] **Overnight pages are recorded with their timestamps** — sleep interruption is the metric that predicts burnout, and it is invisible unless it is counted.
 - [ ] **The outgoing engineer takes compensating rest after a disrupted night** — agreed as team policy, so that taking it does not require asking permission.

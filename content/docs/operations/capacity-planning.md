@@ -11,7 +11,7 @@ Capacity planning is the discipline of knowing, before your users find out, wher
 
 {{< alert context="info" text="**Who runs this:** the service owner with input from finance and whoever owns the infrastructure budget. **When:** quarterly, before any expected demand event, and after any architectural change that alters the constraining resource." />}}
 
-## 1. Demand model
+## 1. Demand model {#demand-model}
 
 - [ ] **The unit of demand is defined in business terms** — orders per minute, active sessions, or documents indexed, so that a product forecast translates directly into infrastructure.
 - [ ] **The peak-to-average ratio is measured, not assumed** — provisioning to the daily average guarantees failure at the daily peak, which is the only hour that matters.
@@ -21,7 +21,7 @@ Capacity planning is the discipline of knowing, before your users find out, wher
 - [ ] **Internal demand is modelled alongside customer demand** — analytics jobs, backfills, and your own retrying clients frequently dominate the peak.
 - [ ] **The forecast records its assumptions explicitly** — so that when reality diverges you can tell which assumption was wrong rather than rebuilding it from scratch.
 
-## 2. Current utilisation and the constraining resource
+## 2. Current utilisation and the constraining resource {#current-utilisation-and-the-constraining-resource}
 
 - [ ] **The constraining resource is identified per service** — CPU, memory, disk IOPS, network, database connections, or a third-party rate limit; everything else is secondary.
 - [ ] **Utilisation is measured at peak, not averaged over the day** — an instance at 40% daily average can be saturated for two hours every evening.
@@ -31,7 +31,7 @@ Capacity planning is the discipline of knowing, before your users find out, wher
 - [ ] **Provider quotas and service limits are inventoried** — API rate limits, instances per region, IP addresses, and load balancer rules all become the binding constraint eventually.
 - [ ] **Efficiency is tracked as demand per unit of resource** — this is what tells you whether growth in cost is growth in traffic or growth in waste.
 
-## 3. Headroom and safety margins
+## 3. Headroom and safety margins {#headroom-and-safety-margins}
 
 - [ ] **A target headroom is defined and justified** — enough to absorb the loss of an availability zone plus the largest plausible traffic spike, not a number copied from another team.
 - [ ] **Headroom accounts for the failure of the largest single unit** — losing one of three zones means the surviving two must carry the full peak.
@@ -40,7 +40,7 @@ Capacity planning is the discipline of knowing, before your users find out, wher
 - [ ] **Headroom is validated after each scaling change** — reducing instance count for cost reasons quietly consumes the margin that was there for zone failure.
 - [ ] **Stateful components have separate, larger margins** — adding a database replica or resharding takes hours or days, unlike adding a stateless instance.
 
-## 4. Load testing and the breaking point
+## 4. Load testing and the breaking point {#load-testing-and-the-breaking-point}
 
 - [ ] **Load tests run against production-like infrastructure** — same instance classes, same database tier, same network topology, or the results describe a system you do not operate.
 - [ ] **The test uses a realistic traffic mix** — replayed or modelled from production, since a single-endpoint benchmark tells you nothing about contention between endpoints.
@@ -52,7 +52,7 @@ Capacity planning is the discipline of knowing, before your users find out, wher
 
 {{< alert context="warning" text="**Common mistake:** load testing one service in isolation. The interesting failures happen at shared dependencies — the database, the cache, the identity provider — under the combined load of every caller, which single-service tests never produce." />}}
 
-## 5. Scaling mechanisms
+## 5. Scaling mechanisms {#scaling-mechanisms}
 
 - [ ] **Autoscaling triggers on the constraining resource** — scaling on CPU when the bottleneck is database connections adds load to the thing that is already failing.
 - [ ] **Scale-up is fast and scale-down is slow** — aggressive scale-down causes thrashing and leaves you short at the start of the next spike.
@@ -62,7 +62,7 @@ Capacity planning is the discipline of knowing, before your users find out, wher
 - [ ] **Scaling one tier does not overwhelm another** — more application instances mean more database connections, and the database rarely scales on the same timescale.
 - [ ] **Manual scaling procedures exist for when autoscaling fails or is too slow** — documented, and tested by someone who is not the person who wrote them.
 
-## 6. Protection under overload
+## 6. Protection under overload {#protection-under-overload}
 
 - [ ] **Rate limiting protects the service from any single client** — including your own internal callers and your own retrying clients, which are the usual culprits.
 - [ ] **Load shedding drops the least important work first** — a documented priority order lets you keep checkout working while analytics queries are rejected.
@@ -71,7 +71,7 @@ Capacity planning is the discipline of knowing, before your users find out, wher
 - [ ] **Circuit breakers protect against a slow dependency** — timeouts alone still consume every thread while waiting.
 - [ ] **Rejection under load is fast and cheap** — a request that is going to fail should fail immediately rather than consuming a connection for thirty seconds first.
 
-## 7. Cost and procurement
+## 7. Cost and procurement {#cost-and-procurement}
 
 - [ ] **Capacity cost per unit of demand is calculated** — cost per thousand requests or per active user is the number that makes a forecast financially meaningful.
 - [ ] **The forecast is translated into a budget and shared with finance before the spend arrives** — capacity surprises are usually organisational failures rather than technical ones.
@@ -80,7 +80,7 @@ Capacity planning is the discipline of knowing, before your users find out, wher
 - [ ] **Budget alerts are configured at thresholds that leave time to react** — an alert at 100% of budget is a report, not a warning.
 - [ ] **Idle and over-provisioned resources are reviewed regularly** — waste consumes the budget that would otherwise fund genuine headroom.
 
-## 8. Review cadence and ownership
+## 8. Review cadence and ownership {#review-cadence-and-ownership}
 
 - [ ] **Capacity is reviewed on a fixed schedule with a named owner** — quarterly for most services, monthly for anything growing quickly.
 - [ ] **Forecast accuracy is measured against actuals each cycle** — a forecast that is never scored never improves.

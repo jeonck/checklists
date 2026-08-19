@@ -11,7 +11,7 @@ A security code review is a normal code review with one extra question asked of 
 
 {{< alert context="info" text="**Who runs this:** the reviewer on a pull request, escalating to a security engineer for changes to authentication, authorisation, cryptography, or payment flows. **When:** before merge, not before release." />}}
 
-## 1. Scoping the review
+## 1. Scoping the review {#scoping-the-review}
 
 - [ ] **The purpose of the change is understood before reading the diff** — you cannot spot a missing check if you do not know what the code is supposed to enforce.
 - [ ] **Trust boundaries crossed by the change are identified** — network edge, tenant boundary, privilege boundary, and process boundary each carry different obligations.
@@ -19,7 +19,7 @@ A security code review is a normal code review with one extra question asked of 
 - [ ] **The threat model or design note is consulted for anything new** — a review is not the right place to first discover the feature accepts uploads from anonymous users.
 - [ ] **Automated findings are triaged before the human read** — so reviewer attention goes to the logic that tools cannot reason about.
 
-## 2. Input handling and trust
+## 2. Input handling and trust {#input-handling-and-trust}
 
 - [ ] **Every external input is identified and validated at the boundary** — request bodies, headers, cookies, path parameters, webhook payloads, queue messages, and file contents.
 - [ ] **Validation is allow-list based and applied server-side** — client-side validation is a usability feature and provides no security value.
@@ -28,7 +28,7 @@ A security code review is a normal code review with one extra question asked of 
 - [ ] **Numeric inputs are bounded and integer overflow or truncation is considered** — especially on quantities, offsets, and sizes.
 - [ ] **Untrusted input never reaches a shell, a query string, a template, a deserialiser, or a URL fetch without an explicit safe construction.**
 
-## 3. Authentication and authorisation logic
+## 3. Authentication and authorisation logic {#authentication-and-authorisation-logic}
 
 - [ ] **Every new endpoint, route, message handler, or GraphQL resolver has an explicit authorisation decision** — check the framework's default, and confirm it is deny rather than allow.
 - [ ] **Authorisation is applied to the object, not just the operation** — confirm the record being loaded actually belongs to the requesting principal or tenant.
@@ -37,7 +37,7 @@ A security code review is a normal code review with one extra question asked of 
 - [ ] **New administrative or internal endpoints are not reachable from the public edge** — verify with routing configuration, not with an assumption about the load balancer.
 - [ ] **Changes to roles or permission definitions are reviewed for unintended grants** — adding a permission to a shared role changes access for everyone holding it.
 
-## 4. Data handling and storage
+## 4. Data handling and storage {#data-handling-and-storage}
 
 - [ ] **Database access uses parameterised queries throughout the change** — including any dynamically assembled fragment.
 - [ ] **Personal or sensitive data added by the change is classified and its storage location is intentional** — new columns, new caches, new analytics events, and new log lines all count.
@@ -46,7 +46,7 @@ A security code review is a normal code review with one extra question asked of 
 - [ ] **Serialised responses expose only the intended fields** — returning a whole model object leaks whatever is added to it later.
 - [ ] **Temporary files, caches, and scratch directories are created with restrictive permissions and cleaned up.**
 
-## 5. Cryptography and secrets
+## 5. Cryptography and secrets {#cryptography-and-secrets}
 
 - [ ] **No secret, key, token, or certificate is present in the diff** — including test fixtures, sample configuration, and comments.
 - [ ] **Cryptographic operations use a maintained high-level library rather than primitives assembled by hand** — a custom construction is a defect until proven otherwise.
@@ -55,7 +55,7 @@ A security code review is a normal code review with one extra question asked of 
 - [ ] **Initialisation vectors and nonces are never reused with the same key, and authenticated encryption is used by default.**
 - [ ] **TLS verification is not disabled anywhere in the change** — a disabled certificate check added to fix a staging problem invariably ships to production.
 
-## 6. Dependencies and supply chain
+## 6. Dependencies and supply chain {#dependencies-and-supply-chain}
 
 - [ ] **New dependencies are justified, actively maintained, and reviewed for their own transitive weight** — every dependency is code you now run.
 - [ ] **Dependency versions are pinned and resolved through a lockfile committed to the repository.**
@@ -63,7 +63,7 @@ A security code review is a normal code review with one extra question asked of 
 - [ ] **Changes to build files, CI configuration, and pipeline scripts get the same scrutiny as application code** — the pipeline usually holds more privilege than the app.
 - [ ] **Post-install scripts and build-time code execution introduced by a dependency are noticed and questioned.**
 
-## 7. Error handling, concurrency, and resource use
+## 7. Error handling, concurrency, and resource use {#error-handling-concurrency-and-resource-use}
 
 - [ ] **Failures default to denying access** — an exception in an authorisation check must not fall through to allow.
 - [ ] **Errors returned to the caller are generic; details go to the log with a correlation ID.**
@@ -71,7 +71,7 @@ A security code review is a normal code review with one extra question asked of 
 - [ ] **Loops, recursion, and allocations driven by user input are bounded** — an unbounded expansion is a denial of service with a one-line request.
 - [ ] **Resources are released on every path, including error paths.**
 
-## 8. Testing and verification
+## 8. Testing and verification {#testing-and-verification}
 
 - [ ] **Security-relevant behaviour has a negative test** — a test proving the unauthorised caller is rejected is worth more than one proving the authorised caller is allowed.
 - [ ] **Static analysis and secret scanning run on the change and their new findings are resolved or explicitly accepted with a reason.**

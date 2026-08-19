@@ -11,7 +11,7 @@ A schema migration is the one deployment step that is not trivially reversible. 
 
 {{< alert context="info" text="**Who runs this:** the engineer writing the migration, reviewed by someone who has operated this database in production. **When:** before the migration is merged, and again during the release window planning." />}}
 
-## 1. Expand and contract planning
+## 1. Expand and contract planning {#expand-and-contract-planning}
 
 - [ ] **The change is decomposed into expand, migrate, and contract phases** — expand adds the new structure without touching the old, the application is moved over, and only then does contract remove the old structure. Every phase ships and is verified separately.
 - [ ] **Expand-phase changes are purely additive** — new nullable columns, new tables, new indexes. Nothing existing is renamed, retyped, dropped, or given a constraint that current writes could violate.
@@ -21,7 +21,7 @@ A schema migration is the one deployment step that is not trivially reversible. 
 - [ ] **Each phase has been checked for whether it can be safely paused indefinitely** — real releases stall, and every intermediate state must be a state you can live in for a week.
 - [ ] **The full sequence is written down in order, with the deploy that accompanies each step** — this is the artefact the release runbook needs, not the migration file itself.
 
-## 2. Backward compatibility during rolling deploys
+## 2. Backward compatibility during rolling deploys {#backward-compatibility-during-rolling-deploys}
 
 - [ ] **Old code runs correctly against the new schema** — during a rolling deploy, and for the entire duration of any canary, both versions are live at once and both are serving writes.
 - [ ] **New code runs correctly against the old schema** — the migration and the deploy are not atomic, and either can land first depending on your pipeline.
@@ -33,7 +33,7 @@ A schema migration is the one deployment step that is not trivially reversible. 
 
 {{< alert context="danger" text="**Blocking:** a migration that renames or drops a column in the same release as the code change cannot be rolled back. The old code will fail on every request the moment the migration commits, and re-adding the column does not restore the data. Split it into expand and contract." />}}
 
-## 3. Locking and large tables
+## 3. Locking and large tables {#locking-and-large-tables}
 
 - [ ] **The lock each statement takes has been looked up for your specific engine and version** — the answer differs between PostgreSQL and MySQL, and between versions of each; assume nothing from experience on the other one.
 - [ ] **The migration acquires no lock that blocks writes for more than a second or two on production-sized data** — a table rewrite on a large table stalls every connection queued behind it, exhausts the pool, and takes the application down even though the database is technically healthy.
@@ -44,7 +44,7 @@ A schema migration is the one deployment step that is not trivially reversible. 
 - [ ] **An online schema change tool is used where the engine cannot do it natively** — and its trigger or replication overhead has been accounted for in the maintenance window.
 - [ ] **Replication lag impact is estimated** — a migration that replays serially on replicas can push read replicas minutes behind and break read-after-write assumptions.
 
-## 4. Backfills
+## 4. Backfills {#backfills}
 
 - [ ] **Backfill is separated from the DDL migration** — mixing a multi-million-row `UPDATE` into a schema migration holds locks and blocks the deployment pipeline.
 - [ ] **The backfill runs in bounded batches with a pause between them** — commit each batch, keep transactions short, and leave headroom for production traffic.
@@ -54,7 +54,7 @@ A schema migration is the one deployment step that is not trivially reversible. 
 - [ ] **New writes populate the new column while the backfill is in progress** — otherwise the backfill can never converge.
 - [ ] **Completion is verified by a count of remaining unpopulated rows, not by the job exiting zero.**
 
-## 5. Rollback safety
+## 5. Rollback safety {#rollback-safety}
 
 - [ ] **The rollback path is written and tested, not assumed** — for each migration, either a tested down-migration exists, or the migration is documented as forward-only with the reason.
 - [ ] **Every step is classified as reversible or irreversible before the release** — dropping a column, dropping a table, and narrowing a column type are irreversible regardless of what the down-migration file claims.
@@ -64,7 +64,7 @@ A schema migration is the one deployment step that is not trivially reversible. 
 - [ ] **Rollback has been rehearsed at least once on a non-production environment with production-like data.**
 - [ ] **The point of no return is identified explicitly in the runbook** — the step after which rolling forward is the only option, so nobody discovers it during an incident.
 
-## 6. Correctness of the change itself
+## 6. Correctness of the change itself {#correctness-of-the-change-itself}
 
 - [ ] **Column types match the data's real domain** — check maximum length, precision for decimals, and whether a 32-bit integer key will exhaust; an identifier column approaching its maximum is a well-known outage cause.
 - [ ] **Timestamps use a timezone-aware type and store UTC** — retrofitting timezone handling onto a populated column is a migration nobody enjoys.
@@ -74,7 +74,7 @@ A schema migration is the one deployment step that is not trivially reversible. 
 - [ ] **Default values are considered for their effect on existing rows** — on older engines, adding a column with a default rewrites the whole table.
 - [ ] **Character set and collation match the rest of the schema** — a mismatched collation on a join column silently disables index usage.
 
-## 7. Testing and review
+## 7. Testing and review {#testing-and-review}
 
 - [ ] **The migration has been run against a restored copy of production data** — anonymised if necessary, but with real row counts and real data distribution.
 - [ ] **The migration runs cleanly from an empty database as well** — the whole migration history must still build a working schema for new environments and for CI.
@@ -95,7 +95,7 @@ ALTER TABLE orders
 ALTER TABLE orders VALIDATE CONSTRAINT orders_customer_uuid_not_null;
 ```
 
-## 8. Execution and monitoring
+## 8. Execution and monitoring {#execution-and-monitoring}
 
 - [ ] **The execution window avoids peak traffic and any scheduled batch job** — including the nightly export nobody remembers owning.
 - [ ] **Someone with production database access is present while the migration runs** — not merely reachable.

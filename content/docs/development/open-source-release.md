@@ -11,7 +11,7 @@ Publishing a repository is a one-way door. Git history is permanent, package reg
 
 {{< alert context="info" text="**Who runs this:** the maintaining team, with sign-off from legal or open source programme office and a security reviewer. **When:** at least two weeks before the intended publication date, because licence and history findings are slow to resolve." />}}
 
-## 1. Legal and licensing
+## 1. Legal and licensing {#legal-and-licensing}
 
 - [ ] **The licence is chosen deliberately and approved by whoever owns that decision** — permissive and copyleft licences make materially different commitments, and changing later requires the agreement of every contributor.
 - [ ] **A `LICENSE` file with the full, unmodified licence text is at the repository root** — package managers, scanners, and GitHub's licence detection all key off it.
@@ -22,7 +22,7 @@ Publishing a repository is a one-way door. Git history is permanent, package reg
 - [ ] **Trademarks, product names, and logos are used according to policy** — the code licence does not grant trademark rights, and the distinction confuses almost everyone.
 - [ ] **Patent implications have been reviewed if the project implements anything patented in-house.**
 
-## 2. History and secret scrubbing
+## 2. History and secret scrubbing {#history-and-secret-scrubbing}
 
 - [ ] **The entire git history has been scanned for secrets, not just the current tree** — a key deleted in a later commit is still trivially retrievable from the history the moment the repository is public.
 - [ ] **Automated secret scanning has been run with more than one tool** — detectors have different rule sets, and the cost of a second run is minutes.
@@ -35,7 +35,7 @@ Publishing a repository is a one-way door. Git history is permanent, package reg
 
 {{< alert context="danger" text="**Blocking:** never publish before rotating every credential that has appeared anywhere in the repository history. Public repositories are indexed by automated scrapers within minutes, and a rewritten history does not un-publish anything that was already fetched or forked." />}}
 
-## 3. Documentation
+## 3. Documentation {#documentation}
 
 - [ ] **The `README` states what the project does and who it is for in the first three lines** — a visitor decides whether to keep reading in about ten seconds.
 - [ ] **Installation and a minimal working example are copy-pasteable and have been tested on a clean machine** — by someone who did not write them.
@@ -45,7 +45,7 @@ Publishing a repository is a one-way door. Git history is permanent, package reg
 - [ ] **A `CODE_OF_CONDUCT.md` is present with a working, monitored reporting address** — a reporting alias nobody reads is worse than none.
 - [ ] **Documentation is versioned with the code** — documentation describing an unreleased API is a support burden from day one.
 
-## 4. Code and repository quality
+## 4. Code and repository quality {#code-and-repository-quality}
 
 - [ ] **The code builds from a clean clone with only the documented prerequisites** — no internal package registry, no internal base image, no company-only tooling.
 - [ ] **All internal dependencies have been removed or replaced with public equivalents** — an internal utility library referenced in `go.mod` or `package.json` will break every external build immediately.
@@ -55,7 +55,7 @@ Publishing a repository is a one-way door. Git history is permanent, package reg
 - [ ] **The default branch is protected and direct pushes are disabled, including for maintainers.**
 - [ ] **Dependency update automation and vulnerability alerts are enabled** — public projects are scanned by everyone, and a stale vulnerable dependency will be reported publicly.
 
-## 5. Versioning and releases
+## 5. Versioning and releases {#versioning-and-releases}
 
 - [ ] **The project follows semantic versioning and says so** — and the meaning of the major, minor, and patch positions for this project is documented.
 - [ ] **The initial version signals stability honestly** — publishing `1.0.0` commits you to a stable public interface; use `0.x` if you are not ready for that.
@@ -66,7 +66,7 @@ Publishing a repository is a one-way door. Git history is permanent, package reg
 - [ ] **Build provenance or an SBOM is published with the artefacts** — consumers increasingly require it, and generating it later for old releases is impossible.
 - [ ] **The package registry namespace and account are owned by the organisation, not by an individual's personal account.**
 
-## 6. Security posture
+## 6. Security posture {#security-posture}
 
 - [ ] **A `SECURITY.md` states how to report a vulnerability and what response time to expect** — without it, reporters disclose publicly by default.
 - [ ] **A private disclosure channel exists and is monitored by more than one person** — a single monitored inbox means a report sits unread while the reporter's disclosure clock runs.
@@ -76,7 +76,7 @@ Publishing a repository is a one-way door. Git history is permanent, package reg
 - [ ] **Maintainer accounts with publish rights all have phishing-resistant multi-factor authentication enabled.**
 - [ ] **The threat model of running this code is documented if it processes untrusted input** — users need to know what guarantees you do and do not make.
 
-## 7. Governance and sustainability
+## 7. Governance and sustainability {#governance-and-sustainability}
 
 - [ ] **Maintainers are named and there is more than one with full access** — a single-maintainer project with a single publish key is one lost laptop from being abandoned.
 - [ ] **The decision-making process for accepting changes is written down** — even if it is "the maintainers decide", stating it prevents a lot of friction.
@@ -85,7 +85,7 @@ Publishing a repository is a one-way door. Git history is permanent, package reg
 - [ ] **The internal cost of maintenance has an owner and allocated time** — an open source project without funded maintenance time degrades into an unanswered issue tracker.
 - [ ] **An archival or transfer plan exists for when the project is no longer maintained** — deciding in advance is far kinder to users than silent abandonment.
 
-## 8. Launch and after
+## 8. Launch and after {#launch-and-after}
 
 - [ ] **A pre-publication dry run has been done on a private repository with the same settings** — including a full release to a registry's test channel where one exists.
 - [ ] **Issue templates and a pull request template are configured** — they measurably improve the quality of what arrives.

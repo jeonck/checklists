@@ -11,7 +11,7 @@ A security incident is an operational incident with lawyers, regulators, and an 
 
 {{< alert context="info" text="**Who runs this:** the security incident commander, with the affected service owner, legal, and communications. **When:** review readiness quarterly; work the response sections live during an incident and again during a tabletop exercise." />}}
 
-## 1. Preparation and readiness
+## 1. Preparation and readiness {#preparation-and-readiness}
 
 - [ ] **An incident response plan exists, names roles rather than individuals, and is stored where it is reachable when the corporate network is down** — a plan on the compromised wiki is not a plan.
 - [ ] **Severity levels are defined with concrete examples and mapped to response times** — the difference between a single phished mailbox and a domain administrator compromise must not be argued about live.
@@ -22,7 +22,7 @@ A security incident is an operational incident with lawyers, regulators, and an 
 - [ ] **Cyber insurance requirements are understood, particularly any obligation to notify the insurer before engaging responders.**
 - [ ] **Tabletop exercises have been run in the last twelve months, including at least one scenario where a privileged administrator account is compromised.**
 
-## 2. Detection and triage
+## 2. Detection and triage {#detection-and-triage}
 
 - [ ] **Telemetry covers identity, endpoint, network, cloud control plane, and application layers** — an attacker who only touches the cloud API leaves no endpoint trace.
 - [ ] **Log retention is long enough to investigate a dwell time measured in months, and logs are stored where an attacker in the production account cannot alter them.**
@@ -31,7 +31,7 @@ A security incident is an operational incident with lawyers, regulators, and an 
 - [ ] **Triage assigns a severity and an incident commander within a defined time from first alert.**
 - [ ] **Every incident gets a ticket and a dedicated channel from the moment it is declared** — investigation done in direct messages cannot be reconstructed afterwards.
 
-## 3. Containment
+## 3. Containment {#containment}
 
 - [ ] **Volatile evidence is captured before containment where feasible** — memory, active connections, and running processes disappear when a host is powered off.
 - [ ] **Containment actions are decided deliberately rather than reflexively** — alerting the attacker too early can trigger destructive action or a pivot you cannot follow.
@@ -43,7 +43,7 @@ A security incident is an operational incident with lawyers, regulators, and an 
 
 {{< alert context="danger" text="**Do not restore from backup or rebuild before scope is understood.** Rebuilding a host destroys the evidence needed to determine whether the same access exists elsewhere, and an attacker with valid credentials will simply return to the rebuilt system." />}}
 
-## 4. Investigation and scope
+## 4. Investigation and scope {#investigation-and-scope}
 
 - [ ] **A single timeline is maintained in one place, in UTC, and updated as facts are confirmed** — separate people keeping separate notes produces contradictory reporting to regulators.
 - [ ] **Facts are recorded separately from hypotheses** — early theories in an incident are wrong more often than they are right.
@@ -53,7 +53,7 @@ A security incident is an operational incident with lawyers, regulators, and an 
 - [ ] **Indicators of compromise are extracted and swept across the whole estate, not only the known-affected systems.**
 - [ ] **Third parties and vendors in the blast radius are identified early** — your incident may be their incident, and their contract may impose a notification clock.
 
-## 5. Communication
+## 5. Communication {#communication}
 
 - [ ] **One person owns external communication and everyone else refers enquiries to them** — inconsistent statements create legal exposure that outlives the incident.
 - [ ] **Regulatory notification deadlines are identified in the first hours** — 72 hours under GDPR from becoming aware, with other regimes running shorter or longer clocks.
@@ -62,7 +62,7 @@ A security incident is an operational incident with lawyers, regulators, and an 
 - [ ] **Staff know not to discuss the incident externally, and know where to send questions.**
 - [ ] **Law enforcement engagement is a conscious decision made with counsel, not an afterthought.**
 
-## 6. Eradication and recovery
+## 6. Eradication and recovery {#eradication-and-recovery}
 
 - [ ] **Root cause is confirmed before rebuild, so the same entry point is not reinstated.**
 - [ ] **Systems are rebuilt from known-good images rather than cleaned in place** — you cannot prove a compromised host is clean.
@@ -71,7 +71,7 @@ A security incident is an operational incident with lawyers, regulators, and an 
 - [ ] **Recovery is staged with heightened monitoring on the restored systems** — reintrusion attempts commonly follow within days.
 - [ ] **A defined set of criteria must be met before the incident is declared closed, and someone with authority declares it.**
 
-## 7. Post-incident learning
+## 7. Post-incident learning {#post-incident-learning}
 
 - [ ] **A blameless post-incident review happens within two weeks, while memory is fresh.**
 - [ ] **The review covers detection and response performance, not only the technical vulnerability** — how long until detection, until containment, until notification.

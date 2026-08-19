@@ -11,7 +11,7 @@ A landing zone is the part of your cloud estate that nobody wants to rebuild lat
 
 {{< alert context="info" text="**Who runs this:** the platform or cloud foundation team, with a reviewer from security and one from finance. **When:** before the first production workload is deployed, and re-run annually or after any change to the account structure." />}}
 
-## 1. Account and organisation structure
+## 1. Account and organisation structure {#account-and-organisation-structure}
 
 - [ ] **A management account exists and runs no workloads** — the AWS Organizations management account (Azure: the root management group and its billing tenant; GCP: the Organization node) can bypass service control policies, so anything running in it is effectively unguarded.
 - [ ] **Workloads are separated into accounts by blast radius, not by convenience** — one account per workload per environment is the defensible default; shared accounts make IAM the only boundary and IAM is the boundary most likely to be misconfigured.
@@ -22,7 +22,7 @@ A landing zone is the part of your cloud estate that nobody wants to rebuild lat
 - [ ] **Every account has a unique root email on a monitored distribution list, with MFA on root and no root access keys** — root account recovery goes to that mailbox, and a personal address means an offboarded employee owns your account.
 - [ ] **Account closure and suspension procedures are documented** — including where the data goes and who confirms the account is empty before it is closed.
 
-## 2. Identity and access
+## 2. Identity and access {#identity-and-access}
 
 - [ ] **Human access is federated from a single identity provider** — AWS IAM Identity Center, Azure Entra ID, or Google Cloud Identity; long-lived IAM users with access keys are the single most common source of leaked cloud credentials.
 - [ ] **No IAM users with static access keys exist outside a documented exception list** — and each exception has an owner, a rotation schedule, and a ticket for its removal.
@@ -36,7 +36,7 @@ A landing zone is the part of your cloud estate that nobody wants to rebuild lat
 
 {{< alert context="danger" text="**Blocking:** if the management account root user does not have MFA, or if any account still has root access keys, stop and fix that before anything else on this list. Everything else assumes the top of the trust chain is sound." />}}
 
-## 3. Network foundation
+## 3. Network foundation {#network-foundation}
 
 - [ ] **The IP address plan is allocated centrally and documented before the first VPC** — overlapping CIDR ranges cannot be peered or routed, and renumbering a live VPC means rebuilding it.
 - [ ] **Address space is reserved for future regions, environments, and on-premises integration** — a /16 that seemed generous will not survive three environments plus Kubernetes pod CIDRs.
@@ -48,7 +48,7 @@ A landing zone is the part of your cloud estate that nobody wants to rebuild lat
 - [ ] **VPC flow logs are enabled to the central log archive with a retention period** — you cannot reconstruct lateral movement after the fact without them.
 - [ ] **DNS resolution is centralised and split-horizon is deliberate** — Route 53 Resolver rules, Azure Private DNS zones, or Cloud DNS, so private endpoint names resolve consistently across accounts.
 
-## 4. Preventive guardrails
+## 4. Preventive guardrails {#preventive-guardrails}
 
 - [ ] **Service control policies deny the actions no workload should ever perform** — disabling CloudTrail, deleting log buckets, or removing GuardDuty; Azure equivalent is Azure Policy deny effects at management group scope, GCP is organization policy constraints.
 - [ ] **A region deny policy restricts the estate to approved regions** — this closes the most common cryptomining pattern, where compromised credentials spin up GPU instances in a region nobody monitors.
@@ -59,7 +59,7 @@ A landing zone is the part of your cloud estate that nobody wants to rebuild lat
 - [ ] **Policies are attached at OU level and version-controlled** — an SCP edited in the console with no review is a production change with no change record.
 - [ ] **A documented exception process exists with expiry dates** — guardrails without an escape hatch get disabled entirely the first time they block a launch.
 
-## 5. Logging, detection, and audit trail
+## 5. Logging, detection, and audit trail {#logging-detection-and-audit-trail}
 
 - [ ] **An organisation-wide trail captures management events in every account and region** — AWS CloudTrail organisation trail, Azure Activity Log diagnostic settings at management group, GCP Cloud Audit Logs at organization level; per-account trails will have gaps exactly where someone disabled one.
 - [ ] **Log delivery goes to a bucket in the log archive account that workload accounts cannot write to or delete from** — with object lock or a retention policy so an attacker with account admin cannot erase their tracks.
@@ -69,7 +69,7 @@ A landing zone is the part of your cloud estate that nobody wants to rebuild lat
 - [ ] **Findings route to a ticketing system or SIEM with an owner and an SLA** — a security dashboard nobody opens is a compliance artefact, not a control.
 - [ ] **Log retention is set explicitly per log type and matches the legal and forensic requirement** — 90 days of flow logs is usually too short for a breach investigation and too long for the budget if you keep them in hot storage.
 
-## 6. Encryption and key management
+## 6. Encryption and key management {#encryption-and-key-management}
 
 - [ ] **A key hierarchy is defined per environment and data classification** — one key for everything means one compromise for everything, and one key per bucket means an unmanageable key policy sprawl.
 - [ ] **Customer-managed keys are used where key policy or rotation control matters** — provider-managed keys are fine for low-sensitivity data, but you cannot revoke access or prove separation of duties with them.
@@ -78,7 +78,7 @@ A landing zone is the part of your cloud estate that nobody wants to rebuild lat
 - [ ] **Cross-account and cross-region key access is explicit and reviewed** — a snapshot copied to a DR region is unusable if the key does not exist there.
 - [ ] **Secrets live in a secret manager with rotation, not in parameter stores as plaintext or in environment variables baked into images.**
 
-## 7. Cost allocation and financial controls
+## 7. Cost allocation and financial controls {#cost-allocation-and-financial-controls}
 
 - [ ] **A tagging standard exists with a small mandatory set** — owner, cost centre, environment, and service; a twenty-tag standard is a standard nobody follows.
 - [ ] **Mandatory tags are enforced at provision time, not audited afterwards** — tag policies plus infrastructure-as-code defaults, because retroactive tagging of six months of resources never happens.
@@ -87,7 +87,7 @@ A landing zone is the part of your cloud estate that nobody wants to rebuild lat
 - [ ] **An anomaly detector is enabled and routes to a human** — AWS Cost Anomaly Detection, Azure Cost Management alerts, or GCP budget alerts with a Pub/Sub trigger.
 - [ ] **Someone owns the monthly bill review and it is on a calendar** — unowned cloud spend grows monotonically.
 
-## 8. Automation, change control, and operations
+## 8. Automation, change control, and operations {#automation-change-control-and-operations}
 
 - [ ] **The entire landing zone is defined as code in version control** — a console-built foundation cannot be reviewed, reproduced in a second region, or rebuilt after a mistake.
 - [ ] **Infrastructure state is stored remotely with locking and versioning** — and the state backend itself lives in an account separate from the workloads it describes.

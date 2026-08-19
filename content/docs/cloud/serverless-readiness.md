@@ -11,7 +11,7 @@ Serverless removes the servers, not the distributed systems problems. What it ch
 
 {{< alert context="info" text="**Who runs this:** the owning engineering team, with a reviewer who has operated an event-driven system before. **When:** before the workload takes production traffic, and again after any change to its event sources or concurrency configuration." />}}
 
-## 1. Workload fit
+## 1. Workload fit {#workload-fit}
 
 - [ ] **The workload's execution profile fits within the platform's timeout and payload limits** — with headroom, because a job that takes 12 minutes against a 15-minute ceiling will time out the first time a dependency is slow.
 - [ ] **Long-running or steady high-throughput work has been compared against containers on cost and latency** — serverless wins on spiky and low-duty-cycle workloads; a service at constant high utilisation is usually cheaper and faster on provisioned compute.
@@ -20,7 +20,7 @@ Serverless removes the servers, not the distributed systems problems. What it ch
 - [ ] **State lives outside the function** — anything cached in the execution environment survives only until the platform recycles it, which it will do without warning and at the worst time.
 - [ ] **Dependencies that hold connection pools have a strategy** — a relational database behind a function that scales to a thousand concurrent executions needs a proxy or a data API, or it will exhaust connections.
 
-## 2. Configuration and packaging
+## 2. Configuration and packaging {#configuration-and-packaging}
 
 - [ ] **Memory is tuned by measurement, not left at the default** — CPU is allocated proportionally to memory, so more memory often reduces both duration and total cost; run a power-tuning sweep rather than guessing.
 - [ ] **Timeout is set to a realistic ceiling per function, not the platform maximum** — a long timeout means a stuck invocation bills for minutes and holds a concurrency slot the whole time.
@@ -30,7 +30,7 @@ Serverless removes the servers, not the distributed systems problems. What it ch
 - [ ] **Configuration comes from environment variables or a parameter store, and secrets from a secret manager** — with the fetch cached outside the handler so it does not run on every invocation.
 - [ ] **Ephemeral storage size and usage are known** — the writable temporary directory is shared across invocations in the same environment and does not empty itself.
 
-## 3. Cold starts and latency
+## 3. Cold starts and latency {#cold-starts-and-latency}
 
 - [ ] **Cold start latency has been measured, not assumed** — measure the p99 of the initialisation phase separately from execution, because averages hide it entirely.
 - [ ] **Initialisation work happens outside the handler** — SDK clients, database connections, and configuration loading belong in the module scope so they are reused across warm invocations.
@@ -39,7 +39,7 @@ Serverless removes the servers, not the distributed systems problems. What it ch
 - [ ] **Functions in a VPC have been checked for the network initialisation penalty and only use a VPC when they need private resources.**
 - [ ] **Ahead-of-time compilation or a lighter runtime has been considered for latency-critical paths** — startup-optimised runtimes and native images cut initialisation by an order of magnitude for JVM and .NET workloads.
 
-## 4. Concurrency, scaling, and downstream protection
+## 4. Concurrency, scaling, and downstream protection {#concurrency-scaling-and-downstream-protection}
 
 - [ ] **The account-level concurrency limit is known and the headroom across all functions is calculated** — concurrency is a shared account quota, so one runaway function can starve every other function in the account.
 - [ ] **Reserved concurrency is set on critical functions to guarantee capacity** — and on risky ones to cap their blast radius.
@@ -49,7 +49,7 @@ Serverless removes the servers, not the distributed systems problems. What it ch
 - [ ] **Batch size and batching window for stream and queue sources are tuned deliberately** — larger batches improve throughput and cost but increase the amount of work lost or retried on a single failure.
 - [ ] **A load test has driven the function to its concurrency ceiling** — the interesting failures all happen at the limit, not below it.
 
-## 5. Event sources, delivery, and idempotency
+## 5. Event sources, delivery, and idempotency {#event-sources-delivery-and-idempotency}
 
 - [ ] **Delivery semantics are known per event source and written down** — at-least-once for most queue and stream sources means duplicate invocations are normal operation, not an incident.
 - [ ] **Every handler with a side effect is idempotent** — deduplicate on an event identifier in a store with a TTL, or make the write naturally idempotent; retries will otherwise double-charge a customer.
@@ -62,7 +62,7 @@ Serverless removes the servers, not the distributed systems problems. What it ch
 
 {{< alert context="danger" text="**Blocking:** a function that writes to its own trigger source without a guard is a recursive invocation loop. Verify the write path cannot re-trigger the function, and set reserved concurrency as a hard ceiling before deploying." />}}
 
-## 6. Failure handling
+## 6. Failure handling {#failure-handling}
 
 - [ ] **Every asynchronous invocation path has a dead letter queue or an on-failure destination** — without one, an event that fails all retries is silently discarded and you will never know it existed.
 - [ ] **The dead letter queue has an alarm on depth greater than zero and a documented owner** — an unmonitored DLQ is a data loss mechanism with extra steps.
@@ -73,7 +73,7 @@ Serverless removes the servers, not the distributed systems problems. What it ch
 - [ ] **Downstream calls have explicit timeouts shorter than the function timeout** — a default-infinite SDK client will burn the entire timeout and then fail with no useful error.
 - [ ] **Circuit-breaking or shedding protects a failing downstream** — thousands of concurrent executions all retrying a struggling dependency will keep it down.
 
-## 7. Security
+## 7. Security {#security}
 
 - [ ] **Each function has its own execution role scoped to the specific resources it uses** — a shared role across functions grants every function the union of all permissions.
 - [ ] **Wildcard resource ARNs have been eliminated or justified** — `Resource: "*"` on a data action is the finding every audit will raise.
@@ -84,7 +84,7 @@ Serverless removes the servers, not the distributed systems problems. What it ch
 - [ ] **Functions in a VPC use security groups that permit only the required egress** — and a function that needs no private resource stays out of the VPC.
 - [ ] **API-fronted functions have authentication, authorisation, and rate limiting at the gateway** — the gateway is the only place you can reject traffic before it costs you an invocation.
 
-## 8. Observability
+## 8. Observability {#observability}
 
 - [ ] **Structured JSON logging is used with a correlation identifier propagated from the event** — free-text logs across hundreds of short-lived invocations are unsearchable.
 - [ ] **Log retention is set explicitly on every log group** — the default in several platforms is to never expire, and high-volume function logs become a significant line item.
@@ -94,7 +94,7 @@ Serverless removes the servers, not the distributed systems problems. What it ch
 - [ ] **Iterator age or queue age is alerted on for stream and queue consumers** — a consumer keeping up at a steadily growing lag is the failure mode invisible to error-rate alerts.
 - [ ] **A method exists to reproduce an invocation locally from a captured event payload** — debugging by redeploying is unbearably slow.
 
-## 9. Deployment, cost, and operations
+## 9. Deployment, cost, and operations {#deployment-cost-and-operations}
 
 - [ ] **Infrastructure and functions are deployed together as code from a pipeline** — a function edited in the console is a change nobody can review or reproduce.
 - [ ] **Deployments are progressive with automatic rollback on an error-rate alarm** — weighted aliases or traffic-splitting revisions make this cheap, so there is no reason not to.

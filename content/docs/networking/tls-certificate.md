@@ -11,7 +11,7 @@ Almost every certificate outage has the same shape: something was issued once by
 
 {{< alert context="info" text="**Who runs this:** the team owning the endpoint, with the platform or security team reviewing key handling and renewal automation. **When:** before a new endpoint goes live, and quarterly across the estate." />}}
 
-## 1. Inventory and ownership
+## 1. Inventory and ownership {#inventory-and-ownership}
 
 - [ ] **Every certificate in the estate is in a single inventory** — including internal services, load balancers, mail servers, VPN concentrators, and the ones on appliances that nobody thinks of as servers.
 - [ ] **Each certificate has a named owning team** — an unowned certificate is one that expires, since nobody feels responsible for a renewal that has not failed yet.
@@ -20,7 +20,7 @@ Almost every certificate outage has the same shape: something was issued once by
 - [ ] **Internal CA-issued certificates are inventoried alongside public ones** — internal certificates expire just as hard, and are usually the ones without automation.
 - [ ] **Client certificates and their expiry are tracked separately** — a mutual TLS client certificate expiring breaks the caller, so the alert must reach the caller's team rather than the server's.
 
-## 2. Issuance and validation
+## 2. Issuance and validation {#issuance-and-validation}
 
 - [ ] **Every certificate is issued through the documented process, not ad hoc** — a certificate obtained on a laptop with a personal ACME account is unrenewable by anyone else.
 - [ ] **The validation method is appropriate to the environment** — DNS-01 for wildcards and for hosts not publicly reachable, HTTP-01 only where port 80 will remain reachable for the life of the automation.
@@ -30,7 +30,7 @@ Almost every certificate outage has the same shape: something was issued once by
 - [ ] **Wildcard certificates are used only where justified** — one wildcard key compromise exposes every host in the domain, and the blast radius of a rotation is equally wide.
 - [ ] **Staging or test endpoints of the CA are used while building automation** — production rate limits are low, and burning them mid-outage is a self-inflicted second incident.
 
-## 3. Key handling
+## 3. Key handling {#key-handling}
 
 - [ ] **Private keys are generated on the system that will use them, or in an HSM** — a key emailed as an archive has been compromised regardless of what happened next.
 - [ ] **Key algorithm and size meet current guidance** — RSA 2048 bit minimum, or ECDSA P-256, with ECDSA preferred for its smaller handshake cost.
@@ -40,7 +40,7 @@ Almost every certificate outage has the same shape: something was issued once by
 - [ ] **A key compromise procedure exists and names who can revoke** — revocation, reissue with a fresh key, and redeployment, with the steps written down before you need them at speed.
 - [ ] **Keys used by more than one host are distributed through the secret manager** — not copied by hand between servers, which is how they end up in a backup archive or a chat message.
 
-## 4. Chain and SAN correctness
+## 4. Chain and SAN correctness {#chain-and-san-correctness}
 
 - [ ] **The server sends the full chain up to but not including the root** — omitting the intermediate is the classic failure that works in browsers, which cache intermediates, and fails for API clients and mobile apps, which do not.
 - [ ] **The chain is verified from a clean machine with no prior cache** — test with a tool that reports the chain explicitly rather than a browser you have already visited the site from.
@@ -55,7 +55,7 @@ openssl s_client -connect example.com:443 -servername example.com \
   -showcerts </dev/null 2>/dev/null | openssl x509 -noout -dates -ext subjectAltName
 ```
 
-## 5. Automated renewal
+## 5. Automated renewal {#automated-renewal}
 
 - [ ] **Renewal is automated end to end, including reloading the service** — a renewed certificate sitting on disk while the process still holds the old one in memory is an outage with a correct file on disk.
 - [ ] **Renewal is attempted well before expiry, typically at one third of remaining lifetime** — this leaves many days of retries before anyone needs to be woken up.
@@ -68,7 +68,7 @@ openssl s_client -connect example.com:443 -servername example.com \
 
 {{< alert context="warning" text="**Blocking:** an endpoint whose renewal automation has never completed a real renewal, end to end including service reload, is not ready for production. An untested renewal path is an expiry scheduled for a date you have not chosen." />}}
 
-## 6. Expiry monitoring
+## 6. Expiry monitoring {#expiry-monitoring}
 
 - [ ] **Expiry is monitored by connecting to the live endpoint, not by reading a file** — the only thing that matters is the certificate the server actually presents to clients.
 - [ ] **Alerts fire at multiple thresholds** — a ticket at 30 days, a warning at 14, and a page at 7, so a missed ticket still has two more chances to be caught.
@@ -77,7 +77,7 @@ openssl s_client -connect example.com:443 -servername example.com \
 - [ ] **Non-HTTPS TLS endpoints are monitored too** — SMTP with STARTTLS, LDAPS, database TLS, message brokers, and internal gRPC services all fail the same way.
 - [ ] **The monitoring itself is verified against a deliberately near-expiry certificate** — an expiry check that has never fired is an expiry check you have no evidence works.
 
-## 7. Protocol and cipher configuration
+## 7. Protocol and cipher configuration {#protocol-and-cipher-configuration}
 
 - [ ] **TLS 1.2 and TLS 1.3 are enabled and everything earlier is disabled** — TLS 1.0 and 1.1 are deprecated and fail modern compliance scans and payment requirements.
 - [ ] **The cipher suite list is taken from a maintained reference configuration** — generate it rather than hand-curating, and record which compatibility level you chose and why.
@@ -87,7 +87,7 @@ openssl s_client -connect example.com:443 -servername example.com \
 - [ ] **Session resumption is configured with rotating tickets** — static, never-rotated session ticket keys undermine forward secrecy for resumed sessions.
 - [ ] **The same standard is applied to internal endpoints** — internal traffic is where obsolete protocol versions survive longest, precisely because nobody scans them.
 
-## 8. OCSP stapling, HSTS, and hardening
+## 8. OCSP stapling, HSTS, and hardening {#ocsp-stapling-hsts-and-hardening}
 
 - [ ] **OCSP stapling is enabled and the stapled response is verified as present** — stapling removes a client-side round trip to the CA and stops the CA seeing your visitors, but a misconfigured stapler silently serves nothing.
 - [ ] **Stapling failure is soft and monitored** — a server that hard-fails when the OCSP responder is unreachable turns a CA outage into your outage.
@@ -97,7 +97,7 @@ openssl s_client -connect example.com:443 -servername example.com \
 - [ ] **HTTP requests redirect to HTTPS at the edge** — with a permanent redirect, and with no application content served over plain HTTP at all.
 - [ ] **Certificate pinning, if used at all, has a documented backup pin and rollout plan** — pinning without a backup pin bricks clients when you rotate keys.
 
-## 9. Incident path for an expired certificate
+## 9. Incident path for an expired certificate {#incident-path-for-an-expired-certificate}
 
 - [ ] **An emergency reissue procedure is documented and reachable without the affected service** — if your runbook lives behind the endpoint that just expired, you do not have a runbook.
 - [ ] **The people with CA and registrar access are named in the on-call escalation** — issuance often needs an account only two people can reach.

@@ -11,7 +11,7 @@ Offboarding is judged on two axes: speed and completeness. Speed matters because
 
 {{< alert context="info" text="**Who runs this:** IT service desk and the identity owner, triggered by HR, with the leaving manager responsible for data handover. **When:** revocation steps execute on the last working day at the agreed hour; for involuntary departures, before the conversation happens." />}}
 
-## 1. Trigger, timing, and classification
+## 1. Trigger, timing, and classification {#trigger-timing-and-classification}
 
 - [ ] **HR is the trigger and the leaving date and time are recorded in the system of record** — offboarding driven by word of mouth is offboarding that happens late or not at all.
 - [ ] **The departure is classified as voluntary, involuntary, or immediate-risk** — an involuntary departure is revoked before notification, not after, and that decision must be made in advance.
@@ -20,7 +20,7 @@ Offboarding is judged on two axes: speed and completeness. Speed matters because
 - [ ] **Privileged, administrative, and production access is identified and prioritised** — these come first in the revocation sequence, not last.
 - [ ] **A single named owner is accountable for the whole offboarding record** — split ownership between HR, IT, and the manager is the reason offboardings stall at 80 percent complete.
 
-## 2. Session and token revocation in the identity provider
+## 2. Session and token revocation in the identity provider {#session-and-token-revocation-in-the-identity-provider}
 
 - [ ] **Active sessions and refresh tokens are explicitly revoked in the identity provider** — not just a password reset; a live OAuth session or refresh token survives a password change and can keep issuing new access tokens for weeks.
 - [ ] **The account is disabled rather than deleted at first** — deletion destroys audit trail, breaks file ownership, and cannot be undone if you need to investigate something later.
@@ -30,7 +30,7 @@ Offboarding is judged on two axes: speed and completeness. Speed matters because
 - [ ] **Conditional access or sign-in risk policies are checked for exclusions naming this user** — individual exclusions added for a past troubleshooting session outlive the reason for them.
 - [ ] **Revocation is verified by attempting the sign-in flows the leaver actually used** — the console showing disabled is a claim; a failed authentication is evidence.
 
-## 3. Accounts and credentials outside single sign-on
+## 3. Accounts and credentials outside single sign-on {#accounts-and-credentials-outside-single-sign-on}
 
 - [ ] **Local accounts on servers, network devices, databases, and appliances are enumerated and disabled** — these never appeared in the identity provider and will not appear in any SSO-based report.
 - [ ] **Personal access tokens, API keys, and deploy keys issued by the leaver are revoked in every platform** — source control, cloud providers, CI systems, and monitoring tools all allow long-lived tokens that keep working after the human account is disabled.
@@ -41,7 +41,7 @@ Offboarding is judged on two axes: speed and completeness. Speed matters because
 
 {{< alert context="danger" text="**This is the gap that bites.** Most offboardings handle the SSO account cleanly and miss two things: accounts that were never behind SSO (local admin accounts, vendor portals, database logins, that one SaaS tool bought on a card), and long-lived API tokens the leaver issued themselves. Both survive account disablement. Enumerate them explicitly and prove each one is dead." />}}
 
-## 4. Shared and privileged credential rotation
+## 4. Shared and privileged credential rotation {#shared-and-privileged-credential-rotation}
 
 - [ ] **Every shared credential the leaver had access to is rotated, not merely un-shared** — knowledge cannot be revoked; removing a vault share does not un-know the password.
 - [ ] **The password vault is queried for everything shared with the leaver, including items shared to groups they belonged to** — group-based sharing is the part people forget.
@@ -51,7 +51,7 @@ Offboarding is judged on two axes: speed and completeness. Speed matters because
 - [ ] **Rotation is prioritised by blast radius and completed within a defined window** — for a departing administrator, that window is hours, not the end of the month.
 - [ ] **Where rotation must be deferred for operational reasons, the exception is written down with a date and an owner** — deferred rotations are otherwise never done.
 
-## 5. Device return, wipe, and endpoint state
+## 5. Device return, wipe, and endpoint state {#device-return-wipe-and-endpoint-state}
 
 - [ ] **All assigned devices are listed from the asset register and each one is accounted for** — laptop, phone, tablet, security keys, dongles, and any home networking equipment.
 - [ ] **Returned devices are confirmed received against serial number, not against model name** — two identical laptops are a reconciliation error waiting to happen.
@@ -61,7 +61,7 @@ Offboarding is judged on two axes: speed and completeness. Speed matters because
 - [ ] **Local data on returned devices is preserved if there is any prospect of investigation or litigation hold** — reimaging first destroys the only copy of evidence.
 - [ ] **The asset register is updated to unassigned or in-stock the same day** — a register that lags reality is worse than no register, because people trust it.
 
-## 6. Data handover, mailbox, and file ownership
+## 6. Data handover, mailbox, and file ownership {#data-handover-mailbox-and-file-ownership}
 
 - [ ] **The manager identifies the business-critical data the leaver owned before the last day** — documents, dashboards, scripts, scheduled jobs, and the undocumented process only they ran.
 - [ ] **Files in personal drives are transferred to a named successor or a team location** — personal drive content is deleted on a schedule after account removal in most platforms, and it goes silently.
@@ -71,7 +71,7 @@ Offboarding is judged on two axes: speed and completeness. Speed matters because
 - [ ] **Repositories, pipelines, cloud resources, and scheduled automation owned by the leaver are reassigned to a team, not to an individual** — otherwise you repeat this exercise at the successor's departure.
 - [ ] **Any legal hold or retention requirement is applied to the mailbox and files before the account is removed** — retention applied after deletion is not retention.
 
-## 7. Physical access, facilities, and third parties
+## 7. Physical access, facilities, and third parties {#physical-access-facilities-and-third-parties}
 
 - [ ] **Badge, fob, and door codes are deactivated and the deactivation is confirmed in the access control system** — collecting the badge is not the same as disabling it.
 - [ ] **Shared door codes, alarm codes, and safe combinations known to the leaver are changed** — the same logic as shared credentials applies to physical access.
@@ -80,7 +80,7 @@ Offboarding is judged on two axes: speed and completeness. Speed matters because
 - [ ] **Vendor and supplier portals where the leaver was the named contact or administrator are transitioned** — including domain registrars, certificate authorities, and payment processors, where a lost administrator can take weeks to recover.
 - [ ] **External communities, partner slack connections, and customer-facing accounts are removed** — a leaver still present in a shared customer channel is both a security and a commercial problem.
 
-## 8. SaaS estate sweep
+## 8. SaaS estate sweep {#saas-estate-sweep}
 
 - [ ] **The SaaS inventory is walked application by application, not sampled** — the applications people forget are exactly the ones bought outside procurement.
 - [ ] **Applications discovered through expense reports and browser or network telemetry are included** — shadow IT does not appear in the official application list by definition.
@@ -89,7 +89,7 @@ Offboarding is judged on two axes: speed and completeness. Speed matters because
 - [ ] **Data stored only in a leaver-owned SaaS workspace is exported or transferred** — personal-tier accounts used for work delete their content on cancellation.
 - [ ] **Each application is marked complete with the date and the person who verified it** — a partially swept estate looks identical to a fully swept one unless you record it.
 
-## 9. Post-offboarding audit and closure
+## 9. Post-offboarding audit and closure {#post-offboarding-audit-and-closure}
 
 - [ ] **An access report is run 24 to 72 hours after the revocation date and shows no successful authentication by the leaver** — this is the check that catches the account you missed.
 - [ ] **Sign-in logs are reviewed for activity in the days before departure that looks like bulk download or mass sharing** — unusual export volumes shortly before a resignation are worth a conversation.
